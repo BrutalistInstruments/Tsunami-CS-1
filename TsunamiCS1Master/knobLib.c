@@ -9,8 +9,8 @@
 //knob index:
 //output 1-8: 0-7
 //pitch 1-8:8-15
-//envelope time 1-8:16-23
-//envelope level 1-8:24-31
+//envelope level 1-8:16-23
+//envelope time 1-8:24-31
 //track volume 1-8: 32-39
 //gpKnob uL:  40 (up left)
 //gpKnob uR: 41 (up right)
@@ -23,7 +23,10 @@
 #include "globalVariables.h"
 int checkValue = 0;
 char pitchPrint[20] = "Pitch = xxx         ";
-
+char etimePrint[20] = "Time = xxx          ";
+char elevelPrint[20] = "Level = xxx         ";
+char outVolumePrint[20] = "OutVolume x = xxxdb ";
+char trackVolumePrint[20] = "TrakVolume x = xxxdb";
 
 uint8_t startADCConversion()
 {
@@ -126,28 +129,41 @@ void interperetKnob(uint8_t select)
 	select = select%44;
 	float volumeDivisor = 3.1875;
 	checkValue = (knobBuffer[0][select])+(knobBuffer[1][select])+(knobBuffer[2][select])+(knobBuffer[3][select]);
-	checkValue = (checkValue >> 2);
+	checkValue = (checkValue >> 2); //this gets us the 8 bit value for to check against 
 	if (select<40)
 	{
 		uint8_t positionSelect = select%8;
 		uint8_t bankSwitch = select/8;
-		
-		//int16_t currentOutVoulume = ((currentPattern.outputLevelMSB[positionSelect]<<8)|(currentPattern.outputLevelLSB));
-		//this should be a regular integer between -70 and +10
-		//int16_t negCheckValue = (checkValue / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
-		
 		switch (bankSwitch)
 		{
-			case 0:
-			//int16_t currentOutVoulume = ((currentPattern.outputLevelMSB[positionSelect]<<8)|(currentPattern.outputLevelLSB)); 
+			
+			case 0:; //switch cases are "labels", used for goto stuff. so, you have to end the label before declaring variables. should be fine?
+			
+			int16_t currentOutVoulume = ((currentPattern.outputLevelMSB[positionSelect]<<8)|(currentPattern.outputLevelLSB[positionSelect])); 
 			//this should be a regular integer between -70 and +10
-			//int16_t negCheckValue = (checkValue / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
-			//if(currentOutVoulume!=negCheckValue)
-			//{
-			//	currentPattern.outputLevelMSB = (negCheckValue>>8);
-			//	currentPattern.outputLevelLSB = (negCheckValue) //will this just throw away the top 8 bits?
-				//then output to screen.
-		//	}
+			int16_t negCheckValue = (checkValue / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
+			if(currentOutVoulume!=negCheckValue)
+			{
+				currentPattern.outputLevelLSB[positionSelect] = (negCheckValue);
+				if(negCheckValue>(-1))
+				{
+					currentPattern.outputLevelMSB[positionSelect] = 0;
+					//just hard coding this for now until we make a function.
+					outVolumePrint[14] = 48;
+					outVolumePrint[16] = (currentPattern.outputLevelLSB[positionSelect]%10)+48;
+					outVolumePrint[15] = ((currentPattern.outputLevelLSB[positionSelect]%100)/10)+48;
+				}else
+				{
+					currentPattern.outputLevelMSB[positionSelect] = 255;
+					outVolumePrint[14] = '-';
+					outVolumePrint[15] = ((((currentPattern.outputLevelLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
+					outVolumePrint[16] = (((currentPattern.outputLevelLSB[positionSelect]^255)+1)%10)+48;
+				}
+				//then output to screen. 
+				outVolumePrint[10] = positionSelect + 49;
+				outputS(outVolumePrint, 3);
+				setOutputVolume(currentPattern.outputLevelLSB[positionSelect], currentPattern.outputLevelMSB[positionSelect], positionSelect);
+			}
 			break;
 			
  			case 1:
@@ -167,25 +183,47 @@ void interperetKnob(uint8_t select)
  			break;
 // 			
 // 			case 2:
-// 			if(eTime[positionSelect]!=checkValue)
-// 			{
-// 				(eTime[positionSelect]) = checkValue;
-// 			}
-// 			break;
-// 			
-// 			case 3:
 // 			if(eLevel[positionSelect]!=checkValue)
 // 			{
 // 				(eLevel[positionSelect]) = checkValue;
 // 			}
 // 			break;
 // 			
-// 			case 4:
-// 			if(trackVolume[positionSelect]!=checkValue)
+// 			case 3:
+// 			if(eTime[positionSelect]!=checkValue)
 // 			{
-// 				(trackVolume[positionSelect]) = (checkValue/volumeDivisor);
+// 				(eTime[positionSelect]) = checkValue;
 // 			}
 // 			break;
+// 			
+ 			case 4:;
+ 			int16_t currentTrackVolume = ((currentPattern.trackMainVolumeMSB[positionSelect]<<8)|(currentPattern.trackMainVolumeLSB[positionSelect]));
+ 			//this should be a regular integer between -70 and +10
+ 			int16_t negCheckValueTrack = (checkValue / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
+ 			if(currentTrackVolume!=negCheckValueTrack)
+ 			{
+	 			currentPattern.trackMainVolumeLSB[positionSelect] = (negCheckValueTrack);
+	 			if(negCheckValueTrack>(-1))
+	 			{
+		 			currentPattern.trackMainVolumeMSB[positionSelect] = 0;
+		 			//just hard coding this for now until we make a function.
+		 			trackVolumePrint[14] = 48;
+		 			trackVolumePrint[16] = (currentPattern.trackMainVolumeLSB[positionSelect]%10)+48;
+		 			trackVolumePrint[15] = ((currentPattern.trackMainVolumeLSB[positionSelect]%100)/10)+48;
+	 			}else
+	 			{
+		 			currentPattern.trackMainVolumeMSB[positionSelect] = 255;
+		 			trackVolumePrint[14] = '-';
+		 			trackVolumePrint[15] = ((((currentPattern.trackMainVolumeLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
+		 			trackVolumePrint[16] = (((currentPattern.trackMainVolumeLSB[positionSelect]^255)+1)%10)+48;
+	 			}
+	 			//then output to screen.
+	 			trackVolumePrint[10] = positionSelect + 49;
+	 			outputS(trackVolumePrint, 3);
+	 			setTrackVolume(currentPattern.trackSampleLSB[positionSelect], currentPattern.trackSampleMSB[positionSelect],
+				 currentPattern.trackMainVolumeLSB[positionSelect], currentPattern.trackMainVolumeMSB[positionSelect]);
+ 			}
+ 			break;
 		
 		}
 		
