@@ -1,0 +1,2189 @@
+
+TsunamiCS1Master.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         0000017c  00800200  00000bac  00000c40  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000bac  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          00000288  0080037c  0080037c  00000dbc  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000dbc  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000dec  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000210  00000000  00000000  00000e2c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00002fec  00000000  00000000  0000103c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 00001477  00000000  00000000  00004028  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   000011ab  00000000  00000000  0000549f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000490  00000000  00000000  0000664c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00000c6d  00000000  00000000  00006adc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00001623  00000000  00000000  00007749  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000180  00000000  00000000  00008d6c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	71 c0       	rjmp	.+226    	; 0xe4 <__ctors_end>
+   2:	00 00       	nop
+   4:	8e c0       	rjmp	.+284    	; 0x122 <__bad_interrupt>
+   6:	00 00       	nop
+   8:	8c c0       	rjmp	.+280    	; 0x122 <__bad_interrupt>
+   a:	00 00       	nop
+   c:	8a c0       	rjmp	.+276    	; 0x122 <__bad_interrupt>
+   e:	00 00       	nop
+  10:	88 c0       	rjmp	.+272    	; 0x122 <__bad_interrupt>
+  12:	00 00       	nop
+  14:	86 c0       	rjmp	.+268    	; 0x122 <__bad_interrupt>
+  16:	00 00       	nop
+  18:	84 c0       	rjmp	.+264    	; 0x122 <__bad_interrupt>
+  1a:	00 00       	nop
+  1c:	82 c0       	rjmp	.+260    	; 0x122 <__bad_interrupt>
+  1e:	00 00       	nop
+  20:	80 c0       	rjmp	.+256    	; 0x122 <__bad_interrupt>
+  22:	00 00       	nop
+  24:	7e c0       	rjmp	.+252    	; 0x122 <__bad_interrupt>
+  26:	00 00       	nop
+  28:	7c c0       	rjmp	.+248    	; 0x122 <__bad_interrupt>
+  2a:	00 00       	nop
+  2c:	7a c0       	rjmp	.+244    	; 0x122 <__bad_interrupt>
+  2e:	00 00       	nop
+  30:	78 c0       	rjmp	.+240    	; 0x122 <__bad_interrupt>
+  32:	00 00       	nop
+  34:	76 c0       	rjmp	.+236    	; 0x122 <__bad_interrupt>
+  36:	00 00       	nop
+  38:	74 c0       	rjmp	.+232    	; 0x122 <__bad_interrupt>
+  3a:	00 00       	nop
+  3c:	72 c0       	rjmp	.+228    	; 0x122 <__bad_interrupt>
+  3e:	00 00       	nop
+  40:	70 c0       	rjmp	.+224    	; 0x122 <__bad_interrupt>
+  42:	00 00       	nop
+  44:	6e c0       	rjmp	.+220    	; 0x122 <__bad_interrupt>
+  46:	00 00       	nop
+  48:	6c c0       	rjmp	.+216    	; 0x122 <__bad_interrupt>
+  4a:	00 00       	nop
+  4c:	6a c0       	rjmp	.+212    	; 0x122 <__bad_interrupt>
+  4e:	00 00       	nop
+  50:	68 c0       	rjmp	.+208    	; 0x122 <__bad_interrupt>
+  52:	00 00       	nop
+  54:	66 c0       	rjmp	.+204    	; 0x122 <__bad_interrupt>
+  56:	00 00       	nop
+  58:	64 c0       	rjmp	.+200    	; 0x122 <__bad_interrupt>
+  5a:	00 00       	nop
+  5c:	62 c0       	rjmp	.+196    	; 0x122 <__bad_interrupt>
+  5e:	00 00       	nop
+  60:	60 c0       	rjmp	.+192    	; 0x122 <__bad_interrupt>
+  62:	00 00       	nop
+  64:	5e c0       	rjmp	.+188    	; 0x122 <__bad_interrupt>
+  66:	00 00       	nop
+  68:	5c c0       	rjmp	.+184    	; 0x122 <__bad_interrupt>
+  6a:	00 00       	nop
+  6c:	d0 c4       	rjmp	.+2464   	; 0xa0e <__vector_27>
+  6e:	00 00       	nop
+  70:	58 c0       	rjmp	.+176    	; 0x122 <__bad_interrupt>
+  72:	00 00       	nop
+  74:	56 c0       	rjmp	.+172    	; 0x122 <__bad_interrupt>
+  76:	00 00       	nop
+  78:	54 c0       	rjmp	.+168    	; 0x122 <__bad_interrupt>
+  7a:	00 00       	nop
+  7c:	52 c0       	rjmp	.+164    	; 0x122 <__bad_interrupt>
+  7e:	00 00       	nop
+  80:	50 c0       	rjmp	.+160    	; 0x122 <__bad_interrupt>
+  82:	00 00       	nop
+  84:	4e c0       	rjmp	.+156    	; 0x122 <__bad_interrupt>
+  86:	00 00       	nop
+  88:	4c c0       	rjmp	.+152    	; 0x122 <__bad_interrupt>
+  8a:	00 00       	nop
+  8c:	4a c0       	rjmp	.+148    	; 0x122 <__bad_interrupt>
+  8e:	00 00       	nop
+  90:	48 c0       	rjmp	.+144    	; 0x122 <__bad_interrupt>
+  92:	00 00       	nop
+  94:	46 c0       	rjmp	.+140    	; 0x122 <__bad_interrupt>
+  96:	00 00       	nop
+  98:	44 c0       	rjmp	.+136    	; 0x122 <__bad_interrupt>
+  9a:	00 00       	nop
+  9c:	42 c0       	rjmp	.+132    	; 0x122 <__bad_interrupt>
+  9e:	00 00       	nop
+  a0:	40 c0       	rjmp	.+128    	; 0x122 <__bad_interrupt>
+  a2:	00 00       	nop
+  a4:	3e c0       	rjmp	.+124    	; 0x122 <__bad_interrupt>
+  a6:	00 00       	nop
+  a8:	3c c0       	rjmp	.+120    	; 0x122 <__bad_interrupt>
+  aa:	00 00       	nop
+  ac:	3a c0       	rjmp	.+116    	; 0x122 <__bad_interrupt>
+  ae:	00 00       	nop
+  b0:	38 c0       	rjmp	.+112    	; 0x122 <__bad_interrupt>
+  b2:	00 00       	nop
+  b4:	36 c0       	rjmp	.+108    	; 0x122 <__bad_interrupt>
+  b6:	00 00       	nop
+  b8:	34 c0       	rjmp	.+104    	; 0x122 <__bad_interrupt>
+  ba:	00 00       	nop
+  bc:	32 c0       	rjmp	.+100    	; 0x122 <__bad_interrupt>
+  be:	00 00       	nop
+  c0:	30 c0       	rjmp	.+96     	; 0x122 <__bad_interrupt>
+  c2:	00 00       	nop
+  c4:	2e c0       	rjmp	.+92     	; 0x122 <__bad_interrupt>
+  c6:	00 00       	nop
+  c8:	2c c0       	rjmp	.+88     	; 0x122 <__bad_interrupt>
+  ca:	00 00       	nop
+  cc:	2a c0       	rjmp	.+84     	; 0x122 <__bad_interrupt>
+  ce:	00 00       	nop
+  d0:	28 c0       	rjmp	.+80     	; 0x122 <__bad_interrupt>
+  d2:	00 00       	nop
+  d4:	26 c0       	rjmp	.+76     	; 0x122 <__bad_interrupt>
+  d6:	00 00       	nop
+  d8:	24 c0       	rjmp	.+72     	; 0x122 <__bad_interrupt>
+  da:	00 00       	nop
+  dc:	22 c0       	rjmp	.+68     	; 0x122 <__bad_interrupt>
+  de:	00 00       	nop
+  e0:	20 c0       	rjmp	.+64     	; 0x122 <__bad_interrupt>
+	...
+
+000000e4 <__ctors_end>:
+  e4:	11 24       	eor	r1, r1
+  e6:	1f be       	out	0x3f, r1	; 63
+  e8:	cf ef       	ldi	r28, 0xFF	; 255
+  ea:	d1 e2       	ldi	r29, 0x21	; 33
+  ec:	de bf       	out	0x3e, r29	; 62
+  ee:	cd bf       	out	0x3d, r28	; 61
+  f0:	00 e0       	ldi	r16, 0x00	; 0
+  f2:	0c bf       	out	0x3c, r16	; 60
+
+000000f4 <__do_copy_data>:
+  f4:	13 e0       	ldi	r17, 0x03	; 3
+  f6:	a0 e0       	ldi	r26, 0x00	; 0
+  f8:	b2 e0       	ldi	r27, 0x02	; 2
+  fa:	ec ea       	ldi	r30, 0xAC	; 172
+  fc:	fb e0       	ldi	r31, 0x0B	; 11
+  fe:	00 e0       	ldi	r16, 0x00	; 0
+ 100:	0b bf       	out	0x3b, r16	; 59
+ 102:	02 c0       	rjmp	.+4      	; 0x108 <__do_copy_data+0x14>
+ 104:	07 90       	elpm	r0, Z+
+ 106:	0d 92       	st	X+, r0
+ 108:	ac 37       	cpi	r26, 0x7C	; 124
+ 10a:	b1 07       	cpc	r27, r17
+ 10c:	d9 f7       	brne	.-10     	; 0x104 <__do_copy_data+0x10>
+
+0000010e <__do_clear_bss>:
+ 10e:	26 e0       	ldi	r18, 0x06	; 6
+ 110:	ac e7       	ldi	r26, 0x7C	; 124
+ 112:	b3 e0       	ldi	r27, 0x03	; 3
+ 114:	01 c0       	rjmp	.+2      	; 0x118 <.do_clear_bss_start>
+
+00000116 <.do_clear_bss_loop>:
+ 116:	1d 92       	st	X+, r1
+
+00000118 <.do_clear_bss_start>:
+ 118:	a4 30       	cpi	r26, 0x04	; 4
+ 11a:	b2 07       	cpc	r27, r18
+ 11c:	e1 f7       	brne	.-8      	; 0x116 <.do_clear_bss_loop>
+ 11e:	a6 d1       	rcall	.+844    	; 0x46c <main>
+ 120:	43 c5       	rjmp	.+2694   	; 0xba8 <_exit>
+
+00000122 <__bad_interrupt>:
+ 122:	6e cf       	rjmp	.-292    	; 0x0 <__vectors>
+
+00000124 <initButtons>:
+
+void initButtons()
+{
+	//this will initialize all of the buttons on the front panel
+	//main trigger buttons
+	PORTA = 0xFF;
+ 124:	8f ef       	ldi	r24, 0xFF	; 255
+ 126:	82 b9       	out	0x02, r24	; 2
+	PORTL = 0xFF;
+ 128:	80 93 0b 01 	sts	0x010B, r24	; 0x80010b <__TEXT_REGION_LENGTH__+0x70010b>
+
+	//GPButtons
+	PORTB = 0B00011111;
+ 12c:	8f e1       	ldi	r24, 0x1F	; 31
+ 12e:	85 b9       	out	0x05, r24	; 5
+ 130:	08 95       	ret
+
+00000132 <listenTrigButtons>:
+
+}
+
+
+void listenTrigButtons()
+{
+ 132:	cf 92       	push	r12
+ 134:	df 92       	push	r13
+ 136:	ef 92       	push	r14
+ 138:	ff 92       	push	r15
+ 13a:	0f 93       	push	r16
+ 13c:	1f 93       	push	r17
+ 13e:	cf 93       	push	r28
+ 140:	df 93       	push	r29
+	buttonsCurrentCycle = (PINL^255); //^ = bitwise XOR operation.
+ 142:	c0 91 09 01 	lds	r28, 0x0109	; 0x800109 <__TEXT_REGION_LENGTH__+0x700109>
+ 146:	c0 95       	com	r28
+ 148:	c0 93 cd 04 	sts	0x04CD, r28	; 0x8004cd <buttonsCurrentCycle>
+	fullBits = (buttonsCurrentCycle << 8) | (PINA^255);
+ 14c:	80 b1       	in	r24, 0x00	; 0
+ 14e:	d0 e0       	ldi	r29, 0x00	; 0
+ 150:	dc 2f       	mov	r29, r28
+ 152:	cc 27       	eor	r28, r28
+ 154:	80 95       	com	r24
+ 156:	c8 2b       	or	r28, r24
+ 158:	d0 93 80 05 	sts	0x0580, r29	; 0x800580 <fullBits+0x1>
+ 15c:	c0 93 7f 05 	sts	0x057F, r28	; 0x80057f <fullBits>
+	if(fullBits!=lastFullBits) //we do read the buttons every cycle, but we don't need to update everything base on the buttons if they haven't changed.
+ 160:	80 91 7c 03 	lds	r24, 0x037C	; 0x80037c <__data_end>
+ 164:	90 91 7d 03 	lds	r25, 0x037D	; 0x80037d <__data_end+0x1>
+ 168:	c8 17       	cp	r28, r24
+ 16a:	d9 07       	cpc	r29, r25
+ 16c:	09 f4       	brne	.+2      	; 0x170 <listenTrigButtons+0x3e>
+ 16e:	3d c0       	rjmp	.+122    	; 0x1ea <listenTrigButtons+0xb8>
+	{
+		lastFullBits = fullBits;
+ 170:	d0 93 7d 03 	sts	0x037D, r29	; 0x80037d <__data_end+0x1>
+ 174:	c0 93 7c 03 	sts	0x037C, r28	; 0x80037c <__data_end>
+ 178:	0d e0       	ldi	r16, 0x0D	; 13
+ 17a:	14 e0       	ldi	r17, 0x04	; 4
+ 17c:	0f 2e       	mov	r0, r31
+ 17e:	fd e1       	ldi	r31, 0x1D	; 29
+ 180:	ef 2e       	mov	r14, r31
+ 182:	f4 e0       	ldi	r31, 0x04	; 4
+ 184:	ff 2e       	mov	r15, r31
+ 186:	f0 2d       	mov	r31, r0
+				//for "perfrmance mode", we should just use the default case, and only have code for the cases where things are outside of that use case.
+				case 0: //performance mode
+				//we trigger a sound here based on the location of bc
+				trackControl(currentPattern.trackSampleLSB[bc], currentPattern.trackSampleMSB[bc], currentPattern.trackOutputRoute[bc], currentPattern.trackPlayMode[bc]);
+				//trackControl(3,0,0,1);
+				numPrinter(buttonTest,9, 2,bc);
+ 188:	88 e7       	ldi	r24, 0x78	; 120
+ 18a:	9f ef       	ldi	r25, 0xFF	; 255
+ 18c:	9c 01       	movw	r18, r24
+ 18e:	25 58       	subi	r18, 0x85	; 133
+ 190:	33 40       	sbci	r19, 0x03	; 3
+ 192:	69 01       	movw	r12, r18
+		uint16_t fullBitsParse = fullBits;
+		//play sounds, if that is the switch case on the encoder
+	//updateLEDs
+	for(uint8_t bc = 0; bc<16; bc++)//bc for buttonCounter
+	{
+		currentTrig = (fullBitsParse&1);
+ 194:	8c 2f       	mov	r24, r28
+ 196:	81 70       	andi	r24, 0x01	; 1
+ 198:	80 93 82 05 	sts	0x0582, r24	; 0x800582 <currentTrig>
+		if(currentTrig)
+ 19c:	88 23       	and	r24, r24
+ 19e:	f1 f0       	breq	.+60     	; 0x1dc <listenTrigButtons+0xaa>
+		{
+			switch (encoderAValue)
+ 1a0:	80 91 84 03 	lds	r24, 0x0384	; 0x800384 <encoderAValue>
+ 1a4:	81 11       	cpse	r24, r1
+ 1a6:	1a c0       	rjmp	.+52     	; 0x1dc <listenTrigButtons+0xaa>
+			{
+				
+				//for "perfrmance mode", we should just use the default case, and only have code for the cases where things are outside of that use case.
+				case 0: //performance mode
+				//we trigger a sound here based on the location of bc
+				trackControl(currentPattern.trackSampleLSB[bc], currentPattern.trackSampleMSB[bc], currentPattern.trackOutputRoute[bc], currentPattern.trackPlayMode[bc]);
+ 1a8:	f8 01       	movw	r30, r16
+ 1aa:	20 81       	ld	r18, Z
+ 1ac:	30 e0       	ldi	r19, 0x00	; 0
+ 1ae:	e0 57       	subi	r30, 0x70	; 112
+ 1b0:	f1 09       	sbc	r31, r1
+ 1b2:	40 81       	ld	r20, Z
+ 1b4:	50 e0       	ldi	r21, 0x00	; 0
+ 1b6:	f8 01       	movw	r30, r16
+ 1b8:	60 89       	ldd	r22, Z+16	; 0x10
+ 1ba:	70 e0       	ldi	r23, 0x00	; 0
+ 1bc:	80 a1       	ldd	r24, Z+32	; 0x20
+ 1be:	90 e0       	ldi	r25, 0x00	; 0
+ 1c0:	9c d4       	rcall	.+2360   	; 0xafa <trackControl>
+				//trackControl(3,0,0,1);
+				numPrinter(buttonTest,9, 2,bc);
+ 1c2:	96 01       	movw	r18, r12
+ 1c4:	20 0f       	add	r18, r16
+ 1c6:	31 1f       	adc	r19, r17
+ 1c8:	42 e0       	ldi	r20, 0x02	; 2
+ 1ca:	69 e0       	ldi	r22, 0x09	; 9
+ 1cc:	80 e0       	ldi	r24, 0x00	; 0
+ 1ce:	92 e0       	ldi	r25, 0x02	; 2
+ 1d0:	6d d2       	rcall	.+1242   	; 0x6ac <numPrinter>
+				outputS(buttonTest, 2);
+ 1d2:	62 e0       	ldi	r22, 0x02	; 2
+ 1d4:	70 e0       	ldi	r23, 0x00	; 0
+ 1d6:	80 e0       	ldi	r24, 0x00	; 0
+ 1d8:	92 e0       	ldi	r25, 0x02	; 2
+ 1da:	50 d2       	rcall	.+1184   	; 0x67c <outputS>
+			}
+		
+		
+		}
+		
+		fullBitsParse = fullBitsParse>>1;
+ 1dc:	d6 95       	lsr	r29
+ 1de:	c7 95       	ror	r28
+ 1e0:	0f 5f       	subi	r16, 0xFF	; 255
+ 1e2:	1f 4f       	sbci	r17, 0xFF	; 255
+	{
+		lastFullBits = fullBits;
+		uint16_t fullBitsParse = fullBits;
+		//play sounds, if that is the switch case on the encoder
+	//updateLEDs
+	for(uint8_t bc = 0; bc<16; bc++)//bc for buttonCounter
+ 1e4:	0e 15       	cp	r16, r14
+ 1e6:	1f 05       	cpc	r17, r15
+ 1e8:	a9 f6       	brne	.-86     	; 0x194 <listenTrigButtons+0x62>
+		fullBitsParse = fullBitsParse>>1;
+	}
+	}
+
+
+}
+ 1ea:	df 91       	pop	r29
+ 1ec:	cf 91       	pop	r28
+ 1ee:	1f 91       	pop	r17
+ 1f0:	0f 91       	pop	r16
+ 1f2:	ff 90       	pop	r15
+ 1f4:	ef 90       	pop	r14
+ 1f6:	df 90       	pop	r13
+ 1f8:	cf 90       	pop	r12
+ 1fa:	08 95       	ret
+
+000001fc <listenGPButtons>:
+
+void listenGPButtons() // are the encoder buttons here also?
+{
+ 1fc:	08 95       	ret
+
+000001fe <initEncoders>:
+#include "globalVariables.h"
+
+void initEncoders()
+{
+	//this is where we set the encoder pins to where they need to be
+PORTH = 0B01111000; // enable internal pullup resistors.
+ 1fe:	88 e7       	ldi	r24, 0x78	; 120
+ 200:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <__TEXT_REGION_LENGTH__+0x700102>
+ 204:	08 95       	ret
+
+00000206 <pollEncoder0>:
+
+}
+
+void pollEncoder0(uint8_t *encoderC0)
+{
+	if(~PINH&(1<<PH6))
+ 206:	20 91 00 01 	lds	r18, 0x0100	; 0x800100 <__TEXT_REGION_LENGTH__+0x700100>
+ 20a:	26 fd       	sbrc	r18, 6
+ 20c:	12 c0       	rjmp	.+36     	; 0x232 <pollEncoder0+0x2c>
+	{
+		if(~PINH&(1<<PH5))
+ 20e:	20 91 00 01 	lds	r18, 0x0100	; 0x800100 <__TEXT_REGION_LENGTH__+0x700100>
+ 212:	25 fd       	sbrc	r18, 5
+ 214:	05 c0       	rjmp	.+10     	; 0x220 <pollEncoder0+0x1a>
+		{
+			//left turn?
+			*encoderC0= (*encoderC0)+1;
+ 216:	fc 01       	movw	r30, r24
+ 218:	20 81       	ld	r18, Z
+ 21a:	2f 5f       	subi	r18, 0xFF	; 255
+ 21c:	20 83       	st	Z, r18
+ 21e:	04 c0       	rjmp	.+8      	; 0x228 <pollEncoder0+0x22>
+		}
+		else
+		{
+			*encoderC0= (*encoderC0)-1;
+ 220:	fc 01       	movw	r30, r24
+ 222:	20 81       	ld	r18, Z
+ 224:	21 50       	subi	r18, 0x01	; 1
+ 226:	20 83       	st	Z, r18
+		}
+		//_delay_ms(2); // seems un-necesary with while loop
+		while(~PINH&(1<<PH6)){} // this does make things smoother, but we need to be sure we have interupts for important things.
+ 228:	e0 e0       	ldi	r30, 0x00	; 0
+ 22a:	f1 e0       	ldi	r31, 0x01	; 1
+ 22c:	80 81       	ld	r24, Z
+ 22e:	86 ff       	sbrs	r24, 6
+ 230:	fd cf       	rjmp	.-6      	; 0x22c <pollEncoder0+0x26>
+ 232:	08 95       	ret
+
+00000234 <pollEncoder1>:
+
+}
+
+void pollEncoder1(uint8_t *encoderC1)
+{
+	if(~PINH&(1<<PH3))
+ 234:	20 91 00 01 	lds	r18, 0x0100	; 0x800100 <__TEXT_REGION_LENGTH__+0x700100>
+ 238:	23 fd       	sbrc	r18, 3
+ 23a:	12 c0       	rjmp	.+36     	; 0x260 <pollEncoder1+0x2c>
+	{
+		if(~PINH&(1<<PH4))
+ 23c:	20 91 00 01 	lds	r18, 0x0100	; 0x800100 <__TEXT_REGION_LENGTH__+0x700100>
+ 240:	24 fd       	sbrc	r18, 4
+ 242:	05 c0       	rjmp	.+10     	; 0x24e <pollEncoder1+0x1a>
+		{
+			//left turn?
+			*encoderC1=(*encoderC1)-1;
+ 244:	fc 01       	movw	r30, r24
+ 246:	20 81       	ld	r18, Z
+ 248:	21 50       	subi	r18, 0x01	; 1
+ 24a:	20 83       	st	Z, r18
+ 24c:	04 c0       	rjmp	.+8      	; 0x256 <pollEncoder1+0x22>
+		}
+		else
+		{
+			*encoderC1=(*encoderC1)+1;
+ 24e:	fc 01       	movw	r30, r24
+ 250:	20 81       	ld	r18, Z
+ 252:	2f 5f       	subi	r18, 0xFF	; 255
+ 254:	20 83       	st	Z, r18
+		}
+		//_delay_ms(2); // seems un-necesary with while loop
+		while(~PINH&(1<<PH3)){} // this does make things smoother, but we need to be sure we have interupts for important things.
+ 256:	e0 e0       	ldi	r30, 0x00	; 0
+ 258:	f1 e0       	ldi	r31, 0x01	; 1
+ 25a:	80 81       	ld	r24, Z
+ 25c:	83 ff       	sbrs	r24, 3
+ 25e:	fd cf       	rjmp	.-6      	; 0x25a <pollEncoder1+0x26>
+ 260:	08 95       	ret
+
+00000262 <listenEncoders>:
+
+
+void listenEncoders()
+{
+	//this is where we update the encoder variables.
+	pollEncoder0(&encoderAValue);
+ 262:	84 e8       	ldi	r24, 0x84	; 132
+ 264:	93 e0       	ldi	r25, 0x03	; 3
+ 266:	cf df       	rcall	.-98     	; 0x206 <pollEncoder0>
+	pollEncoder1(&encoderBValue);
+ 268:	83 e8       	ldi	r24, 0x83	; 131
+ 26a:	95 e0       	ldi	r25, 0x05	; 5
+ 26c:	e3 cf       	rjmp	.-58     	; 0x234 <pollEncoder1>
+ 26e:	08 95       	ret
+
+00000270 <initBank>:
+
+#include <avr/io.h>
+#include "globalVariables.h"
+
+void initBank()
+{
+ 270:	ed e2       	ldi	r30, 0x2D	; 45
+ 272:	f4 e0       	ldi	r31, 0x04	; 4
+	for(uint8_t i = 0; i<16; i++)
+ 274:	80 e0       	ldi	r24, 0x00	; 0
+	{
+		currentPattern.trackSampleLSB[i] = i+1;
+ 276:	8f 5f       	subi	r24, 0xFF	; 255
+ 278:	81 93       	st	Z+, r24
+#include <avr/io.h>
+#include "globalVariables.h"
+
+void initBank()
+{
+	for(uint8_t i = 0; i<16; i++)
+ 27a:	80 31       	cpi	r24, 0x10	; 16
+ 27c:	e1 f7       	brne	.-8      	; 0x276 <initBank+0x6>
+	{
+		currentPattern.trackSampleLSB[i] = i+1;
+	}
+
+
+ 27e:	08 95       	ret
+
+00000280 <startADCConversion>:
+
+
+uint8_t startADCConversion()
+{
+	
+	ADCSRA |= (1 << ADSC); //this moves the read instruction bit to the ADC Register.
+ 280:	ea e7       	ldi	r30, 0x7A	; 122
+ 282:	f0 e0       	ldi	r31, 0x00	; 0
+ 284:	80 81       	ld	r24, Z
+ 286:	80 64       	ori	r24, 0x40	; 64
+ 288:	80 83       	st	Z, r24
+	while (ADCSRA & (1 << ADSC));
+ 28a:	80 81       	ld	r24, Z
+ 28c:	86 fd       	sbrc	r24, 6
+ 28e:	fd cf       	rjmp	.-6      	; 0x28a <startADCConversion+0xa>
+	return ADCH; //this is the top 8 bits of the 10 bit ADC Read.
+ 290:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x700079>
+	
+}
+ 294:	08 95       	ret
+
+00000296 <initADC>:
+
+void initADC()
+{
+	DDRE = 0B00111000; //init pins E5, 4, and 3 as select pins on the external mux.
+ 296:	88 e3       	ldi	r24, 0x38	; 56
+ 298:	8d b9       	out	0x0d, r24	; 13
+	
+	ADMUX = (1 << ADLAR);//we're using the AREF pin to reduce analog noise, and only grabbing 8 bits from the ADC
+ 29a:	80 e2       	ldi	r24, 0x20	; 32
+ 29c:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__TEXT_REGION_LENGTH__+0x70007c>
+	ADCSRA = (1 <<  ADEN) | (1 <<ADPS2) | (1 << ADPS1) | (1 << ADPS0);
+ 2a0:	87 e8       	ldi	r24, 0x87	; 135
+ 2a2:	80 93 7a 00 	sts	0x007A, r24	; 0x80007a <__TEXT_REGION_LENGTH__+0x70007a>
+	ADCSRB = (1 << MUX5);
+ 2a6:	88 e0       	ldi	r24, 0x08	; 8
+ 2a8:	80 93 7b 00 	sts	0x007B, r24	; 0x80007b <__TEXT_REGION_LENGTH__+0x70007b>
+	DIDR0 = 0xff; // we should set this register to all 1s, so there is no digital input triggering.
+ 2ac:	8f ef       	ldi	r24, 0xFF	; 255
+ 2ae:	80 93 7e 00 	sts	0x007E, r24	; 0x80007e <__TEXT_REGION_LENGTH__+0x70007e>
+	DIDR2 = 0xff;
+ 2b2:	80 93 7d 00 	sts	0x007D, r24	; 0x80007d <__TEXT_REGION_LENGTH__+0x70007d>
+	startADCConversion();
+ 2b6:	e4 cf       	rjmp	.-56     	; 0x280 <startADCConversion>
+ 2b8:	08 95       	ret
+
+000002ba <selectKnob>:
+}
+
+void selectKnob(uint8_t select)
+{ 
+ 2ba:	cf 93       	push	r28
+	select = select%44; //accounts for overflows, may be unnecessary
+ 2bc:	98 2f       	mov	r25, r24
+ 2be:	96 95       	lsr	r25
+ 2c0:	96 95       	lsr	r25
+ 2c2:	2f e2       	ldi	r18, 0x2F	; 47
+ 2c4:	92 9f       	mul	r25, r18
+ 2c6:	91 2d       	mov	r25, r1
+ 2c8:	11 24       	eor	r1, r1
+ 2ca:	96 95       	lsr	r25
+ 2cc:	2c e2       	ldi	r18, 0x2C	; 44
+ 2ce:	92 9f       	mul	r25, r18
+ 2d0:	80 19       	sub	r24, r0
+ 2d2:	11 24       	eor	r1, r1
+ 2d4:	98 2f       	mov	r25, r24
+	if(select<40)
+ 2d6:	88 32       	cpi	r24, 0x28	; 40
+ 2d8:	18 f5       	brcc	.+70     	; 0x320 <selectKnob+0x66>
+	{
+		ADCSRB = (1 << MUX5);
+ 2da:	88 e0       	ldi	r24, 0x08	; 8
+ 2dc:	80 93 7b 00 	sts	0x007B, r24	; 0x80007b <__TEXT_REGION_LENGTH__+0x70007b>
+		uint8_t muxSelect = select%8; //this should produce a number between 1 and 7.
+ 2e0:	c9 2f       	mov	r28, r25
+ 2e2:	c7 70       	andi	r28, 0x07	; 7
+		uint8_t tempMuxSelect = muxSelect;
+
+	//we need to set the internal multiplxer
+		uint8_t internalMuxSelect = select/8;
+		
+		ADMUX = internalMuxSelect|(1 << ADLAR);   
+ 2e4:	96 95       	lsr	r25
+ 2e6:	96 95       	lsr	r25
+ 2e8:	96 95       	lsr	r25
+ 2ea:	90 62       	ori	r25, 0x20	; 32
+ 2ec:	90 93 7c 00 	sts	0x007C, r25	; 0x80007c <__TEXT_REGION_LENGTH__+0x70007c>
+		startADCConversion();//this should throw away our first read after the mux changover.
+ 2f0:	c7 df       	rcall	.-114    	; 0x280 <startADCConversion>
+		//we might need to worry about the delay, but that's fine.
+		
+		//we put our select0 and select2 pins in the opposite ports, so we need to do some math to fix that.
+		//easy stupid fix:
+		switch (tempMuxSelect)
+ 2f2:	c3 30       	cpi	r28, 0x03	; 3
+ 2f4:	59 f0       	breq	.+22     	; 0x30c <selectKnob+0x52>
+ 2f6:	18 f4       	brcc	.+6      	; 0x2fe <selectKnob+0x44>
+ 2f8:	c1 30       	cpi	r28, 0x01	; 1
+ 2fa:	31 f0       	breq	.+12     	; 0x308 <selectKnob+0x4e>
+ 2fc:	0c c0       	rjmp	.+24     	; 0x316 <selectKnob+0x5c>
+ 2fe:	c4 30       	cpi	r28, 0x04	; 4
+ 300:	39 f0       	breq	.+14     	; 0x310 <selectKnob+0x56>
+ 302:	c6 30       	cpi	r28, 0x06	; 6
+ 304:	39 f0       	breq	.+14     	; 0x314 <selectKnob+0x5a>
+ 306:	07 c0       	rjmp	.+14     	; 0x316 <selectKnob+0x5c>
+		{
+			case 1: muxSelect = 4;
+ 308:	c4 e0       	ldi	r28, 0x04	; 4
+ 30a:	05 c0       	rjmp	.+10     	; 0x316 <selectKnob+0x5c>
+			break;
+			
+			case 3:	muxSelect = 6;
+ 30c:	c6 e0       	ldi	r28, 0x06	; 6
+			break;
+ 30e:	03 c0       	rjmp	.+6      	; 0x316 <selectKnob+0x5c>
+			
+			case 4: muxSelect = 1;
+ 310:	c1 e0       	ldi	r28, 0x01	; 1
+			break;
+ 312:	01 c0       	rjmp	.+2      	; 0x316 <selectKnob+0x5c>
+			
+			case 6: muxSelect = 3;
+ 314:	c3 e0       	ldi	r28, 0x03	; 3
+			break;
+		}
+
+	//then the external multiplexer
+		PORTE = (muxSelect << 3);
+ 316:	cc 0f       	add	r28, r28
+ 318:	cc 0f       	add	r28, r28
+ 31a:	cc 0f       	add	r28, r28
+ 31c:	ce b9       	out	0x0e, r28	; 14
+ 31e:	20 c0       	rjmp	.+64     	; 0x360 <selectKnob+0xa6>
+	
+	}else
+	{ //we only have to change the ADC Register, since these knobs are wired directly into our microcontroller.
+		switch (select){
+ 320:	89 32       	cpi	r24, 0x29	; 41
+ 322:	71 f0       	breq	.+28     	; 0x340 <selectKnob+0x86>
+ 324:	18 f4       	brcc	.+6      	; 0x32c <selectKnob+0x72>
+ 326:	88 32       	cpi	r24, 0x28	; 40
+ 328:	31 f0       	breq	.+12     	; 0x336 <selectKnob+0x7c>
+ 32a:	1a c0       	rjmp	.+52     	; 0x360 <selectKnob+0xa6>
+ 32c:	8a 32       	cpi	r24, 0x2A	; 42
+ 32e:	69 f0       	breq	.+26     	; 0x34a <selectKnob+0x90>
+ 330:	8b 32       	cpi	r24, 0x2B	; 43
+ 332:	81 f0       	breq	.+32     	; 0x354 <selectKnob+0x9a>
+ 334:	15 c0       	rjmp	.+42     	; 0x360 <selectKnob+0xa6>
+		case 40:
+		ADMUX = 5|(1 << ADLAR);
+ 336:	85 e2       	ldi	r24, 0x25	; 37
+ 338:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__TEXT_REGION_LENGTH__+0x70007c>
+		startADCConversion();
+ 33c:	a1 df       	rcall	.-190    	; 0x280 <startADCConversion>
+		break;
+ 33e:	10 c0       	rjmp	.+32     	; 0x360 <selectKnob+0xa6>
+		
+		case 41:
+		ADMUX = 6|(1 << ADLAR);
+ 340:	86 e2       	ldi	r24, 0x26	; 38
+ 342:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__TEXT_REGION_LENGTH__+0x70007c>
+		startADCConversion();
+ 346:	9c df       	rcall	.-200    	; 0x280 <startADCConversion>
+		break;
+ 348:	0b c0       	rjmp	.+22     	; 0x360 <selectKnob+0xa6>
+		
+		case 42:
+		ADMUX = 7|(1 << ADLAR);
+ 34a:	87 e2       	ldi	r24, 0x27	; 39
+ 34c:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__TEXT_REGION_LENGTH__+0x70007c>
+		startADCConversion();
+ 350:	97 df       	rcall	.-210    	; 0x280 <startADCConversion>
+		break;
+ 352:	06 c0       	rjmp	.+12     	; 0x360 <selectKnob+0xa6>
+		
+		case 43:
+		//remember, this knob is in port A0.
+		ADMUX = 0|(1 << ADLAR);
+ 354:	80 e2       	ldi	r24, 0x20	; 32
+ 356:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__TEXT_REGION_LENGTH__+0x70007c>
+		ADCSRB = (0 << MUX5); 
+ 35a:	10 92 7b 00 	sts	0x007B, r1	; 0x80007b <__TEXT_REGION_LENGTH__+0x70007b>
+		startADCConversion();
+ 35e:	90 df       	rcall	.-224    	; 0x280 <startADCConversion>
+		break;
+		}
+	
+	}
+	
+}
+ 360:	cf 91       	pop	r28
+ 362:	08 95       	ret
+
+00000364 <updateKnob>:
+
+void updateKnob(uint8_t select)
+{
+ 364:	cf 93       	push	r28
+ 366:	df 93       	push	r29
+for (int i = 3; i > 0; i--) {
+	knobBuffer[i][select] = knobBuffer[i - 1][select];//shift everyone up one.
+ 368:	c8 2f       	mov	r28, r24
+ 36a:	d0 e0       	ldi	r29, 0x00	; 0
+ 36c:	c1 53       	subi	r28, 0x31	; 49
+ 36e:	db 4f       	sbci	r29, 0xFB	; 251
+ 370:	de 01       	movw	r26, r28
+ 372:	ac 57       	subi	r26, 0x7C	; 124
+ 374:	bf 4f       	sbci	r27, 0xFF	; 255
+ 376:	fe 01       	movw	r30, r28
+ 378:	e8 5a       	subi	r30, 0xA8	; 168
+ 37a:	ff 4f       	sbci	r31, 0xFF	; 255
+ 37c:	80 81       	ld	r24, Z
+ 37e:	8c 93       	st	X, r24
+ 380:	8c a5       	ldd	r24, Y+44	; 0x2c
+ 382:	80 83       	st	Z, r24
+ 384:	88 81       	ld	r24, Y
+ 386:	8c a7       	std	Y+44, r24	; 0x2c
+}
+knobBuffer[0][select] = startADCConversion(); 
+ 388:	7b df       	rcall	.-266    	; 0x280 <startADCConversion>
+ 38a:	88 83       	st	Y, r24
+
+}
+ 38c:	df 91       	pop	r29
+ 38e:	cf 91       	pop	r28
+ 390:	08 95       	ret
+
+00000392 <interperetKnob>:
+
+void interperetKnob(uint8_t select)
+{//this function will compare outputs, and write to our struct.
+ 392:	cf 93       	push	r28
+ 394:	df 93       	push	r29
+	select = select%44;
+ 396:	98 2f       	mov	r25, r24
+ 398:	96 95       	lsr	r25
+ 39a:	96 95       	lsr	r25
+ 39c:	2f e2       	ldi	r18, 0x2F	; 47
+ 39e:	92 9f       	mul	r25, r18
+ 3a0:	91 2d       	mov	r25, r1
+ 3a2:	11 24       	eor	r1, r1
+ 3a4:	96 95       	lsr	r25
+ 3a6:	2c e2       	ldi	r18, 0x2C	; 44
+ 3a8:	92 9f       	mul	r25, r18
+ 3aa:	80 19       	sub	r24, r0
+ 3ac:	11 24       	eor	r1, r1
+ 3ae:	98 2f       	mov	r25, r24
+	float volumeDivisor = 3.1875;
+	checkValue = (knobBuffer[0][select])+(knobBuffer[1][select])+(knobBuffer[2][select])+(knobBuffer[3][select]);
+ 3b0:	e8 2f       	mov	r30, r24
+ 3b2:	f0 e0       	ldi	r31, 0x00	; 0
+ 3b4:	e1 53       	subi	r30, 0x31	; 49
+ 3b6:	fb 4f       	sbci	r31, 0xFB	; 251
+	checkValue = (checkValue >> 2);
+ 3b8:	80 81       	ld	r24, Z
+ 3ba:	24 a5       	ldd	r18, Z+44	; 0x2c
+ 3bc:	30 e0       	ldi	r19, 0x00	; 0
+ 3be:	28 0f       	add	r18, r24
+ 3c0:	31 1d       	adc	r19, r1
+
+void interperetKnob(uint8_t select)
+{//this function will compare outputs, and write to our struct.
+	select = select%44;
+	float volumeDivisor = 3.1875;
+	checkValue = (knobBuffer[0][select])+(knobBuffer[1][select])+(knobBuffer[2][select])+(knobBuffer[3][select]);
+ 3c2:	df 01       	movw	r26, r30
+ 3c4:	a8 5a       	subi	r26, 0xA8	; 168
+ 3c6:	bf 4f       	sbci	r27, 0xFF	; 255
+	checkValue = (checkValue >> 2);
+ 3c8:	8c 91       	ld	r24, X
+ 3ca:	28 0f       	add	r18, r24
+ 3cc:	31 1d       	adc	r19, r1
+
+void interperetKnob(uint8_t select)
+{//this function will compare outputs, and write to our struct.
+	select = select%44;
+	float volumeDivisor = 3.1875;
+	checkValue = (knobBuffer[0][select])+(knobBuffer[1][select])+(knobBuffer[2][select])+(knobBuffer[3][select]);
+ 3ce:	ec 57       	subi	r30, 0x7C	; 124
+ 3d0:	ff 4f       	sbci	r31, 0xFF	; 255
+	checkValue = (checkValue >> 2);
+ 3d2:	80 81       	ld	r24, Z
+ 3d4:	28 0f       	add	r18, r24
+ 3d6:	31 1d       	adc	r19, r1
+ 3d8:	35 95       	asr	r19
+ 3da:	27 95       	ror	r18
+ 3dc:	35 95       	asr	r19
+ 3de:	27 95       	ror	r18
+ 3e0:	30 93 7f 03 	sts	0x037F, r19	; 0x80037f <checkValue+0x1>
+ 3e4:	20 93 7e 03 	sts	0x037E, r18	; 0x80037e <checkValue>
+	if (select<40)
+ 3e8:	98 32       	cpi	r25, 0x28	; 40
+ 3ea:	80 f5       	brcc	.+96     	; 0x44c <__LOCK_REGION_LENGTH__+0x4c>
+		
+		//int16_t currentOutVoulume = ((currentPattern.outputLevelMSB[positionSelect]<<8)|(currentPattern.outputLevelLSB));
+		//this should be a regular integer between -70 and +10
+		//int16_t negCheckValue = (checkValue / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
+		
+		switch (bankSwitch)
+ 3ec:	89 2f       	mov	r24, r25
+ 3ee:	86 95       	lsr	r24
+ 3f0:	86 95       	lsr	r24
+ 3f2:	86 95       	lsr	r24
+ 3f4:	81 30       	cpi	r24, 0x01	; 1
+ 3f6:	51 f5       	brne	.+84     	; 0x44c <__LOCK_REGION_LENGTH__+0x4c>
+	float volumeDivisor = 3.1875;
+	checkValue = (knobBuffer[0][select])+(knobBuffer[1][select])+(knobBuffer[2][select])+(knobBuffer[3][select]);
+	checkValue = (checkValue >> 2);
+	if (select<40)
+	{
+		uint8_t positionSelect = select%8;
+ 3f8:	97 70       	andi	r25, 0x07	; 7
+				//then output to screen.
+		//	}
+			break;
+			
+ 			case 1:
+ 			if(currentPattern.outputPitch[positionSelect]!=checkValue)
+ 3fa:	c9 2f       	mov	r28, r25
+ 3fc:	d0 e0       	ldi	r29, 0x00	; 0
+ 3fe:	fe 01       	movw	r30, r28
+ 400:	eb 57       	subi	r30, 0x7B	; 123
+ 402:	fc 4f       	sbci	r31, 0xFC	; 252
+ 404:	40 89       	ldd	r20, Z+16	; 0x10
+ 406:	50 e0       	ldi	r21, 0x00	; 0
+ 408:	24 17       	cp	r18, r20
+ 40a:	35 07       	cpc	r19, r21
+ 40c:	f9 f0       	breq	.+62     	; 0x44c <__LOCK_REGION_LENGTH__+0x4c>
+ 			{
+ 				(currentPattern.outputPitch[positionSelect]) = checkValue;
+ 40e:	fe 01       	movw	r30, r28
+ 410:	eb 57       	subi	r30, 0x7B	; 123
+ 412:	fc 4f       	sbci	r31, 0xFC	; 252
+ 414:	20 8b       	std	Z+16, r18	; 0x10
+				 if(encoderAValue == 0)
+ 416:	80 91 84 03 	lds	r24, 0x0384	; 0x800384 <encoderAValue>
+ 41a:	81 11       	cpse	r24, r1
+ 41c:	0e c0       	rjmp	.+28     	; 0x43a <__LOCK_REGION_LENGTH__+0x3a>
+				 {
+					 pitchPrint[5] = (positionSelect+49);
+ 41e:	9f 5c       	subi	r25, 0xCF	; 207
+ 420:	90 93 19 02 	sts	0x0219, r25	; 0x800219 <pitchPrint+0x5>
+					 numPrinter(pitchPrint,8,3,currentPattern.outputPitch[positionSelect]);
+ 424:	33 27       	eor	r19, r19
+ 426:	43 e0       	ldi	r20, 0x03	; 3
+ 428:	68 e0       	ldi	r22, 0x08	; 8
+ 42a:	84 e1       	ldi	r24, 0x14	; 20
+ 42c:	92 e0       	ldi	r25, 0x02	; 2
+ 42e:	3e d1       	rcall	.+636    	; 0x6ac <numPrinter>
+					 outputS(pitchPrint, 3);
+ 430:	63 e0       	ldi	r22, 0x03	; 3
+ 432:	70 e0       	ldi	r23, 0x00	; 0
+ 434:	84 e1       	ldi	r24, 0x14	; 20
+ 436:	92 e0       	ldi	r25, 0x02	; 2
+ 438:	21 d1       	rcall	.+578    	; 0x67c <outputS>
+				 }
+				 outputSampleRate(positionSelect, 0, currentPattern.outputPitch[positionSelect]);
+ 43a:	fe 01       	movw	r30, r28
+ 43c:	eb 57       	subi	r30, 0x7B	; 123
+ 43e:	fc 4f       	sbci	r31, 0xFC	; 252
+ 440:	40 89       	ldd	r20, Z+16	; 0x10
+ 442:	50 e0       	ldi	r21, 0x00	; 0
+ 444:	60 e0       	ldi	r22, 0x00	; 0
+ 446:	70 e0       	ldi	r23, 0x00	; 0
+ 448:	ce 01       	movw	r24, r28
+ 44a:	7c d3       	rcall	.+1784   	; 0xb44 <outputSampleRate>
+		}
+		
+	}
+
+
+}
+ 44c:	df 91       	pop	r29
+ 44e:	cf 91       	pop	r28
+ 450:	08 95       	ret
+
+00000452 <listenKnobs>:
+
+void listenKnobs()
+{
+ 452:	cf 93       	push	r28
+	for(uint8_t loopCounter = 0; loopCounter<44; loopCounter++)
+ 454:	c0 e0       	ldi	r28, 0x00	; 0
+	{
+		selectKnob(loopCounter);
+ 456:	8c 2f       	mov	r24, r28
+ 458:	30 df       	rcall	.-416    	; 0x2ba <selectKnob>
+		updateKnob(loopCounter);
+ 45a:	8c 2f       	mov	r24, r28
+ 45c:	83 df       	rcall	.-250    	; 0x364 <updateKnob>
+		interperetKnob(loopCounter);
+ 45e:	8c 2f       	mov	r24, r28
+ 460:	98 df       	rcall	.-208    	; 0x392 <interperetKnob>
+ 462:	cf 5f       	subi	r28, 0xFF	; 255
+
+}
+
+void listenKnobs()
+{
+	for(uint8_t loopCounter = 0; loopCounter<44; loopCounter++)
+ 464:	cc 32       	cpi	r28, 0x2C	; 44
+ 466:	b9 f7       	brne	.-18     	; 0x456 <listenKnobs+0x4>
+ 468:	cf 91       	pop	r28
+		updateKnob(loopCounter);
+		interperetKnob(loopCounter);
+	}
+
+
+}
+ 46a:	08 95       	ret
+
+0000046c <main>:
+ 46c:	aa d0       	rcall	.+340    	; 0x5c2 <initScreen>
+#include <avr/interrupt.h>
+
+int main(void)
+{
+	initScreen();
+	initButtons();
+ 46e:	5a de       	rcall	.-844    	; 0x124 <initButtons>
+	initEncoders();
+ 470:	c6 de       	rcall	.-628    	; 0x1fe <initEncoders>
+	initMenu();
+ 472:	0a d0       	rcall	.+20     	; 0x488 <initMenu>
+	initADC();
+ 474:	10 df       	rcall	.-480    	; 0x296 <initADC>
+	serialInit0();
+ 476:	35 d3       	rcall	.+1642   	; 0xae2 <serialInit0>
+	sei();
+	initBank(); //this will be necessary on first startup, but maybe not in the actual program? maybe just something handy to have.
+ 478:	78 94       	sei
+ 47a:	fa de       	rcall	.-524    	; 0x270 <initBank>
+	//loadMemory(); //we need to load in the first struct in locarion 0 of our eeprom.
+	//making an edit for GIT
+	//more comments to see if we can cause the same problem
+	while (1)
+	{
+		listenTrigButtons();
+ 47c:	5a de       	rcall	.-844    	; 0x132 <listenTrigButtons>
+ 47e:	be de       	rcall	.-644    	; 0x1fc <listenGPButtons>
+		listenGPButtons();
+ 480:	f0 de       	rcall	.-544    	; 0x262 <listenEncoders>
+ 482:	e7 df       	rcall	.-50     	; 0x452 <listenKnobs>
+		listenEncoders();
+ 484:	16 d0       	rcall	.+44     	; 0x4b2 <updateScreen>
+ 486:	fa cf       	rjmp	.-12     	; 0x47c <main+0x10>
+
+00000488 <initMenu>:
+		listenKnobs();
+ 488:	60 e0       	ldi	r22, 0x00	; 0
+ 48a:	70 e0       	ldi	r23, 0x00	; 0
+		//listenMidi();
+		//updateSequence();
+		updateScreen();
+ 48c:	83 e6       	ldi	r24, 0x63	; 99
+ 48e:	93 e0       	ldi	r25, 0x03	; 3
+ 490:	f5 d0       	rcall	.+490    	; 0x67c <outputS>
+
+void initMenu()
+{
+	
+outputS(s0line0, 0);
+outputS(s0line1, 1);
+ 492:	61 e0       	ldi	r22, 0x01	; 1
+ 494:	70 e0       	ldi	r23, 0x00	; 0
+ 496:	8e e4       	ldi	r24, 0x4E	; 78
+ 498:	93 e0       	ldi	r25, 0x03	; 3
+ 49a:	f0 d0       	rcall	.+480    	; 0x67c <outputS>
+outputS(s0line2, 2);
+ 49c:	62 e0       	ldi	r22, 0x02	; 2
+ 49e:	70 e0       	ldi	r23, 0x00	; 0
+ 4a0:	89 e3       	ldi	r24, 0x39	; 57
+ 4a2:	93 e0       	ldi	r25, 0x03	; 3
+ 4a4:	eb d0       	rcall	.+470    	; 0x67c <outputS>
+outputS(s0line3, 3);
+ 4a6:	63 e0       	ldi	r22, 0x03	; 3
+ 4a8:	70 e0       	ldi	r23, 0x00	; 0
+ 4aa:	84 e2       	ldi	r24, 0x24	; 36
+ 4ac:	93 e0       	ldi	r25, 0x03	; 3
+ 4ae:	e6 c0       	rjmp	.+460    	; 0x67c <outputS>
+ 4b0:	08 95       	ret
+
+000004b2 <updateScreen>:
+
+}
+
+void updateScreen()
+{
+	if(prevEncoderAValue!=encoderAValue){
+ 4b2:	80 91 84 03 	lds	r24, 0x0384	; 0x800384 <encoderAValue>
+ 4b6:	90 91 ce 04 	lds	r25, 0x04CE	; 0x8004ce <prevEncoderAValue>
+ 4ba:	98 17       	cp	r25, r24
+ 4bc:	09 f4       	brne	.+2      	; 0x4c0 <updateScreen+0xe>
+ 4be:	63 c0       	rjmp	.+198    	; 0x586 <updateScreen+0xd4>
+	encoderAValue = encoderAValue%4;
+ 4c0:	83 70       	andi	r24, 0x03	; 3
+ 4c2:	80 93 84 03 	sts	0x0384, r24	; 0x800384 <encoderAValue>
+	switch (encoderAValue)
+ 4c6:	81 30       	cpi	r24, 0x01	; 1
+ 4c8:	e1 f0       	breq	.+56     	; 0x502 <updateScreen+0x50>
+ 4ca:	30 f0       	brcs	.+12     	; 0x4d8 <updateScreen+0x26>
+ 4cc:	82 30       	cpi	r24, 0x02	; 2
+ 4ce:	71 f1       	breq	.+92     	; 0x52c <updateScreen+0x7a>
+ 4d0:	83 30       	cpi	r24, 0x03	; 3
+ 4d2:	09 f4       	brne	.+2      	; 0x4d6 <updateScreen+0x24>
+ 4d4:	40 c0       	rjmp	.+128    	; 0x556 <updateScreen+0xa4>
+ 4d6:	53 c0       	rjmp	.+166    	; 0x57e <updateScreen+0xcc>
+	{
+		case 0:
+		outputS(s0line0, 0);
+ 4d8:	60 e0       	ldi	r22, 0x00	; 0
+ 4da:	70 e0       	ldi	r23, 0x00	; 0
+ 4dc:	83 e6       	ldi	r24, 0x63	; 99
+ 4de:	93 e0       	ldi	r25, 0x03	; 3
+ 4e0:	cd d0       	rcall	.+410    	; 0x67c <outputS>
+		outputS(s0line1, 1);
+ 4e2:	61 e0       	ldi	r22, 0x01	; 1
+ 4e4:	70 e0       	ldi	r23, 0x00	; 0
+ 4e6:	8e e4       	ldi	r24, 0x4E	; 78
+ 4e8:	93 e0       	ldi	r25, 0x03	; 3
+ 4ea:	c8 d0       	rcall	.+400    	; 0x67c <outputS>
+		outputS(s0line2, 2);
+ 4ec:	62 e0       	ldi	r22, 0x02	; 2
+ 4ee:	70 e0       	ldi	r23, 0x00	; 0
+ 4f0:	89 e3       	ldi	r24, 0x39	; 57
+ 4f2:	93 e0       	ldi	r25, 0x03	; 3
+ 4f4:	c3 d0       	rcall	.+390    	; 0x67c <outputS>
+		outputS(s0line3, 3);
+ 4f6:	63 e0       	ldi	r22, 0x03	; 3
+ 4f8:	70 e0       	ldi	r23, 0x00	; 0
+ 4fa:	84 e2       	ldi	r24, 0x24	; 36
+ 4fc:	93 e0       	ldi	r25, 0x03	; 3
+ 4fe:	be d0       	rcall	.+380    	; 0x67c <outputS>
+		break;
+ 500:	3e c0       	rjmp	.+124    	; 0x57e <updateScreen+0xcc>
+		
+		case 1:
+ 		outputS(s1line0, 0);
+ 502:	60 e0       	ldi	r22, 0x00	; 0
+ 504:	70 e0       	ldi	r23, 0x00	; 0
+ 506:	8f e0       	ldi	r24, 0x0F	; 15
+ 508:	93 e0       	ldi	r25, 0x03	; 3
+ 50a:	b8 d0       	rcall	.+368    	; 0x67c <outputS>
+ 		outputS(s1line1, 1);
+ 50c:	61 e0       	ldi	r22, 0x01	; 1
+ 50e:	70 e0       	ldi	r23, 0x00	; 0
+ 510:	8a ef       	ldi	r24, 0xFA	; 250
+ 512:	92 e0       	ldi	r25, 0x02	; 2
+ 514:	b3 d0       	rcall	.+358    	; 0x67c <outputS>
+ 		outputS(s1line2, 2);
+ 516:	62 e0       	ldi	r22, 0x02	; 2
+ 518:	70 e0       	ldi	r23, 0x00	; 0
+ 51a:	85 ee       	ldi	r24, 0xE5	; 229
+ 51c:	92 e0       	ldi	r25, 0x02	; 2
+ 51e:	ae d0       	rcall	.+348    	; 0x67c <outputS>
+ 		outputS(s1line3, 3);
+ 520:	63 e0       	ldi	r22, 0x03	; 3
+ 522:	70 e0       	ldi	r23, 0x00	; 0
+ 524:	80 ed       	ldi	r24, 0xD0	; 208
+ 526:	92 e0       	ldi	r25, 0x02	; 2
+ 528:	a9 d0       	rcall	.+338    	; 0x67c <outputS>
+ 		break;
+ 52a:	29 c0       	rjmp	.+82     	; 0x57e <updateScreen+0xcc>
+		 
+		case 2:
+		outputS(s2line0, 0);
+ 52c:	60 e0       	ldi	r22, 0x00	; 0
+ 52e:	70 e0       	ldi	r23, 0x00	; 0
+ 530:	8b eb       	ldi	r24, 0xBB	; 187
+ 532:	92 e0       	ldi	r25, 0x02	; 2
+ 534:	a3 d0       	rcall	.+326    	; 0x67c <outputS>
+		outputS(s2line1, 1);
+ 536:	61 e0       	ldi	r22, 0x01	; 1
+ 538:	70 e0       	ldi	r23, 0x00	; 0
+ 53a:	86 ea       	ldi	r24, 0xA6	; 166
+ 53c:	92 e0       	ldi	r25, 0x02	; 2
+ 53e:	9e d0       	rcall	.+316    	; 0x67c <outputS>
+		outputS(s2line2, 2);
+ 540:	62 e0       	ldi	r22, 0x02	; 2
+ 542:	70 e0       	ldi	r23, 0x00	; 0
+ 544:	81 e9       	ldi	r24, 0x91	; 145
+ 546:	92 e0       	ldi	r25, 0x02	; 2
+ 548:	99 d0       	rcall	.+306    	; 0x67c <outputS>
+		outputS(s2line3, 3);
+ 54a:	63 e0       	ldi	r22, 0x03	; 3
+ 54c:	70 e0       	ldi	r23, 0x00	; 0
+ 54e:	8c e7       	ldi	r24, 0x7C	; 124
+ 550:	92 e0       	ldi	r25, 0x02	; 2
+ 552:	94 d0       	rcall	.+296    	; 0x67c <outputS>
+		break;
+ 554:	14 c0       	rjmp	.+40     	; 0x57e <updateScreen+0xcc>
+		 
+		case 3:
+		outputS(s3line0, 0);
+ 556:	60 e0       	ldi	r22, 0x00	; 0
+ 558:	70 e0       	ldi	r23, 0x00	; 0
+ 55a:	87 e6       	ldi	r24, 0x67	; 103
+ 55c:	92 e0       	ldi	r25, 0x02	; 2
+ 55e:	8e d0       	rcall	.+284    	; 0x67c <outputS>
+		outputS(s3line1, 1);
+ 560:	61 e0       	ldi	r22, 0x01	; 1
+ 562:	70 e0       	ldi	r23, 0x00	; 0
+ 564:	82 e5       	ldi	r24, 0x52	; 82
+ 566:	92 e0       	ldi	r25, 0x02	; 2
+ 568:	89 d0       	rcall	.+274    	; 0x67c <outputS>
+		outputS(s3line2, 2);
+ 56a:	62 e0       	ldi	r22, 0x02	; 2
+ 56c:	70 e0       	ldi	r23, 0x00	; 0
+ 56e:	8d e3       	ldi	r24, 0x3D	; 61
+ 570:	92 e0       	ldi	r25, 0x02	; 2
+ 572:	84 d0       	rcall	.+264    	; 0x67c <outputS>
+ 574:	63 e0       	ldi	r22, 0x03	; 3
+		outputS(s3line3, 3);
+ 576:	70 e0       	ldi	r23, 0x00	; 0
+ 578:	88 e2       	ldi	r24, 0x28	; 40
+ 57a:	92 e0       	ldi	r25, 0x02	; 2
+ 57c:	7f d0       	rcall	.+254    	; 0x67c <outputS>
+ 57e:	80 91 84 03 	lds	r24, 0x0384	; 0x800384 <encoderAValue>
+		break;
+		 
+		 
+	}
+	prevEncoderAValue = encoderAValue;
+ 582:	80 93 ce 04 	sts	0x04CE, r24	; 0x8004ce <prevEncoderAValue>
+ 586:	08 95       	ret
+
+00000588 <enableCycle>:
+ 588:	e5 e0       	ldi	r30, 0x05	; 5
+ 58a:	f1 e0       	ldi	r31, 0x01	; 1
+	//using unsigned int 8 bit values should protect this
+	//function from overflow.
+	
+	//also,this should just work.
+	//since we want to send an 8 bit value over an entire port.
+	PORTC = value;
+ 58c:	80 81       	ld	r24, Z
+ 58e:	82 60       	ori	r24, 0x02	; 2
+ 590:	80 83       	st	Z, r24
+ 592:	85 e0       	ldi	r24, 0x05	; 5
+ 594:	8a 95       	dec	r24
+ 596:	f1 f7       	brne	.-4      	; 0x594 <enableCycle+0xc>
+ 598:	00 00       	nop
+ 59a:	80 81       	ld	r24, Z
+ 59c:	8d 7f       	andi	r24, 0xFD	; 253
+ 59e:	80 83       	st	Z, r24
+ 5a0:	08 95       	ret
+
+000005a2 <command>:
+}
+
+void command(uint8_t c)
+{
+	//digitalWrite(DC, 0);
+	PORTJ &= 0B11111110; //set our DC pin low, to get ready to write data.
+ 5a2:	e5 e0       	ldi	r30, 0x05	; 5
+ 5a4:	f1 e0       	ldi	r31, 0x01	; 1
+ 5a6:	90 81       	ld	r25, Z
+ 5a8:	9e 7f       	andi	r25, 0xFE	; 254
+ 5aa:	90 83       	st	Z, r25
+	//using unsigned int 8 bit values should protect this
+	//function from overflow.
+	
+	//also,this should just work.
+	//since we want to send an 8 bit value over an entire port.
+	PORTC = value;
+ 5ac:	88 b9       	out	0x08, r24	; 8
+{
+	//digitalWrite(DC, 0);
+	PORTJ &= 0B11111110; //set our DC pin low, to get ready to write data.
+	//we need to figure out where our DC pin is.
+	send8bit(c);
+	enableCycle();
+ 5ae:	ec cf       	rjmp	.-40     	; 0x588 <enableCycle>
+ 5b0:	08 95       	ret
+
+000005b2 <data>:
+}
+
+void data(uint8_t d)
+{
+	//digitalWrite(DC, 1);
+	PORTJ |=0B00000001; //set out DC Pin high, so it's ready to write data.
+ 5b2:	e5 e0       	ldi	r30, 0x05	; 5
+ 5b4:	f1 e0       	ldi	r31, 0x01	; 1
+ 5b6:	90 81       	ld	r25, Z
+ 5b8:	91 60       	ori	r25, 0x01	; 1
+ 5ba:	90 83       	st	Z, r25
+	//using unsigned int 8 bit values should protect this
+	//function from overflow.
+	
+	//also,this should just work.
+	//since we want to send an 8 bit value over an entire port.
+	PORTC = value;
+ 5bc:	88 b9       	out	0x08, r24	; 8
+void data(uint8_t d)
+{
+	//digitalWrite(DC, 1);
+	PORTJ |=0B00000001; //set out DC Pin high, so it's ready to write data.
+	send8bit(d);
+	enableCycle();
+ 5be:	e4 cf       	rjmp	.-56     	; 0x588 <enableCycle>
+ 5c0:	08 95       	ret
+
+000005c2 <initScreen>:
+
+void initScreen()
+{
+	//this is where we will do all of the screen
+	//initialization.
+	DDRJ = 0x03; //pins 14 and 15, 14 is Enable (PortJ1), 15 is data/command (PortJ0)
+ 5c2:	83 e0       	ldi	r24, 0x03	; 3
+ 5c4:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <__TEXT_REGION_LENGTH__+0x700104>
+	DDRC =0xFF; //all pins on the LCD Data Bus.
+ 5c8:	8f ef       	ldi	r24, 0xFF	; 255
+ 5ca:	87 b9       	out	0x07, r24	; 7
+
+	
+	PORTJ &= 0B11111100;		//set both the DC line and E line of the display to 0. leave all other bits on the ports alone
+ 5cc:	e5 e0       	ldi	r30, 0x05	; 5
+ 5ce:	f1 e0       	ldi	r31, 0x01	; 1
+ 5d0:	80 81       	ld	r24, Z
+ 5d2:	8c 7f       	andi	r24, 0xFC	; 252
+ 5d4:	80 83       	st	Z, r24
+	
+	PORTC = 0x00;				// Initializes all Arduino pins for the data bus
+ 5d6:	18 b8       	out	0x08, r1	; 8
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 5d8:	8f e1       	ldi	r24, 0x1F	; 31
+ 5da:	93 e0       	ldi	r25, 0x03	; 3
+ 5dc:	01 97       	sbiw	r24, 0x01	; 1
+ 5de:	f1 f7       	brne	.-4      	; 0x5dc <initScreen+0x1a>
+ 5e0:	00 c0       	rjmp	.+0      	; 0x5e2 <initScreen+0x20>
+ 5e2:	00 00       	nop
+	_delay_us(200);				// Waits 200 us for stabilization purpose
+	
+
+	uint8_t rows = 0x08;                    // Display mode: 2/4 lines
+
+	command(0x22 | rows); // Function set: extended command set (RE=1), lines #
+ 5e4:	8a e2       	ldi	r24, 0x2A	; 42
+ 5e6:	dd df       	rcall	.-70     	; 0x5a2 <command>
+	command(0x71);        // Function selection A:
+ 5e8:	81 e7       	ldi	r24, 0x71	; 113
+ 5ea:	db df       	rcall	.-74     	; 0x5a2 <command>
+	data(0x5C);           //  enable internal Vdd regulator at 5V I/O mode (def. value) (0x00 for disable, 2.8V I/O)
+ 5ec:	8c e5       	ldi	r24, 0x5C	; 92
+ 5ee:	e1 df       	rcall	.-62     	; 0x5b2 <data>
+	command(0x20 | rows); // Function set: fundamental command set (RE=0) (exit from extended command set), lines #
+ 5f0:	88 e2       	ldi	r24, 0x28	; 40
+ 5f2:	d7 df       	rcall	.-82     	; 0x5a2 <command>
+	command(0x08);        // Display ON/OFF control: display off, cursor off, blink off (default values)
+ 5f4:	88 e0       	ldi	r24, 0x08	; 8
+ 5f6:	d5 df       	rcall	.-86     	; 0x5a2 <command>
+	command(0x22 | rows); // Function set: extended command set (RE=1), lines #
+ 5f8:	8a e2       	ldi	r24, 0x2A	; 42
+ 5fa:	d3 df       	rcall	.-90     	; 0x5a2 <command>
+	command(0x79);        // OLED characterization: OLED command set enabled (SD=1)
+ 5fc:	89 e7       	ldi	r24, 0x79	; 121
+ 5fe:	d1 df       	rcall	.-94     	; 0x5a2 <command>
+	command(0xD5);        // Set display clock divide ratio/oscillator frequency:
+ 600:	85 ed       	ldi	r24, 0xD5	; 213
+ 602:	cf df       	rcall	.-98     	; 0x5a2 <command>
+	command(0x70);        //  divide ratio=1, frequency=7 (default values)
+ 604:	80 e7       	ldi	r24, 0x70	; 112
+ 606:	cd df       	rcall	.-102    	; 0x5a2 <command>
+	command(0x78);        // OLED characterization: OLED command set disabled (SD=0) (exit from OLED command set)
+ 608:	88 e7       	ldi	r24, 0x78	; 120
+ 60a:	cb df       	rcall	.-106    	; 0x5a2 <command>
+
+
+	command(0x09);     // Extended function set (RE=1): 5-dot font, B/W inverting disabled (def. val.), 3/4 lines
+ 60c:	89 e0       	ldi	r24, 0x09	; 9
+ 60e:	c9 df       	rcall	.-110    	; 0x5a2 <command>
+
+	command(0x06);        // Entry Mode set - COM/SEG direction: COM0->COM31, SEG99->SEG0 (BDC=1, BDS=0)
+ 610:	86 e0       	ldi	r24, 0x06	; 6
+ 612:	c7 df       	rcall	.-114    	; 0x5a2 <command>
+	command(0x72);        // Function selection B:
+ 614:	82 e7       	ldi	r24, 0x72	; 114
+ 616:	c5 df       	rcall	.-118    	; 0x5a2 <command>
+	data(0x0A);           //  ROM/CGRAM selection: ROM C, CGROM=250, CGRAM=6 (ROM=10, OPR=10)
+ 618:	8a e0       	ldi	r24, 0x0A	; 10
+ 61a:	cb df       	rcall	.-106    	; 0x5b2 <data>
+	command(0x79);        // OLED characterization: OLED command set enabled (SD=1)
+ 61c:	89 e7       	ldi	r24, 0x79	; 121
+ 61e:	c1 df       	rcall	.-126    	; 0x5a2 <command>
+	command(0xDA);        // Set SEG pins hardware configuration:
+ 620:	8a ed       	ldi	r24, 0xDA	; 218
+ 622:	bf df       	rcall	.-130    	; 0x5a2 <command>
+	command(0x10);        //  alternative odd/even SEG pin, disable SEG left/right remap (default values)
+ 624:	80 e1       	ldi	r24, 0x10	; 16
+ 626:	bd df       	rcall	.-134    	; 0x5a2 <command>
+	command(0xDC);        // Function selection C:
+ 628:	8c ed       	ldi	r24, 0xDC	; 220
+ 62a:	bb df       	rcall	.-138    	; 0x5a2 <command>
+	command(0x00);        //  internal VSL, GPIO input disable
+ 62c:	80 e0       	ldi	r24, 0x00	; 0
+ 62e:	b9 df       	rcall	.-142    	; 0x5a2 <command>
+	command(0x81);        // Set contrast control:
+ 630:	81 e8       	ldi	r24, 0x81	; 129
+ 632:	b7 df       	rcall	.-146    	; 0x5a2 <command>
+ 634:	8f e7       	ldi	r24, 0x7F	; 127
+	command(0x7F);        //  contrast=127 (default value)
+ 636:	b5 df       	rcall	.-150    	; 0x5a2 <command>
+ 638:	89 ed       	ldi	r24, 0xD9	; 217
+ 63a:	b3 df       	rcall	.-154    	; 0x5a2 <command>
+	command(0xD9);        // Set phase length:
+ 63c:	81 ef       	ldi	r24, 0xF1	; 241
+ 63e:	b1 df       	rcall	.-158    	; 0x5a2 <command>
+	command(0xF1);        //  phase2=15, phase1=1 (default: 0x78)
+ 640:	8b ed       	ldi	r24, 0xDB	; 219
+ 642:	af df       	rcall	.-162    	; 0x5a2 <command>
+ 644:	80 e4       	ldi	r24, 0x40	; 64
+	command(0xDB);        // Set VCOMH deselect level:
+ 646:	ad df       	rcall	.-166    	; 0x5a2 <command>
+ 648:	88 e7       	ldi	r24, 0x78	; 120
+ 64a:	ab df       	rcall	.-170    	; 0x5a2 <command>
+	command(0x40);        //  VCOMH deselect level=1 x Vcc (default: 0x20=0,77 x Vcc)
+ 64c:	88 e2       	ldi	r24, 0x28	; 40
+ 64e:	a9 df       	rcall	.-174    	; 0x5a2 <command>
+ 650:	81 e0       	ldi	r24, 0x01	; 1
+	command(0x78);        // OLED characterization: OLED command set disabled (SD=0) (exit from OLED command set)
+ 652:	a7 df       	rcall	.-178    	; 0x5a2 <command>
+ 654:	8f e3       	ldi	r24, 0x3F	; 63
+ 656:	9f e1       	ldi	r25, 0x1F	; 31
+	command(0x20 | rows); // Function set: fundamental command set (RE=0) (exit from extended command set), lines #
+ 658:	01 97       	sbiw	r24, 0x01	; 1
+ 65a:	f1 f7       	brne	.-4      	; 0x658 <initScreen+0x96>
+ 65c:	00 c0       	rjmp	.+0      	; 0x65e <initScreen+0x9c>
+	command(0x01);        // Clear display
+ 65e:	00 00       	nop
+ 660:	80 e8       	ldi	r24, 0x80	; 128
+ 662:	9f df       	rcall	.-194    	; 0x5a2 <command>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 664:	8c e0       	ldi	r24, 0x0C	; 12
+ 666:	9d df       	rcall	.-198    	; 0x5a2 <command>
+ 668:	9f ef       	ldi	r25, 0xFF	; 255
+ 66a:	24 e3       	ldi	r18, 0x34	; 52
+ 66c:	8c e0       	ldi	r24, 0x0C	; 12
+ 66e:	91 50       	subi	r25, 0x01	; 1
+	_delay_ms(2);             // After a clear display, a minimum pause of 1-2 ms is required
+	
+	command(0x80);        // Set DDRAM address 0x00 in address counter (cursor home) (default value)
+ 670:	20 40       	sbci	r18, 0x00	; 0
+ 672:	80 40       	sbci	r24, 0x00	; 0
+ 674:	e1 f7       	brne	.-8      	; 0x66e <initScreen+0xac>
+	command(0x0C);        // Display ON/OFF control: display ON, cursor off, blink off
+ 676:	00 c0       	rjmp	.+0      	; 0x678 <initScreen+0xb6>
+ 678:	00 00       	nop
+ 67a:	08 95       	ret
+
+0000067c <outputS>:
+ 67c:	0f 93       	push	r16
+ 67e:	1f 93       	push	r17
+ 680:	cf 93       	push	r28
+ 682:	df 93       	push	r29
+ 684:	8c 01       	movw	r16, r24
+ 686:	fb 01       	movw	r30, r22
+ 688:	ff 27       	eor	r31, r31
+ 68a:	e8 58       	subi	r30, 0x88	; 136
+ 68c:	fc 4f       	sbci	r31, 0xFC	; 252
+ 68e:	80 81       	ld	r24, Z
+void outputS(char* lineIn, int row)
+{
+	uint8_t r = row;
+	uint8_t c = 0;
+	
+	command(new_line[r]);
+ 690:	88 df       	rcall	.-240    	; 0x5a2 <command>
+ 692:	e8 01       	movw	r28, r16
+ 694:	0c 5e       	subi	r16, 0xEC	; 236
+ 696:	1f 4f       	sbci	r17, 0xFF	; 255
+	//20, because our display is 20x4.
+	for(c=0; c<20; c++)
+	{
+		data(lineIn[c]);
+ 698:	89 91       	ld	r24, Y+
+ 69a:	8b df       	rcall	.-234    	; 0x5b2 <data>
+	uint8_t r = row;
+	uint8_t c = 0;
+	
+	command(new_line[r]);
+	//20, because our display is 20x4.
+	for(c=0; c<20; c++)
+ 69c:	c0 17       	cp	r28, r16
+ 69e:	d1 07       	cpc	r29, r17
+ 6a0:	d9 f7       	brne	.-10     	; 0x698 <outputS+0x1c>
+	{
+		data(lineIn[c]);
+	}
+}
+ 6a2:	df 91       	pop	r29
+ 6a4:	cf 91       	pop	r28
+ 6a6:	1f 91       	pop	r17
+ 6a8:	0f 91       	pop	r16
+ 6aa:	08 95       	ret
+
+000006ac <numPrinter>:
+
+void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint16_t inputNumber)
+{
+ 6ac:	cf 93       	push	r28
+ 6ae:	df 93       	push	r29
+ 6b0:	f9 01       	movw	r30, r18
+	uint8_t tensPlace = 0;
+	uint8_t hunderedsPlace = 0;
+	uint8_t thousandsPlace = 0;
+	uint8_t tenThousandsPlace = 0;
+	
+	switch(numCharacters)
+ 6b2:	43 30       	cpi	r20, 0x03	; 3
+ 6b4:	09 f4       	brne	.+2      	; 0x6b8 <numPrinter+0xc>
+ 6b6:	51 c0       	rjmp	.+162    	; 0x75a <numPrinter+0xae>
+ 6b8:	28 f4       	brcc	.+10     	; 0x6c4 <numPrinter+0x18>
+ 6ba:	41 30       	cpi	r20, 0x01	; 1
+ 6bc:	51 f0       	breq	.+20     	; 0x6d2 <numPrinter+0x26>
+ 6be:	42 30       	cpi	r20, 0x02	; 2
+ 6c0:	21 f1       	breq	.+72     	; 0x70a <numPrinter+0x5e>
+ 6c2:	a2 c1       	rjmp	.+836    	; 0xa08 <numPrinter+0x35c>
+ 6c4:	44 30       	cpi	r20, 0x04	; 4
+ 6c6:	09 f4       	brne	.+2      	; 0x6ca <numPrinter+0x1e>
+ 6c8:	8e c0       	rjmp	.+284    	; 0x7e6 <numPrinter+0x13a>
+ 6ca:	45 30       	cpi	r20, 0x05	; 5
+ 6cc:	09 f4       	brne	.+2      	; 0x6d0 <numPrinter+0x24>
+ 6ce:	fd c0       	rjmp	.+506    	; 0x8ca <numPrinter+0x21e>
+ 6d0:	9b c1       	rjmp	.+822    	; 0xa08 <numPrinter+0x35c>
+		case 0:
+		break;
+		
+		case 1:
+		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
+		charArray[startingPos] = onesPlace;
+ 6d2:	ec 01       	movw	r28, r24
+ 6d4:	c6 0f       	add	r28, r22
+ 6d6:	d1 1d       	adc	r29, r1
+ 6d8:	ad ec       	ldi	r26, 0xCD	; 205
+ 6da:	bc ec       	ldi	r27, 0xCC	; 204
+ 6dc:	56 d2       	rcall	.+1196   	; 0xb8a <__umulhisi3>
+ 6de:	96 95       	lsr	r25
+ 6e0:	87 95       	ror	r24
+ 6e2:	96 95       	lsr	r25
+ 6e4:	87 95       	ror	r24
+ 6e6:	96 95       	lsr	r25
+ 6e8:	87 95       	ror	r24
+ 6ea:	9c 01       	movw	r18, r24
+ 6ec:	22 0f       	add	r18, r18
+ 6ee:	33 1f       	adc	r19, r19
+ 6f0:	88 0f       	add	r24, r24
+ 6f2:	99 1f       	adc	r25, r25
+ 6f4:	88 0f       	add	r24, r24
+ 6f6:	99 1f       	adc	r25, r25
+ 6f8:	88 0f       	add	r24, r24
+ 6fa:	99 1f       	adc	r25, r25
+ 6fc:	82 0f       	add	r24, r18
+ 6fe:	93 1f       	adc	r25, r19
+ 700:	e8 1b       	sub	r30, r24
+ 702:	f9 0b       	sbc	r31, r25
+ 704:	e0 5d       	subi	r30, 0xD0	; 208
+ 706:	e8 83       	st	Y, r30
+		break;
+ 708:	7f c1       	rjmp	.+766    	; 0xa08 <numPrinter+0x35c>
+		
+		case 2:
+		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
+		tensPlace = (inputNumber/10)+48;
+		charArray[(startingPos+1)] = onesPlace;
+ 70a:	ec 01       	movw	r28, r24
+ 70c:	c6 0f       	add	r28, r22
+ 70e:	d1 1d       	adc	r29, r1
+ 710:	ad ec       	ldi	r26, 0xCD	; 205
+ 712:	bc ec       	ldi	r27, 0xCC	; 204
+ 714:	3a d2       	rcall	.+1140   	; 0xb8a <__umulhisi3>
+ 716:	96 95       	lsr	r25
+ 718:	87 95       	ror	r24
+ 71a:	96 95       	lsr	r25
+ 71c:	87 95       	ror	r24
+ 71e:	96 95       	lsr	r25
+ 720:	87 95       	ror	r24
+ 722:	9c 01       	movw	r18, r24
+ 724:	22 0f       	add	r18, r18
+ 726:	33 1f       	adc	r19, r19
+ 728:	88 0f       	add	r24, r24
+ 72a:	99 1f       	adc	r25, r25
+ 72c:	88 0f       	add	r24, r24
+ 72e:	99 1f       	adc	r25, r25
+ 730:	88 0f       	add	r24, r24
+ 732:	99 1f       	adc	r25, r25
+ 734:	82 0f       	add	r24, r18
+ 736:	93 1f       	adc	r25, r19
+ 738:	9f 01       	movw	r18, r30
+ 73a:	28 1b       	sub	r18, r24
+ 73c:	39 0b       	sbc	r19, r25
+ 73e:	c9 01       	movw	r24, r18
+ 740:	80 5d       	subi	r24, 0xD0	; 208
+ 742:	89 83       	std	Y+1, r24	; 0x01
+		charArray[startingPos] = tensPlace;
+ 744:	9f 01       	movw	r18, r30
+ 746:	21 d2       	rcall	.+1090   	; 0xb8a <__umulhisi3>
+ 748:	96 95       	lsr	r25
+ 74a:	87 95       	ror	r24
+ 74c:	96 95       	lsr	r25
+ 74e:	87 95       	ror	r24
+ 750:	96 95       	lsr	r25
+ 752:	87 95       	ror	r24
+ 754:	80 5d       	subi	r24, 0xD0	; 208
+ 756:	88 83       	st	Y, r24
+ 758:	57 c1       	rjmp	.+686    	; 0xa08 <numPrinter+0x35c>
+		break;
+ 75a:	ec 01       	movw	r28, r24
+		
+		case 3:
+		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
+		tensPlace = ((inputNumber%100)/10)+48;
+		hunderedsPlace = (inputNumber/100)+48;
+		charArray[(startingPos+2)] = onesPlace;
+ 75c:	c6 0f       	add	r28, r22
+ 75e:	d1 1d       	adc	r29, r1
+ 760:	ad ec       	ldi	r26, 0xCD	; 205
+ 762:	bc ec       	ldi	r27, 0xCC	; 204
+ 764:	12 d2       	rcall	.+1060   	; 0xb8a <__umulhisi3>
+ 766:	96 95       	lsr	r25
+ 768:	87 95       	ror	r24
+ 76a:	96 95       	lsr	r25
+ 76c:	87 95       	ror	r24
+ 76e:	96 95       	lsr	r25
+ 770:	87 95       	ror	r24
+ 772:	9c 01       	movw	r18, r24
+ 774:	22 0f       	add	r18, r18
+ 776:	33 1f       	adc	r19, r19
+ 778:	88 0f       	add	r24, r24
+ 77a:	99 1f       	adc	r25, r25
+ 77c:	88 0f       	add	r24, r24
+ 77e:	99 1f       	adc	r25, r25
+ 780:	88 0f       	add	r24, r24
+ 782:	99 1f       	adc	r25, r25
+ 784:	82 0f       	add	r24, r18
+ 786:	93 1f       	adc	r25, r19
+ 788:	9f 01       	movw	r18, r30
+ 78a:	28 1b       	sub	r18, r24
+ 78c:	39 0b       	sbc	r19, r25
+ 78e:	c9 01       	movw	r24, r18
+ 790:	80 5d       	subi	r24, 0xD0	; 208
+ 792:	8a 83       	std	Y+2, r24	; 0x02
+ 794:	af 01       	movw	r20, r30
+		charArray[(startingPos+1)] = tensPlace;
+ 796:	56 95       	lsr	r21
+ 798:	47 95       	ror	r20
+ 79a:	56 95       	lsr	r21
+ 79c:	47 95       	ror	r20
+ 79e:	9a 01       	movw	r18, r20
+ 7a0:	ab e7       	ldi	r26, 0x7B	; 123
+ 7a2:	b4 e1       	ldi	r27, 0x14	; 20
+ 7a4:	f2 d1       	rcall	.+996    	; 0xb8a <__umulhisi3>
+ 7a6:	96 95       	lsr	r25
+ 7a8:	87 95       	ror	r24
+ 7aa:	64 e6       	ldi	r22, 0x64	; 100
+ 7ac:	68 9f       	mul	r22, r24
+ 7ae:	90 01       	movw	r18, r0
+ 7b0:	69 9f       	mul	r22, r25
+ 7b2:	30 0d       	add	r19, r0
+ 7b4:	11 24       	eor	r1, r1
+ 7b6:	cf 01       	movw	r24, r30
+ 7b8:	82 1b       	sub	r24, r18
+ 7ba:	93 0b       	sbc	r25, r19
+ 7bc:	9c 01       	movw	r18, r24
+ 7be:	ad ec       	ldi	r26, 0xCD	; 205
+ 7c0:	bc ec       	ldi	r27, 0xCC	; 204
+ 7c2:	e3 d1       	rcall	.+966    	; 0xb8a <__umulhisi3>
+ 7c4:	96 95       	lsr	r25
+ 7c6:	87 95       	ror	r24
+ 7c8:	96 95       	lsr	r25
+ 7ca:	87 95       	ror	r24
+ 7cc:	96 95       	lsr	r25
+ 7ce:	87 95       	ror	r24
+ 7d0:	80 5d       	subi	r24, 0xD0	; 208
+ 7d2:	89 83       	std	Y+1, r24	; 0x01
+		charArray[startingPos] = hunderedsPlace;
+ 7d4:	9a 01       	movw	r18, r20
+ 7d6:	ab e7       	ldi	r26, 0x7B	; 123
+ 7d8:	b4 e1       	ldi	r27, 0x14	; 20
+ 7da:	d7 d1       	rcall	.+942    	; 0xb8a <__umulhisi3>
+ 7dc:	96 95       	lsr	r25
+ 7de:	87 95       	ror	r24
+ 7e0:	80 5d       	subi	r24, 0xD0	; 208
+ 7e2:	88 83       	st	Y, r24
+		break;
+ 7e4:	11 c1       	rjmp	.+546    	; 0xa08 <numPrinter+0x35c>
+		case 4:
+		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
+		tensPlace = ((inputNumber%100)/10)+48;
+		hunderedsPlace = ((inputNumber%1000)/100)+48;
+		thousandsPlace = (inputNumber/1000)+48;
+		charArray[(startingPos+3)] = onesPlace;
+ 7e6:	ec 01       	movw	r28, r24
+ 7e8:	c6 0f       	add	r28, r22
+ 7ea:	d1 1d       	adc	r29, r1
+ 7ec:	ad ec       	ldi	r26, 0xCD	; 205
+ 7ee:	bc ec       	ldi	r27, 0xCC	; 204
+ 7f0:	cc d1       	rcall	.+920    	; 0xb8a <__umulhisi3>
+ 7f2:	96 95       	lsr	r25
+ 7f4:	87 95       	ror	r24
+ 7f6:	96 95       	lsr	r25
+ 7f8:	87 95       	ror	r24
+ 7fa:	96 95       	lsr	r25
+ 7fc:	87 95       	ror	r24
+ 7fe:	9c 01       	movw	r18, r24
+ 800:	22 0f       	add	r18, r18
+ 802:	33 1f       	adc	r19, r19
+ 804:	88 0f       	add	r24, r24
+ 806:	99 1f       	adc	r25, r25
+ 808:	88 0f       	add	r24, r24
+ 80a:	99 1f       	adc	r25, r25
+ 80c:	88 0f       	add	r24, r24
+ 80e:	99 1f       	adc	r25, r25
+ 810:	82 0f       	add	r24, r18
+ 812:	93 1f       	adc	r25, r19
+ 814:	9f 01       	movw	r18, r30
+ 816:	28 1b       	sub	r18, r24
+ 818:	39 0b       	sbc	r19, r25
+ 81a:	c9 01       	movw	r24, r18
+ 81c:	80 5d       	subi	r24, 0xD0	; 208
+ 81e:	8b 83       	std	Y+3, r24	; 0x03
+		charArray[(startingPos+2)] = tensPlace;
+ 820:	9f 01       	movw	r18, r30
+ 822:	36 95       	lsr	r19
+ 824:	27 95       	ror	r18
+ 826:	36 95       	lsr	r19
+ 828:	27 95       	ror	r18
+ 82a:	ab e7       	ldi	r26, 0x7B	; 123
+ 82c:	b4 e1       	ldi	r27, 0x14	; 20
+ 82e:	ad d1       	rcall	.+858    	; 0xb8a <__umulhisi3>
+ 830:	96 95       	lsr	r25
+ 832:	87 95       	ror	r24
+ 834:	44 e6       	ldi	r20, 0x64	; 100
+ 836:	48 9f       	mul	r20, r24
+ 838:	90 01       	movw	r18, r0
+ 83a:	49 9f       	mul	r20, r25
+ 83c:	30 0d       	add	r19, r0
+ 83e:	11 24       	eor	r1, r1
+ 840:	cf 01       	movw	r24, r30
+ 842:	82 1b       	sub	r24, r18
+ 844:	93 0b       	sbc	r25, r19
+ 846:	9c 01       	movw	r18, r24
+ 848:	ad ec       	ldi	r26, 0xCD	; 205
+ 84a:	bc ec       	ldi	r27, 0xCC	; 204
+ 84c:	9e d1       	rcall	.+828    	; 0xb8a <__umulhisi3>
+ 84e:	96 95       	lsr	r25
+ 850:	87 95       	ror	r24
+ 852:	96 95       	lsr	r25
+ 854:	87 95       	ror	r24
+ 856:	96 95       	lsr	r25
+ 858:	87 95       	ror	r24
+ 85a:	80 5d       	subi	r24, 0xD0	; 208
+ 85c:	8a 83       	std	Y+2, r24	; 0x02
+ 85e:	af 01       	movw	r20, r30
+		charArray[(startingPos+1)] = hunderedsPlace;
+ 860:	56 95       	lsr	r21
+ 862:	47 95       	ror	r20
+ 864:	56 95       	lsr	r21
+ 866:	47 95       	ror	r20
+ 868:	56 95       	lsr	r21
+ 86a:	47 95       	ror	r20
+ 86c:	9a 01       	movw	r18, r20
+ 86e:	a5 ec       	ldi	r26, 0xC5	; 197
+ 870:	b0 e2       	ldi	r27, 0x20	; 32
+ 872:	8b d1       	rcall	.+790    	; 0xb8a <__umulhisi3>
+ 874:	92 95       	swap	r25
+ 876:	82 95       	swap	r24
+ 878:	8f 70       	andi	r24, 0x0F	; 15
+ 87a:	89 27       	eor	r24, r25
+ 87c:	9f 70       	andi	r25, 0x0F	; 15
+ 87e:	89 27       	eor	r24, r25
+ 880:	68 ee       	ldi	r22, 0xE8	; 232
+ 882:	73 e0       	ldi	r23, 0x03	; 3
+ 884:	86 9f       	mul	r24, r22
+ 886:	90 01       	movw	r18, r0
+ 888:	87 9f       	mul	r24, r23
+ 88a:	30 0d       	add	r19, r0
+ 88c:	96 9f       	mul	r25, r22
+ 88e:	30 0d       	add	r19, r0
+ 890:	11 24       	eor	r1, r1
+ 892:	cf 01       	movw	r24, r30
+ 894:	82 1b       	sub	r24, r18
+ 896:	93 0b       	sbc	r25, r19
+ 898:	9c 01       	movw	r18, r24
+ 89a:	36 95       	lsr	r19
+ 89c:	27 95       	ror	r18
+ 89e:	36 95       	lsr	r19
+ 8a0:	27 95       	ror	r18
+ 8a2:	ab e7       	ldi	r26, 0x7B	; 123
+ 8a4:	b4 e1       	ldi	r27, 0x14	; 20
+ 8a6:	71 d1       	rcall	.+738    	; 0xb8a <__umulhisi3>
+ 8a8:	96 95       	lsr	r25
+ 8aa:	87 95       	ror	r24
+ 8ac:	80 5d       	subi	r24, 0xD0	; 208
+ 8ae:	89 83       	std	Y+1, r24	; 0x01
+		charArray[startingPos] = thousandsPlace;
+ 8b0:	9a 01       	movw	r18, r20
+ 8b2:	a5 ec       	ldi	r26, 0xC5	; 197
+ 8b4:	b0 e2       	ldi	r27, 0x20	; 32
+ 8b6:	69 d1       	rcall	.+722    	; 0xb8a <__umulhisi3>
+ 8b8:	92 95       	swap	r25
+ 8ba:	82 95       	swap	r24
+ 8bc:	8f 70       	andi	r24, 0x0F	; 15
+ 8be:	89 27       	eor	r24, r25
+ 8c0:	9f 70       	andi	r25, 0x0F	; 15
+ 8c2:	89 27       	eor	r24, r25
+ 8c4:	80 5d       	subi	r24, 0xD0	; 208
+ 8c6:	88 83       	st	Y, r24
+		break;
+ 8c8:	9f c0       	rjmp	.+318    	; 0xa08 <numPrinter+0x35c>
+		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
+		tensPlace = ((inputNumber%100)/10)+48;
+		hunderedsPlace = ((inputNumber%1000)/100)+48;
+		thousandsPlace = ((inputNumber%10000)/1000)+48;
+		tenThousandsPlace = (inputNumber/10000)+48;
+		charArray[(startingPos+4)] = onesPlace;
+ 8ca:	ec 01       	movw	r28, r24
+ 8cc:	c6 0f       	add	r28, r22
+ 8ce:	d1 1d       	adc	r29, r1
+ 8d0:	ad ec       	ldi	r26, 0xCD	; 205
+ 8d2:	bc ec       	ldi	r27, 0xCC	; 204
+ 8d4:	5a d1       	rcall	.+692    	; 0xb8a <__umulhisi3>
+ 8d6:	96 95       	lsr	r25
+ 8d8:	87 95       	ror	r24
+ 8da:	96 95       	lsr	r25
+ 8dc:	87 95       	ror	r24
+ 8de:	96 95       	lsr	r25
+ 8e0:	87 95       	ror	r24
+ 8e2:	9c 01       	movw	r18, r24
+ 8e4:	22 0f       	add	r18, r18
+ 8e6:	33 1f       	adc	r19, r19
+ 8e8:	88 0f       	add	r24, r24
+ 8ea:	99 1f       	adc	r25, r25
+ 8ec:	88 0f       	add	r24, r24
+ 8ee:	99 1f       	adc	r25, r25
+ 8f0:	88 0f       	add	r24, r24
+ 8f2:	99 1f       	adc	r25, r25
+ 8f4:	82 0f       	add	r24, r18
+ 8f6:	93 1f       	adc	r25, r19
+ 8f8:	9f 01       	movw	r18, r30
+ 8fa:	28 1b       	sub	r18, r24
+ 8fc:	39 0b       	sbc	r19, r25
+ 8fe:	c9 01       	movw	r24, r18
+ 900:	80 5d       	subi	r24, 0xD0	; 208
+ 902:	8c 83       	std	Y+4, r24	; 0x04
+		charArray[(startingPos+3)] = tensPlace;
+ 904:	9f 01       	movw	r18, r30
+ 906:	36 95       	lsr	r19
+ 908:	27 95       	ror	r18
+ 90a:	36 95       	lsr	r19
+ 90c:	27 95       	ror	r18
+ 90e:	ab e7       	ldi	r26, 0x7B	; 123
+ 910:	b4 e1       	ldi	r27, 0x14	; 20
+ 912:	3b d1       	rcall	.+630    	; 0xb8a <__umulhisi3>
+ 914:	96 95       	lsr	r25
+ 916:	87 95       	ror	r24
+ 918:	44 e6       	ldi	r20, 0x64	; 100
+ 91a:	48 9f       	mul	r20, r24
+ 91c:	90 01       	movw	r18, r0
+ 91e:	49 9f       	mul	r20, r25
+ 920:	30 0d       	add	r19, r0
+ 922:	11 24       	eor	r1, r1
+ 924:	cf 01       	movw	r24, r30
+ 926:	82 1b       	sub	r24, r18
+ 928:	93 0b       	sbc	r25, r19
+ 92a:	9c 01       	movw	r18, r24
+ 92c:	ad ec       	ldi	r26, 0xCD	; 205
+ 92e:	bc ec       	ldi	r27, 0xCC	; 204
+ 930:	2c d1       	rcall	.+600    	; 0xb8a <__umulhisi3>
+ 932:	96 95       	lsr	r25
+ 934:	87 95       	ror	r24
+ 936:	96 95       	lsr	r25
+ 938:	87 95       	ror	r24
+ 93a:	96 95       	lsr	r25
+ 93c:	87 95       	ror	r24
+ 93e:	80 5d       	subi	r24, 0xD0	; 208
+ 940:	8b 83       	std	Y+3, r24	; 0x03
+		charArray[(startingPos+2)] = hunderedsPlace;
+ 942:	9f 01       	movw	r18, r30
+ 944:	36 95       	lsr	r19
+ 946:	27 95       	ror	r18
+ 948:	36 95       	lsr	r19
+ 94a:	27 95       	ror	r18
+ 94c:	36 95       	lsr	r19
+ 94e:	27 95       	ror	r18
+ 950:	a5 ec       	ldi	r26, 0xC5	; 197
+ 952:	b0 e2       	ldi	r27, 0x20	; 32
+ 954:	1a d1       	rcall	.+564    	; 0xb8a <__umulhisi3>
+ 956:	92 95       	swap	r25
+ 958:	82 95       	swap	r24
+ 95a:	8f 70       	andi	r24, 0x0F	; 15
+ 95c:	89 27       	eor	r24, r25
+ 95e:	9f 70       	andi	r25, 0x0F	; 15
+ 960:	89 27       	eor	r24, r25
+ 962:	48 ee       	ldi	r20, 0xE8	; 232
+ 964:	53 e0       	ldi	r21, 0x03	; 3
+ 966:	84 9f       	mul	r24, r20
+ 968:	90 01       	movw	r18, r0
+ 96a:	85 9f       	mul	r24, r21
+ 96c:	30 0d       	add	r19, r0
+ 96e:	94 9f       	mul	r25, r20
+ 970:	30 0d       	add	r19, r0
+ 972:	11 24       	eor	r1, r1
+ 974:	cf 01       	movw	r24, r30
+ 976:	82 1b       	sub	r24, r18
+ 978:	93 0b       	sbc	r25, r19
+ 97a:	9c 01       	movw	r18, r24
+ 97c:	36 95       	lsr	r19
+ 97e:	27 95       	ror	r18
+ 980:	36 95       	lsr	r19
+ 982:	27 95       	ror	r18
+ 984:	ab e7       	ldi	r26, 0x7B	; 123
+ 986:	b4 e1       	ldi	r27, 0x14	; 20
+ 988:	00 d1       	rcall	.+512    	; 0xb8a <__umulhisi3>
+ 98a:	96 95       	lsr	r25
+ 98c:	87 95       	ror	r24
+ 98e:	80 5d       	subi	r24, 0xD0	; 208
+ 990:	8a 83       	std	Y+2, r24	; 0x02
+		charArray[(startingPos+1)] = thousandsPlace;
+ 992:	af 01       	movw	r20, r30
+ 994:	52 95       	swap	r21
+ 996:	42 95       	swap	r20
+ 998:	4f 70       	andi	r20, 0x0F	; 15
+ 99a:	45 27       	eor	r20, r21
+ 99c:	5f 70       	andi	r21, 0x0F	; 15
+ 99e:	45 27       	eor	r20, r21
+ 9a0:	9a 01       	movw	r18, r20
+ 9a2:	a7 e4       	ldi	r26, 0x47	; 71
+ 9a4:	b3 e0       	ldi	r27, 0x03	; 3
+ 9a6:	f1 d0       	rcall	.+482    	; 0xb8a <__umulhisi3>
+ 9a8:	96 95       	lsr	r25
+ 9aa:	87 95       	ror	r24
+ 9ac:	96 95       	lsr	r25
+ 9ae:	87 95       	ror	r24
+ 9b0:	96 95       	lsr	r25
+ 9b2:	87 95       	ror	r24
+ 9b4:	60 e1       	ldi	r22, 0x10	; 16
+ 9b6:	77 e2       	ldi	r23, 0x27	; 39
+ 9b8:	86 9f       	mul	r24, r22
+ 9ba:	90 01       	movw	r18, r0
+ 9bc:	87 9f       	mul	r24, r23
+ 9be:	30 0d       	add	r19, r0
+ 9c0:	96 9f       	mul	r25, r22
+ 9c2:	30 0d       	add	r19, r0
+ 9c4:	11 24       	eor	r1, r1
+ 9c6:	cf 01       	movw	r24, r30
+ 9c8:	82 1b       	sub	r24, r18
+ 9ca:	93 0b       	sbc	r25, r19
+ 9cc:	9c 01       	movw	r18, r24
+ 9ce:	36 95       	lsr	r19
+ 9d0:	27 95       	ror	r18
+ 9d2:	36 95       	lsr	r19
+ 9d4:	27 95       	ror	r18
+ 9d6:	36 95       	lsr	r19
+ 9d8:	27 95       	ror	r18
+ 9da:	a5 ec       	ldi	r26, 0xC5	; 197
+ 9dc:	b0 e2       	ldi	r27, 0x20	; 32
+ 9de:	d5 d0       	rcall	.+426    	; 0xb8a <__umulhisi3>
+ 9e0:	92 95       	swap	r25
+ 9e2:	82 95       	swap	r24
+ 9e4:	8f 70       	andi	r24, 0x0F	; 15
+ 9e6:	89 27       	eor	r24, r25
+ 9e8:	9f 70       	andi	r25, 0x0F	; 15
+ 9ea:	89 27       	eor	r24, r25
+ 9ec:	80 5d       	subi	r24, 0xD0	; 208
+ 9ee:	89 83       	std	Y+1, r24	; 0x01
+		charArray[startingPos] = tenThousandsPlace;
+ 9f0:	9a 01       	movw	r18, r20
+ 9f2:	a7 e4       	ldi	r26, 0x47	; 71
+ 9f4:	b3 e0       	ldi	r27, 0x03	; 3
+ 9f6:	c9 d0       	rcall	.+402    	; 0xb8a <__umulhisi3>
+ 9f8:	96 95       	lsr	r25
+ 9fa:	87 95       	ror	r24
+ 9fc:	96 95       	lsr	r25
+ 9fe:	87 95       	ror	r24
+ a00:	96 95       	lsr	r25
+ a02:	87 95       	ror	r24
+ a04:	80 5d       	subi	r24, 0xD0	; 208
+ a06:	88 83       	st	Y, r24
+ a08:	df 91       	pop	r29
+		break;
+		
+	}
+
+
+ a0a:	cf 91       	pop	r28
+ a0c:	08 95       	ret
+
+00000a0e <__vector_27>:
+
+int serialReadPos = 0;////this is a necessary global for the serial Library
+int serialWritePos = 0;//this is a necessary global for the serial Library
+
+ISR (USART0_TX_vect)
+{
+ a0e:	1f 92       	push	r1
+ a10:	0f 92       	push	r0
+ a12:	0f b6       	in	r0, 0x3f	; 63
+ a14:	0f 92       	push	r0
+ a16:	11 24       	eor	r1, r1
+ a18:	0b b6       	in	r0, 0x3b	; 59
+ a1a:	0f 92       	push	r0
+ a1c:	2f 93       	push	r18
+ a1e:	3f 93       	push	r19
+ a20:	8f 93       	push	r24
+ a22:	9f 93       	push	r25
+ a24:	ef 93       	push	r30
+ a26:	ff 93       	push	r31
+	if(serialReadPos != serialWritePos)
+ a28:	80 91 82 03 	lds	r24, 0x0382	; 0x800382 <serialReadPos>
+ a2c:	90 91 83 03 	lds	r25, 0x0383	; 0x800383 <serialReadPos+0x1>
+ a30:	20 91 80 03 	lds	r18, 0x0380	; 0x800380 <serialWritePos>
+ a34:	30 91 81 03 	lds	r19, 0x0381	; 0x800381 <serialWritePos+0x1>
+ a38:	82 17       	cp	r24, r18
+ a3a:	93 07       	cpc	r25, r19
+ a3c:	b9 f0       	breq	.+46     	; 0xa6c <__vector_27+0x5e>
+	{
+		UDR0 = serial0Buffer[serialReadPos];
+ a3e:	fc 01       	movw	r30, r24
+ a40:	ec 57       	subi	r30, 0x7C	; 124
+ a42:	fa 4f       	sbci	r31, 0xFA	; 250
+ a44:	80 81       	ld	r24, Z
+ a46:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7000c6>
+		serialReadPos++;
+ a4a:	80 91 82 03 	lds	r24, 0x0382	; 0x800382 <serialReadPos>
+ a4e:	90 91 83 03 	lds	r25, 0x0383	; 0x800383 <serialReadPos+0x1>
+ a52:	01 96       	adiw	r24, 0x01	; 1
+		
+		if(serialReadPos >= TX_BUFFER_SIZE)
+ a54:	80 38       	cpi	r24, 0x80	; 128
+ a56:	91 05       	cpc	r25, r1
+ a58:	2c f4       	brge	.+10     	; 0xa64 <__vector_27+0x56>
+ISR (USART0_TX_vect)
+{
+	if(serialReadPos != serialWritePos)
+	{
+		UDR0 = serial0Buffer[serialReadPos];
+		serialReadPos++;
+ a5a:	90 93 83 03 	sts	0x0383, r25	; 0x800383 <serialReadPos+0x1>
+ a5e:	80 93 82 03 	sts	0x0382, r24	; 0x800382 <serialReadPos>
+ a62:	04 c0       	rjmp	.+8      	; 0xa6c <__vector_27+0x5e>
+		
+		if(serialReadPos >= TX_BUFFER_SIZE)
+		{
+			serialReadPos=0; //this seems wrong, I think we should be setting this to 0.
+ a64:	10 92 83 03 	sts	0x0383, r1	; 0x800383 <serialReadPos+0x1>
+ a68:	10 92 82 03 	sts	0x0382, r1	; 0x800382 <serialReadPos>
+		}
+	}
+}
+ a6c:	ff 91       	pop	r31
+ a6e:	ef 91       	pop	r30
+ a70:	9f 91       	pop	r25
+ a72:	8f 91       	pop	r24
+ a74:	3f 91       	pop	r19
+ a76:	2f 91       	pop	r18
+ a78:	0f 90       	pop	r0
+ a7a:	0b be       	out	0x3b, r0	; 59
+ a7c:	0f 90       	pop	r0
+ a7e:	0f be       	out	0x3f, r0	; 63
+ a80:	0f 90       	pop	r0
+ a82:	1f 90       	pop	r1
+ a84:	18 95       	reti
+
+00000a86 <appendSerial0>:
+
+void appendSerial0(char c)
+{
+	serial0Buffer[serialWritePos] = c;
+ a86:	20 91 80 03 	lds	r18, 0x0380	; 0x800380 <serialWritePos>
+ a8a:	30 91 81 03 	lds	r19, 0x0381	; 0x800381 <serialWritePos+0x1>
+ a8e:	f9 01       	movw	r30, r18
+ a90:	ec 57       	subi	r30, 0x7C	; 124
+ a92:	fa 4f       	sbci	r31, 0xFA	; 250
+ a94:	80 83       	st	Z, r24
+	serialWritePos++;
+ a96:	2f 5f       	subi	r18, 0xFF	; 255
+ a98:	3f 4f       	sbci	r19, 0xFF	; 255
+	if(serialWritePos >= TX_BUFFER_SIZE)
+ a9a:	20 38       	cpi	r18, 0x80	; 128
+ a9c:	31 05       	cpc	r19, r1
+ a9e:	2c f4       	brge	.+10     	; 0xaaa <appendSerial0+0x24>
+}
+
+void appendSerial0(char c)
+{
+	serial0Buffer[serialWritePos] = c;
+	serialWritePos++;
+ aa0:	30 93 81 03 	sts	0x0381, r19	; 0x800381 <serialWritePos+0x1>
+ aa4:	20 93 80 03 	sts	0x0380, r18	; 0x800380 <serialWritePos>
+ aa8:	08 95       	ret
+	if(serialWritePos >= TX_BUFFER_SIZE)
+	{
+		serialWritePos = 0;
+ aaa:	10 92 81 03 	sts	0x0381, r1	; 0x800381 <serialWritePos+0x1>
+ aae:	10 92 80 03 	sts	0x0380, r1	; 0x800380 <serialWritePos>
+ ab2:	08 95       	ret
+
+00000ab4 <serialWrite0>:
+	}
+}
+
+void serialWrite0(char c[])
+{
+ ab4:	0f 93       	push	r16
+ ab6:	1f 93       	push	r17
+ ab8:	cf 93       	push	r28
+ aba:	df 93       	push	r29
+ abc:	ec 01       	movw	r28, r24
+ abe:	8c 01       	movw	r16, r24
+ ac0:	06 5f       	subi	r16, 0xF6	; 246
+ ac2:	1f 4f       	sbci	r17, 0xFF	; 255
+	for (uint8_t i = 0; i<10; i++) //this may need to be 11
+	{
+		appendSerial0(c[i]);
+ ac4:	89 91       	ld	r24, Y+
+ ac6:	df df       	rcall	.-66     	; 0xa86 <appendSerial0>
+	}
+}
+
+void serialWrite0(char c[])
+{
+	for (uint8_t i = 0; i<10; i++) //this may need to be 11
+ ac8:	c0 17       	cp	r28, r16
+ aca:	d1 07       	cpc	r29, r17
+ acc:	d9 f7       	brne	.-10     	; 0xac4 <serialWrite0+0x10>
+	{
+		appendSerial0(c[i]);
+		
+	}
+	
+	if(UCSR0A & (1 << UDRE0))
+ ace:	80 91 c0 00 	lds	r24, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7000c0>
+ ad2:	85 fd       	sbrc	r24, 5
+	{
+		UDR0 = 0;
+ ad4:	10 92 c6 00 	sts	0x00C6, r1	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7000c6>
+	}
+}
+ ad8:	df 91       	pop	r29
+ ada:	cf 91       	pop	r28
+ adc:	1f 91       	pop	r17
+ ade:	0f 91       	pop	r16
+ ae0:	08 95       	ret
+
+00000ae2 <serialInit0>:
+
+void serialInit0()
+{
+UBRR0H = (BRC >> 8);
+ ae2:	10 92 c5 00 	sts	0x00C5, r1	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7000c5>
+UBRR0L = BRC;
+ ae6:	80 e1       	ldi	r24, 0x10	; 16
+ ae8:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7000c4>
+
+UCSR0B = (1 << TXEN0)  | (1 << TXCIE0);
+ aec:	88 e4       	ldi	r24, 0x48	; 72
+ aee:	80 93 c1 00 	sts	0x00C1, r24	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7000c1>
+UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
+ af2:	86 e0       	ldi	r24, 0x06	; 6
+ af4:	80 93 c2 00 	sts	0x00C2, r24	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7000c2>
+ af8:	08 95       	ret
+
+00000afa <trackControl>:
+void resumeAll()
+{
+	char resumePlay[5] = {0xf0, 0xaa, 0x05, 0x0b, 0x55};
+	serialWrite0(resumePlay);
+	
+}
+ afa:	cf 93       	push	r28
+ afc:	df 93       	push	r29
+ afe:	cd b7       	in	r28, 0x3d	; 61
+ b00:	de b7       	in	r29, 0x3e	; 62
+ b02:	2a 97       	sbiw	r28, 0x0a	; 10
+ b04:	0f b6       	in	r0, 0x3f	; 63
+ b06:	f8 94       	cli
+ b08:	de bf       	out	0x3e, r29	; 62
+ b0a:	0f be       	out	0x3f, r0	; 63
+ b0c:	cd bf       	out	0x3d, r28	; 61
+ b0e:	90 ef       	ldi	r25, 0xF0	; 240
+ b10:	99 83       	std	Y+1, r25	; 0x01
+ b12:	9a ea       	ldi	r25, 0xAA	; 170
+ b14:	9a 83       	std	Y+2, r25	; 0x02
+ b16:	9a e0       	ldi	r25, 0x0A	; 10
+ b18:	9b 83       	std	Y+3, r25	; 0x03
+ b1a:	93 e0       	ldi	r25, 0x03	; 3
+ b1c:	9c 83       	std	Y+4, r25	; 0x04
+ b1e:	2d 83       	std	Y+5, r18	; 0x05
+ b20:	8e 83       	std	Y+6, r24	; 0x06
+ b22:	6f 83       	std	Y+7, r22	; 0x07
+ b24:	48 87       	std	Y+8, r20	; 0x08
+ b26:	19 86       	std	Y+9, r1	; 0x09
+ b28:	85 e5       	ldi	r24, 0x55	; 85
+ b2a:	8a 87       	std	Y+10, r24	; 0x0a
+ b2c:	ce 01       	movw	r24, r28
+ b2e:	01 96       	adiw	r24, 0x01	; 1
+ b30:	c1 df       	rcall	.-126    	; 0xab4 <serialWrite0>
+ b32:	2a 96       	adiw	r28, 0x0a	; 10
+ b34:	0f b6       	in	r0, 0x3f	; 63
+ b36:	f8 94       	cli
+ b38:	de bf       	out	0x3e, r29	; 62
+ b3a:	0f be       	out	0x3f, r0	; 63
+ b3c:	cd bf       	out	0x3d, r28	; 61
+ b3e:	df 91       	pop	r29
+ b40:	cf 91       	pop	r28
+ b42:	08 95       	ret
+
+00000b44 <outputSampleRate>:
+
+void outputSampleRate(uint8_t outputSelect, uint8_t offsetLSB, uint8_t offsetMSB)
+{
+ b44:	cf 93       	push	r28
+ b46:	df 93       	push	r29
+ b48:	cd b7       	in	r28, 0x3d	; 61
+ b4a:	de b7       	in	r29, 0x3e	; 62
+ b4c:	28 97       	sbiw	r28, 0x08	; 8
+ b4e:	0f b6       	in	r0, 0x3f	; 63
+ b50:	f8 94       	cli
+ b52:	de bf       	out	0x3e, r29	; 62
+ b54:	0f be       	out	0x3f, r0	; 63
+ b56:	cd bf       	out	0x3d, r28	; 61
+	char pitchChange[8] = {0xf0, 0xaa, 0x08, 0x0c, outputSelect, offsetLSB, offsetMSB, 0x55};
+ b58:	90 ef       	ldi	r25, 0xF0	; 240
+ b5a:	99 83       	std	Y+1, r25	; 0x01
+ b5c:	9a ea       	ldi	r25, 0xAA	; 170
+ b5e:	9a 83       	std	Y+2, r25	; 0x02
+ b60:	98 e0       	ldi	r25, 0x08	; 8
+ b62:	9b 83       	std	Y+3, r25	; 0x03
+ b64:	9c e0       	ldi	r25, 0x0C	; 12
+ b66:	9c 83       	std	Y+4, r25	; 0x04
+ b68:	8d 83       	std	Y+5, r24	; 0x05
+ b6a:	6e 83       	std	Y+6, r22	; 0x06
+ b6c:	4f 83       	std	Y+7, r20	; 0x07
+ b6e:	85 e5       	ldi	r24, 0x55	; 85
+ b70:	88 87       	std	Y+8, r24	; 0x08
+	serialWrite0(pitchChange);
+ b72:	ce 01       	movw	r24, r28
+ b74:	01 96       	adiw	r24, 0x01	; 1
+ b76:	9e df       	rcall	.-196    	; 0xab4 <serialWrite0>
+}
+ b78:	28 96       	adiw	r28, 0x08	; 8
+ b7a:	0f b6       	in	r0, 0x3f	; 63
+ b7c:	f8 94       	cli
+ b7e:	de bf       	out	0x3e, r29	; 62
+ b80:	0f be       	out	0x3f, r0	; 63
+ b82:	cd bf       	out	0x3d, r28	; 61
+ b84:	df 91       	pop	r29
+ b86:	cf 91       	pop	r28
+ b88:	08 95       	ret
+
+00000b8a <__umulhisi3>:
+ b8a:	a2 9f       	mul	r26, r18
+ b8c:	b0 01       	movw	r22, r0
+ b8e:	b3 9f       	mul	r27, r19
+ b90:	c0 01       	movw	r24, r0
+ b92:	a3 9f       	mul	r26, r19
+ b94:	70 0d       	add	r23, r0
+ b96:	81 1d       	adc	r24, r1
+ b98:	11 24       	eor	r1, r1
+ b9a:	91 1d       	adc	r25, r1
+ b9c:	b2 9f       	mul	r27, r18
+ b9e:	70 0d       	add	r23, r0
+ ba0:	81 1d       	adc	r24, r1
+ ba2:	11 24       	eor	r1, r1
+ ba4:	91 1d       	adc	r25, r1
+ ba6:	08 95       	ret
+
+00000ba8 <_exit>:
+ ba8:	f8 94       	cli
+
+00000baa <__stop_program>:
+ baa:	ff cf       	rjmp	.-2      	; 0xbaa <__stop_program>
