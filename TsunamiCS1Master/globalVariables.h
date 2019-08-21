@@ -31,7 +31,9 @@ typedef struct Pattern
  	uint16_t trackSequenceMSB[64];
 } Pattern; //what is the size of this struct?
 
-uint8_t knobBuffer[4][44];
+uint8_t knobBuffer[44];
+uint8_t checkBuffer[44];
+uint8_t knobBufferCounter;
 Pattern currentPattern;
 uint8_t encoderAValue;
 uint8_t encoderBValue;

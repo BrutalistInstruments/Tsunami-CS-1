@@ -48,6 +48,7 @@ void initADC()
 	ADCSRB = (1 << MUX5);
 	DIDR0 = 0xff; // we should set this register to all 1s, so there is no digital input triggering.
 	DIDR2 = 0xff;
+	knobBufferCounter = 0;
 	startADCConversion();
 }
 
@@ -119,19 +120,21 @@ void selectKnob(uint8_t select)
 
 void updateKnob(uint8_t select)
 {
-for (int i = 3; i > 0; i--) {
-	knobBuffer[i][select] = knobBuffer[i - 1][select];//shift everyone up one.
-}
-knobBuffer[0][select] = startADCConversion(); 
 
+	knobBuffer[select] = startADCConversion(); 
 }
 
 void interperetKnob(uint8_t select)
 {//this function will compare outputs, and write to our struct.
 	select = select%44;
+	//we might not need this with the IIR filter
 	float volumeDivisor = 3.1875;
-	checkValue = (knobBuffer[0][select])+(knobBuffer[1][select])+(knobBuffer[2][select])+(knobBuffer[3][select]);
-	checkValue = (checkValue >> 2); //this gets us the 8 bit value for to check against 
+	
+	
+	//Change from FIR filter to IIR filter.
+     checkBuffer[select] += ((knobBuffer[select]-checkBuffer[select])/2);
+	
+	
 	if (select<40)
 	{
 		uint8_t positionSelect = select%8;
@@ -143,7 +146,7 @@ void interperetKnob(uint8_t select)
 			
 			int16_t currentOutVoulume = ((currentPattern.outputLevelMSB[positionSelect]<<8)|(currentPattern.outputLevelLSB[positionSelect])); 
 			//this should be a regular integer between -70 and +10
-			int16_t negCheckValue = (checkValue / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
+			int16_t negCheckValue = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
 			if(currentOutVoulume!=negCheckValue)
 			{
 				currentPattern.outputLevelLSB[positionSelect] = (negCheckValue);
@@ -169,9 +172,9 @@ void interperetKnob(uint8_t select)
 			break;
 			
  			case 1:
- 			if(currentPattern.outputPitch[positionSelect]!=(checkValue^128))
+ 			if(currentPattern.outputPitch[positionSelect]!=(checkBuffer[select]^128))
  			{
- 				(currentPattern.outputPitch[positionSelect]) = (checkValue^128);
+ 				(currentPattern.outputPitch[positionSelect]) = (checkBuffer[select]^128);
 				 if(encoderAValue == 0)
 				 {
 					 pitchPrint[5] = (positionSelect+49);
@@ -194,7 +197,7 @@ void interperetKnob(uint8_t select)
  			
  			case 2:;
 			int16_t currentEnvelopeVolume = ((currentPattern.trackFadeGainMSB[positionSelect]<<8)|(currentPattern.trackFadeGainLSB[positionSelect]));
-			int16_t negCheckValueEnvelope = (checkValue / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
+			int16_t negCheckValueEnvelope = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
 			if(currentEnvelopeVolume!=negCheckValueEnvelope)
 			{
 				currentPattern.trackFadeGainLSB[positionSelect] = (negCheckValueEnvelope);
@@ -220,9 +223,9 @@ void interperetKnob(uint8_t select)
 			break;
  			
  			case 3:
- 			if(currentPattern.trackFadeTimeMSB[positionSelect]!=checkValue)
+ 			if(currentPattern.trackFadeTimeMSB[positionSelect]!=checkBuffer[select])
  			{
- 				(currentPattern.trackFadeTimeMSB[positionSelect]) = checkValue;
+ 				(currentPattern.trackFadeTimeMSB[positionSelect]) = checkBuffer[select];
 				 numPrinter(envelopeTimePrint,14,4,currentPattern.trackFadeTimeMSB[positionSelect]);
 				 envelopeTimePrint[12] = positionSelect+49;
 				 outputS(envelopeTimePrint, 3);
@@ -231,7 +234,7 @@ void interperetKnob(uint8_t select)
  			
  			case 4:;
  			int16_t currentTrackVolume = ((currentPattern.trackMainVolumeMSB[positionSelect]<<8)|(currentPattern.trackMainVolumeLSB[positionSelect]));
- 			int16_t negCheckValueTrack = (checkValue / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
+ 			int16_t negCheckValueTrack = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
  			if(currentTrackVolume!=negCheckValueTrack)
  			{
 	 			currentPattern.trackMainVolumeLSB[positionSelect] = (negCheckValueTrack);
@@ -294,7 +297,6 @@ void interperetKnob(uint8_t select)
 		}
 		
 	}
-
 
 }
 
