@@ -26,7 +26,9 @@ char pitchPrint[20] = "Pitch = xxx         ";
 char etimePrint[20] = "Time = xxx          ";
 char elevelPrint[20] = "Level = xxx         ";
 char outVolumePrint[20] = "OutVolume x = xxxdb ";
-char trackVolumePrint[20] = "TrakVolume x = xxxdb";
+char trackVolumePrint[20] = "TrackVolumex = xxxdb";
+char envelopeLevelPrint[20] = "EnvelopeGainxx:xxxdb";
+char envelopeTimePrint[20] = "EnvelopeTimex:xxxxMS";
 
 uint8_t startADCConversion()
 {
@@ -167,13 +169,21 @@ void interperetKnob(uint8_t select)
 			break;
 			
  			case 1:
- 			if(currentPattern.outputPitch[positionSelect]!=checkValue)
+ 			if(currentPattern.outputPitch[positionSelect]!=(checkValue^128))
  			{
- 				(currentPattern.outputPitch[positionSelect]) = checkValue;
+ 				(currentPattern.outputPitch[positionSelect]) = (checkValue^128);
 				 if(encoderAValue == 0)
 				 {
 					 pitchPrint[5] = (positionSelect+49);
-					 numPrinter(pitchPrint,8,3,currentPattern.outputPitch[positionSelect]);
+					 if(currentPattern.outputPitch[positionSelect]>>7)
+					 {
+						 //again, hard coding.
+						 pitchPrint[7] = '-';
+						 numPrinter(pitchPrint, 8, 3, (currentPattern.outputPitch[positionSelect]^255));
+					 
+					 }else{
+						 pitchPrint[7] = '+';
+					 numPrinter(pitchPrint,8,3,currentPattern.outputPitch[positionSelect]);}
 					 outputS(pitchPrint, 3);
 				 }
 				 outputSampleRate(positionSelect, 0, currentPattern.outputPitch[positionSelect]);
@@ -181,24 +191,46 @@ void interperetKnob(uint8_t select)
  			}
 			
  			break;
-// 			
-// 			case 2:
-// 			if(eLevel[positionSelect]!=checkValue)
-// 			{
-// 				(eLevel[positionSelect]) = checkValue;
-// 			}
-// 			break;
-// 			
-// 			case 3:
-// 			if(eTime[positionSelect]!=checkValue)
-// 			{
-// 				(eTime[positionSelect]) = checkValue;
-// 			}
-// 			break;
-// 			
+ 			
+ 			case 2:;
+			int16_t currentEnvelopeVolume = ((currentPattern.trackFadeGainMSB[positionSelect]<<8)|(currentPattern.trackFadeGainLSB[positionSelect]));
+			int16_t negCheckValueEnvelope = (checkValue / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
+			if(currentEnvelopeVolume!=negCheckValueEnvelope)
+			{
+				currentPattern.trackFadeGainLSB[positionSelect] = (negCheckValueEnvelope);
+				if(negCheckValueEnvelope>(-1))
+				{
+					currentPattern.trackFadeGainMSB[positionSelect] = 0;
+					//just hard coding this for now until we make a function.
+					envelopeLevelPrint[15] = 48;
+					envelopeLevelPrint[17] = (currentPattern.trackFadeGainLSB[positionSelect]%10)+48;
+					envelopeLevelPrint[16] = ((currentPattern.trackFadeGainLSB[positionSelect]%100)/10)+48;
+				}else
+				{
+					currentPattern.trackFadeGainMSB[positionSelect] = 255;
+					envelopeLevelPrint[15] = '-';
+					envelopeLevelPrint[16] = ((((currentPattern.trackFadeGainLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
+					envelopeLevelPrint[17] = (((currentPattern.trackFadeGainLSB[positionSelect]^255)+1)%10)+48;
+				}
+				//then output to screen.
+				envelopeLevelPrint[13] = positionSelect + 49;
+				outputS(envelopeLevelPrint, 3);
+				//nothing to "set", since envelopes are triggered after a sound is playing.
+			}
+			break;
+ 			
+ 			case 3:
+ 			if(currentPattern.trackFadeTimeMSB[positionSelect]!=checkValue)
+ 			{
+ 				(currentPattern.trackFadeTimeMSB[positionSelect]) = checkValue;
+				 numPrinter(envelopeTimePrint,14,4,currentPattern.trackFadeTimeMSB[positionSelect]);
+				 envelopeTimePrint[12] = positionSelect+49;
+				 outputS(envelopeTimePrint, 3);
+ 			}
+ 			break;
+ 			
  			case 4:;
  			int16_t currentTrackVolume = ((currentPattern.trackMainVolumeMSB[positionSelect]<<8)|(currentPattern.trackMainVolumeLSB[positionSelect]));
- 			//this should be a regular integer between -70 and +10
  			int16_t negCheckValueTrack = (checkValue / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
  			if(currentTrackVolume!=negCheckValueTrack)
  			{
@@ -207,18 +239,18 @@ void interperetKnob(uint8_t select)
 	 			{
 		 			currentPattern.trackMainVolumeMSB[positionSelect] = 0;
 		 			//just hard coding this for now until we make a function.
-		 			trackVolumePrint[14] = 48;
-		 			trackVolumePrint[16] = (currentPattern.trackMainVolumeLSB[positionSelect]%10)+48;
-		 			trackVolumePrint[15] = ((currentPattern.trackMainVolumeLSB[positionSelect]%100)/10)+48;
+		 			trackVolumePrint[15] = 48;
+		 			trackVolumePrint[17] = (currentPattern.trackMainVolumeLSB[positionSelect]%10)+48;
+		 			trackVolumePrint[16] = ((currentPattern.trackMainVolumeLSB[positionSelect]%100)/10)+48;
 	 			}else
 	 			{
 		 			currentPattern.trackMainVolumeMSB[positionSelect] = 255;
-		 			trackVolumePrint[14] = '-';
-		 			trackVolumePrint[15] = ((((currentPattern.trackMainVolumeLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
-		 			trackVolumePrint[16] = (((currentPattern.trackMainVolumeLSB[positionSelect]^255)+1)%10)+48;
+		 			trackVolumePrint[15] = '-';
+		 			trackVolumePrint[16] = ((((currentPattern.trackMainVolumeLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
+		 			trackVolumePrint[17] = (((currentPattern.trackMainVolumeLSB[positionSelect]^255)+1)%10)+48;
 	 			}
 	 			//then output to screen.
-	 			trackVolumePrint[10] = positionSelect + 49;
+	 			trackVolumePrint[11] = positionSelect + 49;
 	 			outputS(trackVolumePrint, 3);
 	 			setTrackVolume(currentPattern.trackSampleLSB[positionSelect], currentPattern.trackSampleMSB[positionSelect],
 				 currentPattern.trackMainVolumeLSB[positionSelect], currentPattern.trackMainVolumeMSB[positionSelect]);
