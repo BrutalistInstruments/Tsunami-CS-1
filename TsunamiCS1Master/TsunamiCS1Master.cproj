@@ -177,6 +177,12 @@
     <Compile Include="menu.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="MidiLib.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MidiLib.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="OLEDLib.c">
       <SubType>compile</SubType>
     </Compile>

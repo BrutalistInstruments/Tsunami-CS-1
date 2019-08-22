@@ -44,6 +44,7 @@ C_SRCS +=  \
 ../LEDLib.c \
 ../main.c \
 ../menu.c \
+../MidiLib.c \
 ../OLEDLib.c \
 ../serialLib.c \
 ../tsunamiLib.c
@@ -63,6 +64,7 @@ knobLib.o \
 LEDLib.o \
 main.o \
 menu.o \
+MidiLib.o \
 OLEDLib.o \
 serialLib.o \
 tsunamiLib.o
@@ -75,6 +77,7 @@ knobLib.o \
 LEDLib.o \
 main.o \
 menu.o \
+MidiLib.o \
 OLEDLib.o \
 serialLib.o \
 tsunamiLib.o
@@ -87,6 +90,7 @@ knobLib.d \
 LEDLib.d \
 main.d \
 menu.d \
+MidiLib.d \
 OLEDLib.d \
 serialLib.d \
 tsunamiLib.d
@@ -99,6 +103,7 @@ knobLib.d \
 LEDLib.d \
 main.d \
 menu.d \
+MidiLib.d \
 OLEDLib.d \
 serialLib.d \
 tsunamiLib.d
@@ -160,6 +165,13 @@ LINKER_SCRIPT_DEP+=
 	
 
 ./menu.o: .././menu.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -mmcu=atmega2560 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega2560" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./MidiLib.o: .././MidiLib.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -mmcu=atmega2560 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega2560" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

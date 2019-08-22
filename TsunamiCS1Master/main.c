@@ -9,11 +9,14 @@
 #include "globalVariables.h"
 #include "serialLib.h"
 #include "LEDLib.h"
+#include "MidiLib.h"
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+
 int main(void)
 {
+	midiChannel = 0; //for now, need to change this from load memory
 	initScreen();
 	initButtons();
 	initLEDs();
@@ -31,7 +34,7 @@ int main(void)
 		updateLEDs();
 		listenEncoders();
 		listenKnobs();
-		//listenMidi();
+		listenMidi();
 		//updateSequence();
 		updateScreen();
 		

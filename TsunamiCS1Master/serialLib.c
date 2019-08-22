@@ -6,8 +6,14 @@
  */ 
 #define F_CPU 16000000UL
 #define TX_BUFFER_SIZE 128
-#define BUAD 57600
-#define BRC ((F_CPU/16/BUAD)-1)
+#define BUADTsunami 57600
+#define BAUDMidi 31250 
+#define BRCTsunami ((F_CPU/16/BUADTsunami)-1)
+#define BRCMidi ((F_CPU/16/BAUDMidi)-1)
+
+#define RX_BUFFER_SIZE 128
+
+//we'll need to chage all of these define names for when we send Midi CCs and notes, but we'll worry about that later.
 
 //buad rate: 57.6 kbps // 57600 buad - for Tsunami
 
@@ -16,9 +22,12 @@
 #include <avr/io.h>
 
 char serial0Buffer[TX_BUFFER_SIZE];
-
+char serial1Buffer[RX_BUFFER_SIZE];
 int serialReadPos = 0;////this is a necessary global for the serial Library
 int serialWritePos = 0;//this is a necessary global for the serial Library
+
+uint8_t rxReadPosition = 0;
+uint8_t rxWritePosition = 0;
 
 ISR (USART0_TX_vect)
 {
@@ -32,6 +41,19 @@ ISR (USART0_TX_vect)
 			serialReadPos=0; //this seems wrong, I think we should be setting this to 0.
 		}
 	}
+}
+
+ISR (USART1_RX_vect)
+{
+	serial1Buffer[rxWritePosition] = UDR1;
+	rxWritePosition++;
+	
+	if(rxWritePosition>= RX_BUFFER_SIZE)
+	{
+		rxWritePosition = 0; //this could cause some issues.
+	}
+
+
 }
 
 void appendSerial0(char c)
@@ -60,11 +82,43 @@ void serialWrite0(char c[])
 
 void serialInit0()
 {
-UBRR0H = (BRC >> 8);
-UBRR0L = BRC;
+UBRR0H = (BRCTsunami >> 8);
+UBRR0L = BRCTsunami;
+
+UBRR1H = (BRCMidi >> 8);
+UBRR1L = BRCMidi;
 
 UCSR0B = (1 << TXEN0)  | (1 << TXCIE0);
-UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
+UCSR0C = (1 << UCSZ01) | (1 << UCSZ00); //8 bit chars will be sent
 
+
+UCSR1B = (1 << RXEN1)  | (1 << RXCIE0);
+UCSR1C = (1 << UCSZ11) | (1 << UCSZ10); //8 bit chars will be sent
+
+}
+
+char getChar()
+{
+	char returnMe = '\0';
+	
+	if(rxReadPosition != rxWritePosition)
+	{
+		returnMe = serial1Buffer[rxReadPosition];
+		
+		rxReadPosition++;
+		
+		if(rxReadPosition >= RX_BUFFER_SIZE)
+		{
+			rxReadPosition = 0;
+		}
+	
+	}
+	return returnMe;
+	
+}
+
+char peekChar()
+{
+	return 'h';
 
 }

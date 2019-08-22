@@ -16,6 +16,8 @@ main.c
 
 menu.c
 
+MidiLib.c
+
 OLEDLib.c
 
 serialLib.c

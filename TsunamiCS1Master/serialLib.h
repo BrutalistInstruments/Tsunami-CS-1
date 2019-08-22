@@ -11,6 +11,8 @@
 void appendSerial0();
 void serialWrite0();
 void serialInit0();
+char getChar();
+char peekChar();
 
 
 #endif /* SERIALLIB_H_ */

@@ -41,6 +41,7 @@ uint8_t prevEncoderAValue;
 uint8_t prevEncoderBValue;
 uint16_t currentTrigButtons;
 uint8_t currentGPButtons;
+uint8_t midiChannel;
 
 void initBank();
 
