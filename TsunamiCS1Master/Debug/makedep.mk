@@ -10,6 +10,8 @@ globalVariables.c
 
 knobLib.c
 
+LEDLib.c
+
 main.c
 
 menu.c

@@ -41,6 +41,7 @@ C_SRCS +=  \
 ../EncoderLib.c \
 ../globalVariables.c \
 ../knobLib.c \
+../LEDLib.c \
 ../main.c \
 ../menu.c \
 ../OLEDLib.c \
@@ -59,6 +60,7 @@ ButtonLib.o \
 EncoderLib.o \
 globalVariables.o \
 knobLib.o \
+LEDLib.o \
 main.o \
 menu.o \
 OLEDLib.o \
@@ -70,6 +72,7 @@ ButtonLib.o \
 EncoderLib.o \
 globalVariables.o \
 knobLib.o \
+LEDLib.o \
 main.o \
 menu.o \
 OLEDLib.o \
@@ -81,6 +84,7 @@ ButtonLib.d \
 EncoderLib.d \
 globalVariables.d \
 knobLib.d \
+LEDLib.d \
 main.d \
 menu.d \
 OLEDLib.d \
@@ -92,6 +96,7 @@ ButtonLib.d \
 EncoderLib.d \
 globalVariables.d \
 knobLib.d \
+LEDLib.d \
 main.d \
 menu.d \
 OLEDLib.d \
@@ -134,6 +139,13 @@ LINKER_SCRIPT_DEP+=
 	
 
 ./knobLib.o: .././knobLib.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -mmcu=atmega2560 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega2560" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./LEDLib.o: .././LEDLib.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -mmcu=atmega2560 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega2560" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

@@ -12,7 +12,6 @@
 #include <avr/io.h>
 
 uint8_t buttonsCurrentCycle;
-uint16_t fullBits;
 uint16_t lastFullBits = 0;
 uint8_t currentTrig;
 
@@ -30,19 +29,17 @@ void initButtons()
 	PORTB = 0B00011111;
 	
 	//what ports are the encoder buttons on?
-	
-
 }
 
 
 void listenTrigButtons()
 {
 	buttonsCurrentCycle = (PINL^255); //^ = bitwise XOR operation.
-	fullBits = (buttonsCurrentCycle << 8) | (PINA^255);
-	if(fullBits!=lastFullBits) //we do read the buttons every cycle, but we don't need to update everything base on the buttons if they haven't changed.
+	currentTrigButtons = (buttonsCurrentCycle << 8) | (PINA^255);
+	if(currentTrigButtons!=lastFullBits) //we do read the buttons every cycle, but we don't need to update everything base on the buttons if they haven't changed.
 	{
-		lastFullBits = fullBits;
-		uint16_t fullBitsParse = fullBits;
+		lastFullBits = currentTrigButtons;
+		uint16_t fullBitsParse = currentTrigButtons;
 		//play sounds, if that is the switch case on the encoder
 	//updateLEDs
 	for(uint8_t bc = 0; bc<16; bc++)//bc for buttonCounter

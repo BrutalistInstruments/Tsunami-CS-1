@@ -39,7 +39,8 @@ uint8_t encoderAValue;
 uint8_t encoderBValue;
 uint8_t prevEncoderAValue;
 uint8_t prevEncoderBValue;
-
+uint16_t currentTrigButtons;
+uint8_t currentGPButtons;
 
 void initBank();
 

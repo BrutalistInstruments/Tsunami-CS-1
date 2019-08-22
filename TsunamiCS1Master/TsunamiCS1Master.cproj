@@ -162,6 +162,12 @@
     <Compile Include="knobLib.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="LEDLib.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LEDLib.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>

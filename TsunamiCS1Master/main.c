@@ -8,6 +8,7 @@
 #include "knobLib.h"
 #include "globalVariables.h"
 #include "serialLib.h"
+#include "LEDLib.h"
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
@@ -15,6 +16,7 @@ int main(void)
 {
 	initScreen();
 	initButtons();
+	initLEDs();
 	initEncoders();
 	initMenu();
 	initADC();
@@ -22,12 +24,11 @@ int main(void)
 	sei();
 	initBank(); //this will be necessary on first startup, but maybe not in the actual program? maybe just something handy to have.
 	//loadMemory(); //we need to load in the first struct in locarion 0 of our eeprom.
-	//making an edit for GIT
-	//more comments to see if we can cause the same problem
 	while (1)
 	{
 		listenTrigButtons();
 		listenGPButtons();
+		updateLEDs();
 		listenEncoders();
 		listenKnobs();
 		//listenMidi();
