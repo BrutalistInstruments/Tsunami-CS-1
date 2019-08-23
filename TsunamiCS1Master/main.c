@@ -30,13 +30,18 @@ int main(void)
 	while (1)
 	{
 		listenTrigButtons();
+		listenMidi();
 		listenGPButtons();
+		listenMidi();
 		updateLEDs();
+		listenMidi();
 		listenEncoders();
+		listenMidi();
 		listenKnobs();
 		listenMidi();
 		//updateSequence();
 		updateScreen();
+		listenMidi();
 		
 	}
 }

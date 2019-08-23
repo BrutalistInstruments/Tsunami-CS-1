@@ -9,6 +9,7 @@
 #include "globalVariables.h"
 #include "serialLib.h"
 #include "OLEDLib.h"
+#include "tsunamiLib.h"
 
 char currentMidiMessage[3] = {0, 0, 0};
 char printMidiNote[20]= "Note On Message     ";
@@ -30,11 +31,23 @@ void listenMidi()
 	
 	//right now, this is just for testing.
 	currentMidiMessage[0] = getChar();
+	//while(currentMidiMessage[0]==254)
+	//{
+	//	currentMidiMessage[0]=getChar(); //for now, get rid of midi clock signals
+	//}
 	if(currentMidiMessage[0]==midiNoteCheck)
 	{
 		currentMidiMessage[1] = getChar(); //this should be byte1 (note)
 		currentMidiMessage[2] = getChar(); //this should be byte2 (velocity)
-		outputS(printMidiNote, 3);
+		//outputS(printMidiNote, 3);
+		
+		for(int i=0; i<16; i++)
+		{
+			//I don't like this forloop, but It seems like the best way to deal with this struct at the moment.
+			if((currentPattern.midiTrackNote[i])==(currentMidiMessage[1]))
+			trackControl(currentPattern.trackSampleLSB[i], currentPattern.trackSampleMSB[i], currentPattern.trackOutputRoute[i], currentPattern.trackPlayMode[i]);
+		}
+		
 	}
 	if(currentMidiMessage[0]==midiCCCheck)
 	{

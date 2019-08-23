@@ -29,7 +29,8 @@ typedef struct Pattern
  	uint8_t trackSampleLSB[16];
  	uint8_t voiceLockFlag[16];
  	uint16_t trackSequenceMSB[64];
-} Pattern; //what is the size of this struct?
+	uint8_t midiTrackNote[16];
+} Pattern;
 
 uint8_t knobBuffer[44];
 uint8_t checkBuffer[44];
