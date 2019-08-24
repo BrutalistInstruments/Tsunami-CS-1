@@ -11,7 +11,7 @@ knobLib.d knobLib.o: .././knobLib.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\version.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\fuse.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h \
- .././OLEDLib.h .././tsunamiLib.h .././globalVariables.h
+ .././OLEDLib.h .././tsunamiLib.h .././MidiLib.h .././globalVariables.h
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -40,5 +40,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 .././OLEDLib.h:
 
 .././tsunamiLib.h:
+
+.././MidiLib.h:
 
 .././globalVariables.h:

@@ -15,7 +15,9 @@ uint8_t buttonsCurrentCycle;
 uint16_t lastFullBits = 0;
 uint8_t currentTrig;
 
-char buttonTest[20] = "Pressed: xx       ";
+//char buttonTest[20] = "Pressed: xx         ";
+char trackSpoof[20] = "Track:              ";
+
 
 
 void initButtons()
@@ -53,10 +55,10 @@ void listenTrigButtons()
 				//for "perfrmance mode", we should just use the default case, and only have code for the cases where things are outside of that use case.
 				case 0: //performance mode
 				//we trigger a sound here based on the location of bc
-				trackControl(currentPattern.trackSampleLSB[bc], currentPattern.trackSampleMSB[bc], currentPattern.trackOutputRoute[bc], currentPattern.trackPlayMode[bc]);
+				trackControl(currentPattern.trackSampleLSB[bc], currentPattern.trackSampleMSB[bc], currentPattern.trackOutputRoute[bc], currentPattern.trackOutputRoute[bc]);
 				//trackControl(3,0,0,1);
-				numPrinter(buttonTest,9, 2,bc);
-				outputS(buttonTest, 2);
+				//numPrinter(buttonTest,9, 2,bc);
+				//outputS(buttonTest, 2);
 				break;
 				
 				case 1:
@@ -64,8 +66,14 @@ void listenTrigButtons()
 				//step sequencer mode.
 				break;
 				
-				case 2: 
+				case 2: ;
 				//select track for sample assignment
+				uint16_t currentSample = (currentPattern.trackSampleMSB[bc]<<8)|(currentPattern.trackSampleLSB[bc]);
+				currentTrack = bc;
+				numPrinter(trackSpoof, 7, 2, (bc+1));
+				numPrinter(trackSpoof, 10, 4, currentSample);
+				outputS(trackSpoof, 1);
+				trackControl(currentPattern.trackSampleLSB[bc], currentPattern.trackSampleMSB[bc], currentPattern.trackOutputRoute[bc], currentPattern.trackOutputRoute[bc]);
 				break;
 				
 				case 3: 

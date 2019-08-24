@@ -22,6 +22,7 @@ void initLEDs()
 
 void updateLEDs()
 {
+	if(encoderAValue==0){
 	uint16_t trigLEDParse = currentTrigButtons;
 	PORTG &= (~(1 << PG2)); //set latch low for data input
 	for(uint8_t i = 0; i<17; i++)
@@ -39,6 +40,6 @@ void updateLEDs()
 		trigLEDParse = trigLEDParse << 1;
 	}
 	PORTG |= (1 << PG2); //latch pin high
-	
+	}
 
 }

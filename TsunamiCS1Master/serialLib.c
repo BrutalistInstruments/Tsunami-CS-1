@@ -45,13 +45,13 @@ ISR (USART0_TX_vect)
 
 ISR (USART1_RX_vect)
 {
-	serial1Buffer[rxWritePosition] = UDR1;
-	rxWritePosition++;
+		serial1Buffer[rxWritePosition] = UDR1;
+		rxWritePosition++;
 	
-	if(rxWritePosition>= RX_BUFFER_SIZE)
-	{
-		rxWritePosition = 0; //this could cause some issues.
-	}
+		if(rxWritePosition>= RX_BUFFER_SIZE)
+		{
+			rxWritePosition = 0; //this could cause some issues.
+		}
 
 
 }
@@ -115,10 +115,4 @@ char getChar()
 	}
 	return returnMe;
 	
-}
-
-char peekChar()
-{
-	return 'h';
-
 }

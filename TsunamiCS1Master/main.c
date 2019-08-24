@@ -17,6 +17,7 @@
 int main(void)
 {
 	midiChannel = 0; //for now, need to change this from load memory
+	initBank();
 	initScreen();
 	initButtons();
 	initLEDs();
@@ -25,7 +26,7 @@ int main(void)
 	initADC();
 	serialInit0();
 	sei();
-	initBank(); //this will be necessary on first startup, but maybe not in the actual program? maybe just something handy to have.
+	 //this will be necessary on first startup, but maybe not in the actual program? maybe just something handy to have.
 	//loadMemory(); //we need to load in the first struct in locarion 0 of our eeprom.
 	while (1)
 	{

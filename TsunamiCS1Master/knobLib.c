@@ -19,6 +19,7 @@
 #include <avr/io.h>
 #include "OLEDLib.h"
 #include "tsunamiLib.h"
+#include "MidiLib.h"
 
 #include "globalVariables.h"
 int checkValue = 0;
@@ -29,6 +30,7 @@ char outVolumePrint[20] = "OutVolume x = xxxdb ";
 char trackVolumePrint[20] = "TrackVolumex = xxxdb";
 char envelopeLevelPrint[20] = "EnvelopeGainxx:xxxdb";
 char envelopeTimePrint[20] = "EnvelopeTimex:xxxxMS";
+char BPMSpoof[20] = "BPM: xxx            "; 
 
 uint8_t startADCConversion()
 {
@@ -281,12 +283,16 @@ void interperetKnob(uint8_t select)
 // 			}
 // 			break;
 // 			
-// 			case 42:
-// 			if(gpKnob2!=checkValue)
-// 			{
-// 				gpKnob2 = checkValue;
-// 			}
-// 			break;
+ 			case 42:
+ 			if(currentPattern.patternBPM!=checkBuffer[select]+30)
+			{
+ 				currentPattern.patternBPM = checkBuffer[select]+30;
+				if(encoderAValue==0){
+				 numPrinter(BPMSpoof, 5, 3, currentPattern.patternBPM);
+				 outputS(BPMSpoof, 2);
+				}
+ 			}
+ 			break;
 // 			
 // 			case 43:
 // 			if(gpKnob3!=checkValue)

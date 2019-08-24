@@ -32,5 +32,9 @@ void initBank()
 	currentPattern.midiTrackNote[13] = 0x3d;
 	currentPattern.midiTrackNote[14] = 0x3e;
 	currentPattern.midiTrackNote[15] = 0x3f;
+	currentPattern.patternBPM = 120;
+	currentPatternNumber = 1;
+	
+
 
 }

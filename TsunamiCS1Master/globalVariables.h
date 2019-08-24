@@ -30,6 +30,8 @@ typedef struct Pattern
  	uint8_t voiceLockFlag[16];
  	uint16_t trackSequenceMSB[64];
 	uint8_t midiTrackNote[16];
+	uint16_t patternBPM;
+	
 } Pattern;
 
 uint8_t knobBuffer[44];
@@ -43,6 +45,9 @@ uint8_t prevEncoderBValue;
 uint16_t currentTrigButtons;
 uint8_t currentGPButtons;
 uint8_t midiChannel;
+uint8_t currentPatternNumber;
+uint8_t currentStep;
+uint8_t currentTrack;
 
 void initBank();
 
