@@ -30,7 +30,6 @@ char outVolumePrint[20] = "OutVolume x = xxxdb ";
 char trackVolumePrint[20] = "TrackVolumex = xxxdb";
 char envelopeLevelPrint[20] = "EnvelopeGainxx:xxxdb";
 char envelopeTimePrint[20] = "EnvelopeTimex:xxxxMS";
-char BPMSpoof[20] = "BPM: xxx            "; 
 
 uint8_t startADCConversion()
 {
@@ -288,8 +287,8 @@ void interperetKnob(uint8_t select)
 			{
  				currentPattern.patternBPM = checkBuffer[select]+30;
 				if(encoderAValue==0){
-				 numPrinter(BPMSpoof, 5, 3, currentPattern.patternBPM);
-				 outputS(BPMSpoof, 2);
+				 numPrinter(screen0[2], 5, 3, currentPattern.patternBPM);
+				 outputS(screen0[2], 2);
 				}
  			}
  			break;

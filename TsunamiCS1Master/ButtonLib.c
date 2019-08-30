@@ -15,9 +15,7 @@ uint8_t buttonsCurrentCycle;
 uint16_t lastFullBits = 0;
 uint8_t currentTrig;
 
-//char buttonTest[20] = "Pressed: xx         ";
-char trackSpoof[20] = "Track:              ";
-
+char testEncoderButton[20] = "EncoderButtonPressed";
 
 
 void initButtons()
@@ -27,10 +25,9 @@ void initButtons()
 	PORTA = 0xFF;
 	PORTL = 0xFF;
 
-	//GPButtons
-	PORTB = 0B00011111;
+	//GPButtons and Encoder buttons
+	PORTB = 0B01111111;
 	
-	//what ports are the encoder buttons on?
 }
 
 
@@ -70,9 +67,9 @@ void listenTrigButtons()
 				//select track for sample assignment
 				uint16_t currentSample = (currentPattern.trackSampleMSB[bc]<<8)|(currentPattern.trackSampleLSB[bc]);
 				currentTrack = bc;
-				numPrinter(trackSpoof, 7, 2, (bc+1));
-				numPrinter(trackSpoof, 10, 4, currentSample);
-				outputS(trackSpoof, 1);
+				numPrinter(screen2[1], 7, 2, (bc+1));
+				numPrinter(screen2[1], 10, 4, currentSample);
+				outputS(screen2[1], 1);
 				trackControl(currentPattern.trackSampleLSB[bc], currentPattern.trackSampleMSB[bc], currentPattern.trackOutputRoute[bc], currentPattern.trackOutputRoute[bc]);
 				break;
 				
@@ -97,6 +94,21 @@ void listenTrigButtons()
 
 void listenGPButtons() // are the encoder buttons here also?
 {
+	currentGPButtons = PINB;
+	if((currentGPButtons^255)&(1 << PB5))
+	{ //top encoder button
+	//	outputS(testEncoderButton, 3);
+	encoderAFlag = ~encoderAFlag;
+		
+	}
+	if((currentGPButtons^255)&(1 << PB6))
+	{//botton encoder button
+		
+		//outputS(testEncoderButton, 3);
+		encoderBFlag = ~encoderBFlag;
+		
+	}
+	
 
 
 

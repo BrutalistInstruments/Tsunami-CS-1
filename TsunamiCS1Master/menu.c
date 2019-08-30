@@ -12,24 +12,6 @@
 #include "OLEDLib.h"
 
 
-//screen 0
-char screen0[5][20] = {"Performance Mode    ","Pattern:            ","BPM: xxx            "
-,"Stop                ","Play                "  };
-uint8_t screen0Index = 0;
-
-//screen 1:
-char screen1[5][20] = {"Sequence Edit       ","Pattern:            ","Steps  :            "
-,"Step number:        ","                    "};
-uint8_t screen1Index = 0;
-
-//screen 2:
-char screen2[4][20] = {"Track Settings      ","Track:              ",
-"Play Mode           ","OutRoute            "};
-uint8_t screen2Index = 0;
-
-//screen 3:
-char screen3[4][20] = {"Global Settings     ","Midi Channel: xx    ", "Midi trigger Notes  ","(put triggered note)"};
-uint8_t screen3Index = 0;
 
 void initMenu()
 {
@@ -51,45 +33,71 @@ void updateScreen()
 {
 	if(prevEncoderBValue!=encoderBValue)
 	{
-		//encoderBValue = encoderBValue%5;
+		encoderBValue = encoderBValue%4;
 		//this needs some work...
-//		uint8_t menuMoveArrow = encoderBValue - prevEncoderBValue; //this tells us whether we need to move up or down.
+		uint8_t menuMoveArrow = encoderBValue - prevEncoderBValue; //this tells us whether we need to move up or down.
 		switch(encoderAValue)
 		{
-			case 0:
-// 			if(menuMoveArrow==1)
-// 			{
-// 				screen0Index++;
-// 				if(screen0Index>4)
-// 				{
-// 					screen0Index = 4;
-// 				}
-// 				screen0[screen0Index][19] = '<';
-// 				screen0[screen0Index-1][19] = ' ';
-// 				outputS(screen0[screen0Index], screen0Index);
-// 				outputS(screen0[screen0Index-1], screen0Index-1);
-// 				
-//			}else
-//			{
-// 				screen0Index--;
-// 				if(screen0Index<1)
-// 				{
-// 					screen0Index = 1;
-// 				}
-// 				screen0[screen0Index][19] = '<';
-// 				screen0[screen0Index+1][19] = ' ';
-// 				outputS(screen0[screen0Index], screen0Index);
-// 				outputS(screen0[screen0Index+1], screen0Index+1);
-			
-			
-			//}
-			
-			break;
-			
 			case 1:
+			if(menuMoveArrow==1)
+			{
+				screen1Index++;
+				if(screen1Index>3)
+				{
+					screen1Index = 3;
+				}
+				screen1[screen1Index][19] = '<';
+				screen1[screen1Index-1][19] = ' ';
+				outputS(screen1[screen1Index], screen1Index);
+				outputS(screen1[screen1Index-1], screen1Index-1);
+			
+			
+			}else 
+			{
+				screen1Index--;
+				if(screen1Index>250||screen1Index==0)
+				{
+					screen1Index = 1;
+				}
+				screen1[screen1Index][19] = '<';
+				screen1[screen1Index+1][19] = ' ';
+				outputS(screen1[screen1Index], screen1Index);
+				outputS(screen1[screen1Index+1], screen1Index+1);
+			
+			}
+			
 			break;
 			
 			case 2:
+			if(menuMoveArrow==1)
+			{
+				screen2Index++;
+				if(screen2Index>3)
+				{
+					screen2Index = 3;
+				}
+				screen2[screen2Index][19] = '<';
+				screen2[screen2Index-1][19] = ' ';
+				outputS(screen2[screen2Index], screen2Index);
+				outputS(screen2[screen2Index-1], screen2Index-1);
+				
+				
+			}else
+			{
+				screen2Index--;
+				if(screen2Index>250||screen2Index==0) //this should account for any negative numbers from overflow.
+				{
+					screen2Index = 1;
+				}
+				screen2[screen2Index][19] = '<';
+				screen2[screen2Index+1][19] = ' ';
+				outputS(screen2[screen2Index], screen2Index);
+				outputS(screen2[screen2Index+1], screen2Index+1);
+				
+			}
+			
+			
+			/*
 			if(encoderBValue-prevEncoderBValue==1)
 			{
 				currentPattern.trackSampleLSB[currentTrack] = (currentPattern.trackSampleLSB[currentTrack])+ 1; 
@@ -106,15 +114,53 @@ void updateScreen()
 				numPrinter(screen2[1], 10, 4, currentSample);
 				outputS(screen2[1], 1);
 			}
-			
+			*/
 			break;
 			
 			case 3:
+			
+				//this is the functionality if encoder B flag is not pressed
+				if(menuMoveArrow==1)
+				{
+					screen3Index++;
+					if(screen3Index>3)
+					{
+						screen3Index = 3;
+					}
+					screen3[screen3Index][19] = '<';
+					screen3[screen3Index-1][19] = ' ';
+					outputS(screen3[screen3Index], screen3Index);
+					outputS(screen3[screen3Index-1], screen3Index-1);
+					
+					
+				}else
+				{
+					screen3Index--;
+					if(screen3Index>250||screen3Index==0) //this should account for any negative numbers from overflow.
+					{
+						screen3Index = 1;
+					}
+					screen3[screen3Index][19] = '<';
+					screen3[screen3Index+1][19] = ' ';
+					outputS(screen3[screen3Index], screen3Index);
+					outputS(screen3[screen3Index+1], screen3Index+1);
+				}
+				
+				//this is the functionality if the encoder B flag is pressed. 
+				if(encoderBFlag)
+				{
+				
+				}
+				
+				
+			
 			break;
 			
 		}
 		prevEncoderBValue = encoderBValue;
 	}
+	
+	//top encoder
 	if(prevEncoderAValue!=encoderAValue){
 	encoderAValue = encoderAValue%4;
 	switch (encoderAValue)
@@ -129,6 +175,8 @@ void updateScreen()
 		break;
 		
 		case 1:
+		numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
+		numPrinter(screen1[3], 13, 2, (currentStep+1));
 		for(uint8_t i=0;i<4; i++ ){
  		outputS(screen1[i],i);
 		}
