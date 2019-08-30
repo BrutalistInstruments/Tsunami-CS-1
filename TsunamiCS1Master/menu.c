@@ -122,19 +122,53 @@ void updateScreen()
 				//this is the functionality if encoder B flag is not pressed
 				if(menuMoveArrow==1)
 				{
-					screen3Index++;
-					if(screen3Index>3)
+					if(encoderBFlag)
 					{
-						screen3Index = 3;
+						switch(screen3Index)
+						{
+							case 1:
+							midiChannel = midiChannel+1;
+							if(midiChannel>15)
+							{
+								midiChannel = 15;
+							}
+							numPrinter(screen3[1], 14, 2, (midiChannel+1));
+							outputS(screen3[1], 1);
+							break;
+							
+						}
+					}else
+					{
+						screen3Index++;
+						if(screen3Index>3)
+						{
+							screen3Index = 3;
+						}
+						screen3[screen3Index][19] = '<';
+						screen3[screen3Index-1][19] = ' ';
+						outputS(screen3[screen3Index], screen3Index);
+						outputS(screen3[screen3Index-1], screen3Index-1);
 					}
-					screen3[screen3Index][19] = '<';
-					screen3[screen3Index-1][19] = ' ';
-					outputS(screen3[screen3Index], screen3Index);
-					outputS(screen3[screen3Index-1], screen3Index-1);
 					
 					
 				}else
 				{
+					if(encoderBFlag)
+					{
+						switch(screen3Index)
+						{
+							case 1:
+							midiChannel = midiChannel-1;
+							if(midiChannel==255)
+							{
+								midiChannel = 0;
+							}
+							numPrinter(screen3[1], 14, 2, (midiChannel+1));
+							outputS(screen3[1], 1);
+							break;
+							
+						}
+					}else{
 					screen3Index--;
 					if(screen3Index>250||screen3Index==0) //this should account for any negative numbers from overflow.
 					{
@@ -145,17 +179,11 @@ void updateScreen()
 					outputS(screen3[screen3Index], screen3Index);
 					outputS(screen3[screen3Index+1], screen3Index+1);
 				}
-				
-				//this is the functionality if the encoder B flag is pressed. 
-				if(encoderBFlag)
-				{
-				
-				}
-				
+					}
 				
 			
 			break;
-			
+					
 		}
 		prevEncoderBValue = encoderBValue;
 	}

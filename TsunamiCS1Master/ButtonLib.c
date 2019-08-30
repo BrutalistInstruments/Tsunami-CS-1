@@ -18,6 +18,7 @@ uint8_t currentTrig;
 char testEncoderButton[20] = "EncoderButtonPressed";
 
 
+
 void initButtons()
 {
 	//this will initialize all of the buttons on the front panel
@@ -70,6 +71,34 @@ void listenTrigButtons()
 				numPrinter(screen2[1], 7, 2, (bc+1));
 				numPrinter(screen2[1], 10, 4, currentSample);
 				outputS(screen2[1], 1);
+				switch (currentPattern.trackPlayMode[bc])
+				{
+					case 0:
+					screen2[2][10] = 'P';
+					screen2[2][11] = 'o';
+					screen2[2][12] = 'l';
+					screen2[2][13] = 'y';
+					break;
+					
+					case 1:
+					screen2[2][10] = 'S';
+					screen2[2][11] = 'o';
+					screen2[2][12] = 'l';
+					screen2[2][13] = 'o';
+					break;
+					
+					//these additional cases will be for loops and other stuff. have not decided on how to deal with them yet.
+					case 2:
+					break;
+					
+					case 3:
+					break;
+				}
+				outputS(screen2[2], 2);
+				numPrinter(screen2[3], 10, 2, (currentPattern.trackOutputRoute[bc]+1));
+				outputS(screen2[3], 3);
+				
+				
 				trackControl(currentPattern.trackSampleLSB[bc], currentPattern.trackSampleMSB[bc], currentPattern.trackOutputRoute[bc], currentPattern.trackOutputRoute[bc]);
 				break;
 				
