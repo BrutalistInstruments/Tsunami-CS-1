@@ -38,9 +38,77 @@ void updateScreen()
 		uint8_t menuMoveArrow = encoderBValue - prevEncoderBValue; //this tells us whether we need to move up or down.
 		switch(encoderAValue)
 		{
+			
 			case 1:
+			if(encoderBFlag)
+			{
+				switch (screen1Index)
+				{
+					case 1:
+				if(menuMoveArrow==1)
+				{
+					currentPatternNumber = currentPatternNumber + 1;
+					numPrinter(screen1[1],9,3,currentPatternNumber);
+					outputS(screen1[1], 1);
+				}else
+				{
+					currentPatternNumber = currentPatternNumber - 1;
+					numPrinter(screen1[1],9,3,currentPatternNumber);
+					outputS(screen1[1], 1);
+				}
+				break;
+				
+				case 2:
+				if(menuMoveArrow==1){
+				currentPattern.numSteps = currentPattern.numSteps+1;
+					if(currentPattern.numSteps>64)
+					{
+						currentPattern.numSteps = 64;
+					}
+					numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
+					outputS(screen1[2], 2);
+				}else
+				{
+					
+					currentPattern.numSteps = currentPattern.numSteps-1;
+					if(currentPattern.numSteps<1)
+					{
+						currentPattern.numSteps= 1;
+			
+					}
+					numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
+					outputS(screen1[2],2);
+				}
+				break;
+				
+				case 3:
+				if(menuMoveArrow==1)
+				{
+					currentStep = currentStep+1;
+					if(currentStep>(currentPattern.numSteps)-1)
+					{
+						currentStep = (currentPattern.numSteps)-1;
+					}
+					numPrinter(screen1[3], 13, 2, currentStep+1);
+					outputS(screen1[3], 3);
+					
+				}else
+				{
+					currentStep = currentStep-1;
+					if(currentStep==255)
+					{
+						currentStep = 0;
+					}
+					numPrinter(screen1[3], 13, 2, currentStep+1);
+					outputS(screen1[3], 3);
+				}
+				
+				break;
+				}
+			}else{
 			if(menuMoveArrow==1)
 			{
+				
 				screen1Index++;
 				if(screen1Index>3)
 				{
@@ -65,10 +133,86 @@ void updateScreen()
 				outputS(screen1[screen1Index+1], screen1Index+1);
 			
 			}
+			}
 			
 			break;
 			
 			case 2:
+			if(encoderBFlag)
+			{
+				switch (screen2Index)
+				{
+					if(menuMoveArrow==1)
+					{
+						currentPattern.trackSampleLSB[currentTrack] = (currentPattern.trackSampleLSB[currentTrack])+ 1;
+						uint16_t currentSample = (currentPattern.trackSampleMSB[currentTrack]<<8)|(currentPattern.trackSampleLSB[currentTrack]);
+						numPrinter(screen2[1], 7, 2, (currentTrack+1));
+						numPrinter(screen2[1], 10, 4, currentSample);
+						outputS(screen2[1], 1);
+						
+					}else
+					{
+						currentPattern.trackSampleLSB[currentTrack] = (currentPattern.trackSampleLSB[currentTrack])- 1;
+						uint16_t currentSample = (currentPattern.trackSampleMSB[currentTrack]<<8)|(currentPattern.trackSampleLSB[currentTrack]);
+						numPrinter(screen2[1], 7, 2, (currentTrack+1));
+						numPrinter(screen2[1], 10, 4, currentSample);
+						outputS(screen2[1], 1);
+					}
+					
+					break;
+					
+					case 2:
+					if(menuMoveArrow==1)
+					{
+						currentPattern.trackPlayMode[currentTrack] = (currentPattern.trackPlayMode[currentTrack])+1;
+						if(currentPattern.trackPlayMode[currentTrack]>6)
+						{
+							currentPattern.trackPlayMode[currentTrack] = 6;
+						}
+						//do printing poly or solo stuff here.
+						
+						outputS(screen2[2], 2);
+						
+					}else
+					{
+						currentPattern.trackPlayMode[currentTrack] = (currentPattern.trackPlayMode[currentTrack])+1;
+						if(currentPattern.trackPlayMode[currentTrack]==255)
+						{
+							currentPattern.trackPlayMode[currentTrack] = 0;
+						}
+						//do printing poly or solo stuff here
+						outputS(screen2[2], 2);
+					}
+					break;
+					
+					case 3:
+					if(menuMoveArrow==1)
+					{
+						currentPattern.trackOutputRoute[currentTrack] = (currentPattern.trackOutputRoute[currentTrack])+1;
+						if(currentPattern.trackOutputRoute[currentTrack]>7)
+						{
+							currentPattern.trackOutputRoute[currentTrack] = 7;
+						}
+						numPrinter(screen2[3], 10, 2, (currentPattern.trackOutputRoute[currentTrack])+1);
+						outputS(screen2[3],3);
+						
+					}else
+					{
+						currentPattern.trackOutputRoute[currentTrack] = (currentPattern.trackOutputRoute[currentTrack])-1;
+						if(currentPattern.trackOutputRoute[currentTrack]==255)
+						{
+							currentPattern.trackOutputRoute[currentTrack] = 0;
+						}
+						numPrinter(screen2[3], 10, 2, (currentPattern.trackOutputRoute[currentTrack])+1);
+						outputS(screen2[3],3);
+						
+					}
+					
+					break;
+					
+				}
+				
+			}else{
 			if(menuMoveArrow==1)
 			{
 				screen2Index++;
@@ -95,25 +239,10 @@ void updateScreen()
 				outputS(screen2[screen2Index+1], screen2Index+1);
 				
 			}
-			
+			}
 			
 			/*
-			if(encoderBValue-prevEncoderBValue==1)
-			{
-				currentPattern.trackSampleLSB[currentTrack] = (currentPattern.trackSampleLSB[currentTrack])+ 1; 
-				uint16_t currentSample = (currentPattern.trackSampleMSB[currentTrack]<<8)|(currentPattern.trackSampleLSB[currentTrack]);
-				numPrinter(screen2[1], 7, 2, (currentTrack+1));
-				numPrinter(screen2[1], 10, 4, currentSample);
-				outputS(screen2[1], 1);
-	
-			}else
-			{
-				currentPattern.trackSampleLSB[currentTrack] = (currentPattern.trackSampleLSB[currentTrack])- 1;
-				uint16_t currentSample = (currentPattern.trackSampleMSB[currentTrack]<<8)|(currentPattern.trackSampleLSB[currentTrack]);
-				numPrinter(screen2[1], 7, 2, (currentTrack+1));
-				numPrinter(screen2[1], 10, 4, currentSample);
-				outputS(screen2[1], 1);
-			}
+			
 			*/
 			break;
 			
