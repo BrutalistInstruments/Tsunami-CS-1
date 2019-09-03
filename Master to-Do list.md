@@ -11,7 +11,7 @@ What's here:
 #### Firmware
 | Known Bug| Proposed Solution |
 | ------ | ------ |
-| Encoder reading issues | debouncing encoder pins, or interupts on falling edge |
+| Encoder reading issues | Interupt enable on encoderA, need to make hardware revision for encoderB|
 | Encoder switch bouncing | debouncing decoder switch, or falling edge detection |
 | Midi in dropping bytes | use arduino midi library |
 
@@ -32,6 +32,7 @@ What's here:
 |Feature|Dependencies|
 |----|----|
 |LowPass Filter on audio Outputs|Re-Design of IO Board|
+|Encoder Pin Interupts|Encoders need to be changed so that each have 1 interupt pin, instead of EncoderA having 2.|
 
 ## Features Complete
 #### Firmware
