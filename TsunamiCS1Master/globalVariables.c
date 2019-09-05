@@ -74,10 +74,10 @@ void initBank()
 	initArrays(screen2,9,3,"OutRoute:");
 	initArrays(screen2,14,0,"Track Settings");
 	//screen3
-	// = {"Global Settings     ","Midi Channel: xx    ", "Midi trigger Notes  ","(put triggered note)"};
+	// = {"Global Settings     ","Midi Channel: xx    ", "Midi trig:  "};
 	initArrays(screen3,13,1,"Midi Channel:");
-	initArrays(screen3,18,2,"Midi Trigger Notes");
-	initArrays(screen3,20,3,"(trigger Notes here)");
+	initArrays(screen3,18,2,"Midi trig:           ");
+	initArrays(screen3,20,3,"                     ");
 	initArrays(screen3,15,0,"Global Settings");	
 
 

@@ -11,6 +11,7 @@
 
 void updateScreen();
 void initMenu();
+void numToMidiNote(uint8_t inputNum, char midiNote[3]);
 
 
 

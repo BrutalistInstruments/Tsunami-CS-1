@@ -9,8 +9,10 @@
 #ifndef LEDLIB_H_
 #define LEDLIB_H_
 
+void parseLEDs(uint16_t LEDInput);
 void initLEDs();
 void updateLEDs();
+
 
 
 #endif /* LEDLIB_H_ */

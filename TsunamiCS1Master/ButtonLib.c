@@ -54,12 +54,10 @@ void listenTrigButtons()
 				case 0: //performance mode
 				//we trigger a sound here based on the location of bc
 				trackControl(currentPattern.trackSampleLSB[bc], currentPattern.trackSampleMSB[bc], currentPattern.trackOutputRoute[bc], currentPattern.trackOutputRoute[bc]);
-				//trackControl(3,0,0,1);
-				//numPrinter(buttonTest,9, 2,bc);
-				//outputS(buttonTest, 2);
 				break;
 				
 				case 1:
+				currentPattern.trackSequence[currentStep] ^=currentTrigButtons;
 				//turn on step number, or turn off step number.
 				//step sequencer mode.
 				break;
@@ -102,8 +100,12 @@ void listenTrigButtons()
 				trackControl(currentPattern.trackSampleLSB[bc], currentPattern.trackSampleMSB[bc], currentPattern.trackOutputRoute[bc], currentPattern.trackOutputRoute[bc]);
 				break;
 				
-				case 3: 
-				//same as 0
+				case 3:; 
+				uint16_t currentMidiNote = currentPattern.midiTrackNote[bc];
+				currentTrack = bc;
+				numPrinter(screen3[2], 11, 2, currentTrack);
+				numPrinter(screen3[2], 14, 2, currentMidiNote);
+				outputS(screen3[2], 2);
 				break;
 				
 				default:

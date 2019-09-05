@@ -28,7 +28,7 @@ typedef struct Pattern
  	uint8_t trackSampleMSB[16];
  	uint8_t trackSampleLSB[16];
  	uint8_t voiceLockFlag[16];
- 	uint16_t trackSequenceMSB[64];
+ 	uint16_t trackSequence[64];
 	uint8_t midiTrackNote[16];
 	uint16_t patternBPM;
 	uint8_t numSteps;

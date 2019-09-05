@@ -8,20 +8,6 @@
 #include "globalVariables.h"
 #include <avr/interrupt.h>
 
-ISR(INT5_vect)
-{
-	if(PINH == (1 << PH6)) //we may need to reverse this, since PH6 will be pulled to ground.
-	{
-		//
-		encoderAValue = encoderAValue+1;
-		
-	}else
-	{
-		encoderAValue = encoderAValue -1;
-	}
-	
-}
-
 void initEncoders()
 {
 	//this is where we set the encoder pins to where they need to be
@@ -71,7 +57,7 @@ void pollEncoder1(uint8_t *encoderC1)
 void listenEncoders()
 {
 	//this is where we update the encoder variables.
-//	pollEncoder0(&encoderAValue); //we're going to try using and interurt for encoderA's trigger, instead of polling. still need to debounce though? maybe?
+	pollEncoder0(&encoderAValue); //we're going to try using and interurt for encoderA's trigger, instead of polling. still need to debounce though? maybe?
 	pollEncoder1(&encoderBValue);
 
 

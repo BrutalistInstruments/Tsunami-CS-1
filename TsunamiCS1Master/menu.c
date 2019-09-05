@@ -11,7 +11,7 @@
 #include "globalVariables.h"
 #include "OLEDLib.h"
 
-
+char midiNote[3] = "C-0";
 
 void initMenu()
 {
@@ -38,77 +38,83 @@ void updateScreen()
 		uint8_t menuMoveArrow = encoderBValue - prevEncoderBValue; //this tells us whether we need to move up or down.
 		switch(encoderAValue)
 		{
-			
+			///Sequencer Edit Screen
 			case 1:
 			if(encoderBFlag)
 			{
 				switch (screen1Index)
 				{
+					// change pattern
 					case 1:
-				if(menuMoveArrow==1)
-				{
-					currentPatternNumber = currentPatternNumber + 1;
-					numPrinter(screen1[1],9,3,currentPatternNumber);
-					outputS(screen1[1], 1);
-				}else
-				{
-					currentPatternNumber = currentPatternNumber - 1;
-					numPrinter(screen1[1],9,3,currentPatternNumber);
-					outputS(screen1[1], 1);
-				}
-				break;
-				
-				case 2:
-				if(menuMoveArrow==1){
-				currentPattern.numSteps = currentPattern.numSteps+1;
-					if(currentPattern.numSteps>64)
+					if(menuMoveArrow==1)
 					{
-						currentPattern.numSteps = 64;
+						currentPatternNumber = currentPatternNumber + 1;
+						numPrinter(screen1[1],9,3,currentPatternNumber);
+						outputS(screen1[1], 1);
+					}else
+					{
+						currentPatternNumber = currentPatternNumber - 1;
+						numPrinter(screen1[1],9,3,currentPatternNumber);
+						outputS(screen1[1], 1);
 					}
-					numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
-					outputS(screen1[2], 2);
-				}else
-				{
-					
-					currentPattern.numSteps = currentPattern.numSteps-1;
-					if(currentPattern.numSteps<1)
+					break;
+				
+					//edit number of steps
+					case 2:
+					if(menuMoveArrow==1){
+						currentPattern.numSteps = currentPattern.numSteps+1;
+						if(currentPattern.numSteps>64)
+						{
+							currentPattern.numSteps = 64;
+						}
+						numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
+						outputS(screen1[2], 2);
+					}else
 					{
-						currentPattern.numSteps= 1;
+					
+						currentPattern.numSteps = currentPattern.numSteps-1;
+						if(currentPattern.numSteps<1)
+						{
+							currentPattern.numSteps= 1;
 			
+						}
+						numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
+						outputS(screen1[2],2);
 					}
-					numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
-					outputS(screen1[2],2);
-				}
-				break;
+					break;
 				
+				
+				
+				//edit current step
 				case 3:
-				if(menuMoveArrow==1)
-				{
-					currentStep = currentStep+1;
-					if(currentStep>(currentPattern.numSteps)-1)
+					if(menuMoveArrow==1)
 					{
-						currentStep = (currentPattern.numSteps)-1;
-					}
-					numPrinter(screen1[3], 13, 2, currentStep+1);
-					outputS(screen1[3], 3);
+						currentStep = currentStep+1;
+						if(currentStep>(currentPattern.numSteps)-1)
+						{
+							currentStep = (currentPattern.numSteps)-1;
+						}
+						numPrinter(screen1[3], 13, 2, currentStep+1);
+						outputS(screen1[3], 3);
 					
-				}else
-				{
-					currentStep = currentStep-1;
-					if(currentStep==255)
+					}else
 					{
-						currentStep = 0;
+						currentStep = currentStep-1;
+						if(currentStep==255)
+						{
+							currentStep = 0;
+						}
+						numPrinter(screen1[3], 13, 2, currentStep+1);
+						outputS(screen1[3], 3);
 					}
-					numPrinter(screen1[3], 13, 2, currentStep+1);
-					outputS(screen1[3], 3);
-				}
+					break;
+				}//end of switch statment.
 				
-				break;
-				}
+				//Move screen arrow/
 			}else{
 			if(menuMoveArrow==1)
 			{
-				
+				//move screen arrow down
 				screen1Index++;
 				if(screen1Index>3)
 				{
@@ -118,10 +124,9 @@ void updateScreen()
 				screen1[screen1Index-1][19] = ' ';
 				outputS(screen1[screen1Index], screen1Index);
 				outputS(screen1[screen1Index-1], screen1Index-1);
-			
-			
 			}else 
 			{
+				//move arrow up
 				screen1Index--;
 				if(screen1Index>250||screen1Index==0)
 				{
@@ -131,17 +136,18 @@ void updateScreen()
 				screen1[screen1Index+1][19] = ' ';
 				outputS(screen1[screen1Index], screen1Index);
 				outputS(screen1[screen1Index+1], screen1Index+1);
-			
 			}
 			}
+		break;
 			
-			break;
 			
+			//track setting screen
 			case 2:
 			if(encoderBFlag)
 			{
 				switch (screen2Index)
 				{
+					case 1:
 					if(menuMoveArrow==1)
 					{
 						currentPattern.trackSampleLSB[currentTrack] = (currentPattern.trackSampleLSB[currentTrack])+ 1;
@@ -185,6 +191,7 @@ void updateScreen()
 					}
 					break;
 					
+					//output routing on track setting screen
 					case 3:
 					if(menuMoveArrow==1)
 					{
@@ -228,6 +235,7 @@ void updateScreen()
 				
 			}else
 			{
+				//moving arrow on track setting screen
 				screen2Index--;
 				if(screen2Index>250||screen2Index==0) //this should account for any negative numbers from overflow.
 				{
@@ -241,14 +249,12 @@ void updateScreen()
 			}
 			}
 			
-			/*
-			
-			*/
 			break;
 			
 			case 3:
 			
 				//this is the functionality if encoder B flag is not pressed
+				//haha, I probably need to change this to how all of the other cases work up there. 
 				if(menuMoveArrow==1)
 				{
 					if(encoderBFlag)
@@ -265,13 +271,20 @@ void updateScreen()
 							outputS(screen3[1], 1);
 							break;
 							
+							case 2:
+							currentPattern.midiTrackNote[currentTrack] = (currentPattern.midiTrackNote[currentTrack]) + 1;
+							numPrinter(screen3[2], 14, 2, currentPattern.midiTrackNote[currentTrack]);
+							outputS(screen3[2], 2);
+							break;
+							
+							
 						}
 					}else
 					{
 						screen3Index++;
-						if(screen3Index>3)
+						if(screen3Index>2)
 						{
-							screen3Index = 3;
+							screen3Index = 2;
 						}
 						screen3[screen3Index][19] = '<';
 						screen3[screen3Index-1][19] = ' ';
@@ -294,6 +307,12 @@ void updateScreen()
 							}
 							numPrinter(screen3[1], 14, 2, (midiChannel+1));
 							outputS(screen3[1], 1);
+							break;
+							
+							case 2:
+							currentPattern.midiTrackNote[currentTrack] = (currentPattern.midiTrackNote[currentTrack]) - 1;
+							numPrinter(screen3[2], 14, 2, currentPattern.midiTrackNote[currentTrack]);
+							outputS(screen3[2], 2);
 							break;
 							
 						}
@@ -361,4 +380,10 @@ void updateScreen()
 	}
 
 
+}
+
+void numToMidiNote(uint8_t inputNum, char midiNote[3])
+{
+	//write this I guess?
+	
 }
