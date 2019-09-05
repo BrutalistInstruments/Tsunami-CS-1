@@ -27,6 +27,7 @@ What's here:
 |Variable BPM Sequencing|Sequencer|
 |Logarithmic Knob Reading|Knob Library|
 |GP-Button LEDs|LED output Library|
+|Envelop Knob Functionallity|Knob Library|
 
 #### Hardware
 |Feature|Dependencies|
