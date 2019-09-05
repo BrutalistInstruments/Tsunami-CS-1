@@ -20,8 +20,8 @@ What's here:
 | Feature |Depenencies|
 | ------- |-------|
 |Midi-Out|Midi-In functioning correctly|
-|Spi-bus Library|- - -|
-|Bank Storage|Spi-Bus Library|
+|I2C Library|- - -|
+|Bank Storage|I2C Library|
 |GP-Button Functionallity|GP section of Button Library|
 |Sequencer|Variable Timer interupts|
 |Variable BPM Sequencing|Sequencer|
@@ -47,3 +47,4 @@ What's here:
 |Midi In|
 |Trigger LEDs on Preformance Mode|
 |Main struct, ready for storage|
+|Midi notes per track assinable per pattern|

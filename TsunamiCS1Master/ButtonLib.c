@@ -101,6 +101,7 @@ void listenTrigButtons()
 				break;
 				
 				case 3:; 
+				//should these be assignable per pattern? maybe should take them out of global settings, or change that
 				uint16_t currentMidiNote = currentPattern.midiTrackNote[bc];
 				currentTrack = bc;
 				numPrinter(screen3[2], 11, 2, currentTrack);
