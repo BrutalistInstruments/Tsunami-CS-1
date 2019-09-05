@@ -34,6 +34,7 @@ What's here:
 |----|----|
 |LowPass Filter on audio Outputs|Re-Design of IO Board|
 |Encoder Pin Interupts|Encoders need to be changed so that each have 1 interupt pin, instead of EncoderA having 2.|
+|Resistors on the 2 lines of the SPI bus connecting them to VCC|Rev5 of CS-PCB|
 
 ## Features Complete
 #### Firmware
