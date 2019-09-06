@@ -28,6 +28,7 @@ int main(void)
 	sei();
 	 //this will be necessary on first startup, but maybe not in the actual program? maybe just something handy to have.
 	//loadMemory(); //we need to load in the first struct in locarion 0 of our eeprom.
+	//change for github
 	while (1)
 	{
 		listenTrigButtons();
