@@ -126,14 +126,13 @@ void listenTrigButtons()
 
 void listenGPButtons() // are the encoder buttons here also?
 {
-	currentGPButtons = PINB;
-	if((currentGPButtons^255)&(1 << PB5))
+
+	if(button_down(1 << PB5))
 	{ //top encoder button
 	//	outputS(testEncoderButton, 3);
 	encoderAFlag = ~encoderAFlag;
 		
 	}
-	if((currentGPButtons^255)&(1 << PB6))
 	{//botton encoder button
 		
 		//outputS(testEncoderButton, 3);

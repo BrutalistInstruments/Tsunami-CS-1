@@ -15,13 +15,11 @@
 
 #define BUTTON_PIN PINB
 #define BUTTON_PORT PORTB
-#define BUTTON_DDR DDRB
 #define BUTTON_MASK 0B01111111
 
 
 extern volatile uint8_t buttons_down;
 uint8_t button_down(uint8_t button_mask);
-void debounce_init();
 
 #define VC_DEC_OR_SET(high, low, mask) \
 low = ~(low & mask); \
