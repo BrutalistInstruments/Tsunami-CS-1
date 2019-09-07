@@ -23,11 +23,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  00000608  00000000  00000000  0000a900  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000fcd  00000000  00000000  0000af08  2**0
+ 10 .debug_str    0000101a  00000000  00000000  0000af08  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000229c  00000000  00000000  0000bed5  2**0
+ 11 .debug_loc    0000229c  00000000  00000000  0000bf22  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000001e8  00000000  00000000  0000e171  2**0
+ 12 .debug_ranges 000001e8  00000000  00000000  0000e1be  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -480,6 +480,7 @@ void listenTrigButtons()
      2e0:	1b c0       	rjmp	.+54     	; 0x318 <listenTrigButtons+0x1e4>
 				
 				case 3:; 
+				//should these be assignable per pattern? maybe should take them out of global settings, or change that
 				uint16_t currentMidiNote = currentPattern.midiTrackNote[bc];
      2e2:	f7 01       	movw	r30, r14
      2e4:	e0 54       	subi	r30, 0x40	; 64
@@ -591,50 +592,26 @@ void listenGPButtons() // are the encoder buttons here also?
      37c:	08 95       	ret
 
 0000037e <initEncoders>:
-#include <avr/interrupt.h>
-
-void initEncoders()
-{
-	//this is where we set the encoder pins to where they need to be
-PORTH = 0B01111000; // enable internal pullup resistors.
      37e:	88 e7       	ldi	r24, 0x78	; 120
      380:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <__TEXT_REGION_LENGTH__+0x700102>
      384:	08 95       	ret
 
 00000386 <pollEncoder0>:
-
-}
-
-void pollEncoder0(uint8_t *encoderC0)
-{
-	if(~PINH&(1<<PH6))
      386:	20 91 00 01 	lds	r18, 0x0100	; 0x800100 <__TEXT_REGION_LENGTH__+0x700100>
      38a:	26 fd       	sbrc	r18, 6
      38c:	12 c0       	rjmp	.+36     	; 0x3b2 <pollEncoder0+0x2c>
-	{
-		if(~PINH&(1<<PH5))
      38e:	20 91 00 01 	lds	r18, 0x0100	; 0x800100 <__TEXT_REGION_LENGTH__+0x700100>
      392:	25 fd       	sbrc	r18, 5
      394:	05 c0       	rjmp	.+10     	; 0x3a0 <pollEncoder0+0x1a>
-		{
-			//left turn?
-			*encoderC0= (*encoderC0)+1;
      396:	fc 01       	movw	r30, r24
      398:	20 81       	ld	r18, Z
      39a:	2f 5f       	subi	r18, 0xFF	; 255
      39c:	20 83       	st	Z, r18
      39e:	04 c0       	rjmp	.+8      	; 0x3a8 <pollEncoder0+0x22>
-		}
-		else
-		{
-			*encoderC0= (*encoderC0)-1;
      3a0:	fc 01       	movw	r30, r24
      3a2:	20 81       	ld	r18, Z
      3a4:	21 50       	subi	r18, 0x01	; 1
      3a6:	20 83       	st	Z, r18
-		}
-		//_delay_ms(2); // seems un-necesary with while loop
-		while(~PINH&(1<<PH6)){} // this does make things smoother, but we need to be sure we have interupts for important things.
      3a8:	e0 e0       	ldi	r30, 0x00	; 0
      3aa:	f1 e0       	ldi	r31, 0x01	; 1
      3ac:	80 81       	ld	r24, Z
@@ -643,39 +620,21 @@ void pollEncoder0(uint8_t *encoderC0)
      3b2:	08 95       	ret
 
 000003b4 <pollEncoder1>:
-
-}
-
-void pollEncoder1(uint8_t *encoderC1)
-{
-	if(~PINH&(1<<PH3))
      3b4:	20 91 00 01 	lds	r18, 0x0100	; 0x800100 <__TEXT_REGION_LENGTH__+0x700100>
      3b8:	23 fd       	sbrc	r18, 3
      3ba:	12 c0       	rjmp	.+36     	; 0x3e0 <pollEncoder1+0x2c>
-	{
-		if(~PINH&(1<<PH4))
      3bc:	20 91 00 01 	lds	r18, 0x0100	; 0x800100 <__TEXT_REGION_LENGTH__+0x700100>
      3c0:	24 fd       	sbrc	r18, 4
      3c2:	05 c0       	rjmp	.+10     	; 0x3ce <pollEncoder1+0x1a>
-		{
-			//left turn?
-			*encoderC1=(*encoderC1)-1;
      3c4:	fc 01       	movw	r30, r24
      3c6:	20 81       	ld	r18, Z
      3c8:	21 50       	subi	r18, 0x01	; 1
      3ca:	20 83       	st	Z, r18
      3cc:	04 c0       	rjmp	.+8      	; 0x3d6 <pollEncoder1+0x22>
-		}
-		else
-		{
-			*encoderC1=(*encoderC1)+1;
      3ce:	fc 01       	movw	r30, r24
      3d0:	20 81       	ld	r18, Z
      3d2:	2f 5f       	subi	r18, 0xFF	; 255
      3d4:	20 83       	st	Z, r18
-		}
-		//_delay_ms(2); // seems un-necesary with while loop
-		while(~PINH&(1<<PH3)){} // this does make things smoother, but we need to be sure we have interupts for important things.
      3d6:	e0 e0       	ldi	r30, 0x00	; 0
      3d8:	f1 e0       	ldi	r31, 0x01	; 1
      3da:	80 81       	ld	r24, Z
@@ -684,28 +643,15 @@ void pollEncoder1(uint8_t *encoderC1)
      3e0:	08 95       	ret
 
 000003e2 <listenEncoders>:
-
-
-void listenEncoders()
-{
-	//this is where we update the encoder variables.
-	pollEncoder0(&encoderAValue); //we're going to try using and interurt for encoderA's trigger, instead of polling. still need to debounce though? maybe?
      3e2:	8d e6       	ldi	r24, 0x6D	; 109
      3e4:	93 e0       	ldi	r25, 0x03	; 3
      3e6:	cf df       	rcall	.-98     	; 0x386 <pollEncoder0>
-	pollEncoder1(&encoderBValue);
      3e8:	82 e7       	ldi	r24, 0x72	; 114
      3ea:	96 e0       	ldi	r25, 0x06	; 6
      3ec:	e3 cf       	rjmp	.-58     	; 0x3b4 <pollEncoder1>
      3ee:	08 95       	ret
 
 000003f0 <initArrays>:
-
-#include <avr/io.h>
-#include "globalVariables.h"
-
-void initArrays(char myArray[4][20], uint8_t lengthOfString, int stringNumber, char* myString)
-{
      3f0:	ef 92       	push	r14
      3f2:	ff 92       	push	r15
      3f4:	0f 93       	push	r16
@@ -714,12 +660,9 @@ void initArrays(char myArray[4][20], uint8_t lengthOfString, int stringNumber, c
      3fa:	df 93       	push	r29
      3fc:	8c 01       	movw	r16, r24
      3fe:	7a 01       	movw	r14, r20
-	uint8_t charLeft = 20 - lengthOfString;
      400:	94 e1       	ldi	r25, 0x14	; 20
      402:	59 2f       	mov	r21, r25
      404:	56 1b       	sub	r21, r22
-	uint8_t currentIndex = 0;
-	for(currentIndex; currentIndex<lengthOfString; currentIndex++)
      406:	66 23       	and	r22, r22
      408:	a1 f0       	breq	.+40     	; 0x432 <__LOCK_REGION_LENGTH__+0x32>
      40a:	f9 01       	movw	r30, r18
@@ -737,30 +680,13 @@ void initArrays(char myArray[4][20], uint8_t lengthOfString, int stringNumber, c
      422:	21 96       	adiw	r28, 0x01	; 1
      424:	2c 0f       	add	r18, r28
      426:	3d 1f       	adc	r19, r29
-	{
-		myArray[stringNumber][currentIndex] = myString[currentIndex];
      428:	91 91       	ld	r25, Z+
      42a:	9d 93       	st	X+, r25
-
-void initArrays(char myArray[4][20], uint8_t lengthOfString, int stringNumber, char* myString)
-{
-	uint8_t charLeft = 20 - lengthOfString;
-	uint8_t currentIndex = 0;
-	for(currentIndex; currentIndex<lengthOfString; currentIndex++)
      42c:	e2 17       	cp	r30, r18
      42e:	f3 07       	cpc	r31, r19
      430:	d9 f7       	brne	.-10     	; 0x428 <__LOCK_REGION_LENGTH__+0x28>
-	{
-		myArray[stringNumber][currentIndex] = myString[currentIndex];
-		
-	}
-	
-	for(charLeft; charLeft>0; charLeft--)
      432:	55 23       	and	r21, r21
      434:	91 f0       	breq	.+36     	; 0x45a <__LOCK_REGION_LENGTH__+0x5a>
-	{
-		
-		myArray[stringNumber][currentIndex] = ' ';
      436:	24 e1       	ldi	r18, 0x14	; 20
      438:	2e 9d       	mul	r18, r14
      43a:	c0 01       	movw	r24, r0
@@ -776,22 +702,9 @@ void initArrays(char myArray[4][20], uint8_t lengthOfString, int stringNumber, c
      44e:	e6 0f       	add	r30, r22
      450:	f1 1d       	adc	r31, r1
      452:	80 83       	st	Z, r24
-		currentIndex++;
      454:	6f 5f       	subi	r22, 0xFF	; 255
-	{
-		myArray[stringNumber][currentIndex] = myString[currentIndex];
-		
-	}
-	
-	for(charLeft; charLeft>0; charLeft--)
      456:	69 13       	cpse	r22, r25
      458:	f9 cf       	rjmp	.-14     	; 0x44c <__LOCK_REGION_LENGTH__+0x4c>
-		
-		myArray[stringNumber][currentIndex] = ' ';
-		currentIndex++;
-	}
-
-}
      45a:	df 91       	pop	r29
      45c:	cf 91       	pop	r28
      45e:	1f 91       	pop	r17
@@ -801,94 +714,54 @@ void initArrays(char myArray[4][20], uint8_t lengthOfString, int stringNumber, c
      466:	08 95       	ret
 
 00000468 <initBank>:
-
-void initBank()
-{
      468:	e6 e1       	ldi	r30, 0x16	; 22
      46a:	f4 e0       	ldi	r31, 0x04	; 4
-	for(uint8_t i = 0; i<16; i++)
      46c:	80 e0       	ldi	r24, 0x00	; 0
-	{
-		currentPattern.trackSampleLSB[i] = i+1;
      46e:	8f 5f       	subi	r24, 0xFF	; 255
      470:	81 93       	st	Z+, r24
-
-}
-
-void initBank()
-{
-	for(uint8_t i = 0; i<16; i++)
      472:	80 31       	cpi	r24, 0x10	; 16
      474:	e1 f7       	brne	.-8      	; 0x46e <initBank+0x6>
-	{
-		currentPattern.trackSampleLSB[i] = i+1;
-	}
-	
-	//assign midi notes C3 to E4
-	currentPattern.midiTrackNote[0] = 0x30;
      476:	80 e3       	ldi	r24, 0x30	; 48
      478:	80 93 b6 04 	sts	0x04B6, r24	; 0x8004b6 <currentPattern+0x148>
-	currentPattern.midiTrackNote[1] = 0x31;
      47c:	81 e3       	ldi	r24, 0x31	; 49
      47e:	80 93 b7 04 	sts	0x04B7, r24	; 0x8004b7 <currentPattern+0x149>
-	currentPattern.midiTrackNote[2] = 0x32;
      482:	82 e3       	ldi	r24, 0x32	; 50
      484:	80 93 b8 04 	sts	0x04B8, r24	; 0x8004b8 <currentPattern+0x14a>
-	currentPattern.midiTrackNote[3] = 0x33;
      488:	83 e3       	ldi	r24, 0x33	; 51
      48a:	80 93 b9 04 	sts	0x04B9, r24	; 0x8004b9 <currentPattern+0x14b>
-	currentPattern.midiTrackNote[4] = 0x34;
      48e:	84 e3       	ldi	r24, 0x34	; 52
      490:	80 93 ba 04 	sts	0x04BA, r24	; 0x8004ba <currentPattern+0x14c>
-	currentPattern.midiTrackNote[5] = 0x35;
      494:	85 e3       	ldi	r24, 0x35	; 53
      496:	80 93 bb 04 	sts	0x04BB, r24	; 0x8004bb <currentPattern+0x14d>
-	currentPattern.midiTrackNote[6] = 0x36;
      49a:	86 e3       	ldi	r24, 0x36	; 54
      49c:	80 93 bc 04 	sts	0x04BC, r24	; 0x8004bc <currentPattern+0x14e>
-	currentPattern.midiTrackNote[7] = 0x37;
      4a0:	87 e3       	ldi	r24, 0x37	; 55
      4a2:	80 93 bd 04 	sts	0x04BD, r24	; 0x8004bd <currentPattern+0x14f>
-	currentPattern.midiTrackNote[8] = 0x38;
      4a6:	88 e3       	ldi	r24, 0x38	; 56
      4a8:	80 93 be 04 	sts	0x04BE, r24	; 0x8004be <currentPattern+0x150>
-	currentPattern.midiTrackNote[9] = 0x39;
      4ac:	89 e3       	ldi	r24, 0x39	; 57
      4ae:	80 93 bf 04 	sts	0x04BF, r24	; 0x8004bf <currentPattern+0x151>
-	currentPattern.midiTrackNote[10] = 0x3a;
      4b2:	8a e3       	ldi	r24, 0x3A	; 58
      4b4:	80 93 c0 04 	sts	0x04C0, r24	; 0x8004c0 <currentPattern+0x152>
-	currentPattern.midiTrackNote[11] = 0x3b;
      4b8:	8b e3       	ldi	r24, 0x3B	; 59
      4ba:	80 93 c1 04 	sts	0x04C1, r24	; 0x8004c1 <currentPattern+0x153>
-	currentPattern.midiTrackNote[12] = 0x3c;
      4be:	8c e3       	ldi	r24, 0x3C	; 60
      4c0:	80 93 c2 04 	sts	0x04C2, r24	; 0x8004c2 <currentPattern+0x154>
-	currentPattern.midiTrackNote[13] = 0x3d;
      4c4:	8d e3       	ldi	r24, 0x3D	; 61
      4c6:	80 93 c3 04 	sts	0x04C3, r24	; 0x8004c3 <currentPattern+0x155>
-	currentPattern.midiTrackNote[14] = 0x3e;
      4ca:	8e e3       	ldi	r24, 0x3E	; 62
      4cc:	80 93 c4 04 	sts	0x04C4, r24	; 0x8004c4 <currentPattern+0x156>
-	currentPattern.midiTrackNote[15] = 0x3f;
      4d0:	8f e3       	ldi	r24, 0x3F	; 63
      4d2:	80 93 c5 04 	sts	0x04C5, r24	; 0x8004c5 <currentPattern+0x157>
-	currentPattern.patternBPM = 120;
      4d6:	88 e7       	ldi	r24, 0x78	; 120
      4d8:	90 e0       	ldi	r25, 0x00	; 0
      4da:	90 93 c7 04 	sts	0x04C7, r25	; 0x8004c7 <currentPattern+0x159>
      4de:	80 93 c6 04 	sts	0x04C6, r24	; 0x8004c6 <currentPattern+0x158>
-	currentPatternNumber = 1;
      4e2:	81 e0       	ldi	r24, 0x01	; 1
      4e4:	80 93 1d 06 	sts	0x061D, r24	; 0x80061d <currentPatternNumber>
-	currentStep = 0;
      4e8:	10 92 73 06 	sts	0x0673, r1	; 0x800673 <currentStep>
-	currentPattern.numSteps = 16;
      4ec:	80 e1       	ldi	r24, 0x10	; 16
      4ee:	80 93 c8 04 	sts	0x04C8, r24	; 0x8004c8 <currentPattern+0x15a>
-	//screen0
-	// = {"Performance Mode    ","Pattern:            ","BPM: xxx            ","Stop                "}
-	initArrays(screen0,8,1,"Pattern:");
      4f2:	24 ea       	ldi	r18, 0xA4	; 164
      4f4:	32 e0       	ldi	r19, 0x02	; 2
      4f6:	41 e0       	ldi	r20, 0x01	; 1
@@ -897,7 +770,6 @@ void initBank()
      4fc:	87 e4       	ldi	r24, 0x47	; 71
      4fe:	95 e0       	ldi	r25, 0x05	; 5
      500:	77 df       	rcall	.-274    	; 0x3f0 <initArrays>
-	initArrays(screen0,4,2,"BPM:");
      502:	2d ea       	ldi	r18, 0xAD	; 173
      504:	32 e0       	ldi	r19, 0x02	; 2
      506:	42 e0       	ldi	r20, 0x02	; 2
@@ -906,7 +778,6 @@ void initBank()
      50c:	87 e4       	ldi	r24, 0x47	; 71
      50e:	95 e0       	ldi	r25, 0x05	; 5
      510:	6f df       	rcall	.-290    	; 0x3f0 <initArrays>
-	initArrays(screen0,4,3,"Stop");
      512:	22 eb       	ldi	r18, 0xB2	; 178
      514:	32 e0       	ldi	r19, 0x02	; 2
      516:	43 e0       	ldi	r20, 0x03	; 3
@@ -915,7 +786,6 @@ void initBank()
      51c:	87 e4       	ldi	r24, 0x47	; 71
      51e:	95 e0       	ldi	r25, 0x05	; 5
      520:	67 df       	rcall	.-306    	; 0x3f0 <initArrays>
-	initArrays(screen0,16,0,"Performance Mode");
      522:	27 eb       	ldi	r18, 0xB7	; 183
      524:	32 e0       	ldi	r19, 0x02	; 2
      526:	40 e0       	ldi	r20, 0x00	; 0
@@ -924,9 +794,6 @@ void initBank()
      52c:	87 e4       	ldi	r24, 0x47	; 71
      52e:	95 e0       	ldi	r25, 0x05	; 5
      530:	5f df       	rcall	.-322    	; 0x3f0 <initArrays>
-	//screen1
-	// = {"Sequence Edit       ","Pattern:            ","Steps:              ","Step number:        "}; //this will eventually be 5 once we implement naming of samples.
-	initArrays(screen1,8,1,"Pattern:");
      532:	24 ea       	ldi	r18, 0xA4	; 164
      534:	32 e0       	ldi	r19, 0x02	; 2
      536:	41 e0       	ldi	r20, 0x01	; 1
@@ -935,7 +802,6 @@ void initBank()
      53c:	8b ec       	ldi	r24, 0xCB	; 203
      53e:	94 e0       	ldi	r25, 0x04	; 4
      540:	57 df       	rcall	.-338    	; 0x3f0 <initArrays>
-	initArrays(screen1,6,2,"Steps:");
      542:	28 ec       	ldi	r18, 0xC8	; 200
      544:	32 e0       	ldi	r19, 0x02	; 2
      546:	42 e0       	ldi	r20, 0x02	; 2
@@ -944,7 +810,6 @@ void initBank()
      54c:	8b ec       	ldi	r24, 0xCB	; 203
      54e:	94 e0       	ldi	r25, 0x04	; 4
      550:	4f df       	rcall	.-354    	; 0x3f0 <initArrays>
-	initArrays(screen1,12,3,"Step number:");
      552:	2f ec       	ldi	r18, 0xCF	; 207
      554:	32 e0       	ldi	r19, 0x02	; 2
      556:	43 e0       	ldi	r20, 0x03	; 3
@@ -953,7 +818,6 @@ void initBank()
      55c:	8b ec       	ldi	r24, 0xCB	; 203
      55e:	94 e0       	ldi	r25, 0x04	; 4
      560:	47 df       	rcall	.-370    	; 0x3f0 <initArrays>
-	initArrays(screen1,13,0,"Sequence Edit");
      562:	2c ed       	ldi	r18, 0xDC	; 220
      564:	32 e0       	ldi	r19, 0x02	; 2
      566:	40 e0       	ldi	r20, 0x00	; 0
@@ -962,9 +826,6 @@ void initBank()
      56c:	8b ec       	ldi	r24, 0xCB	; 203
      56e:	94 e0       	ldi	r25, 0x04	; 4
      570:	3f df       	rcall	.-386    	; 0x3f0 <initArrays>
-	//screen2
-	//= {"Track Settings      ","Track:              ","Play Mode           ","OutRoute            "};
-	initArrays(screen2,6,1,"Track:");
      572:	2a ee       	ldi	r18, 0xEA	; 234
      574:	32 e0       	ldi	r19, 0x02	; 2
      576:	41 e0       	ldi	r20, 0x01	; 1
@@ -973,7 +834,6 @@ void initBank()
      57c:	8b e9       	ldi	r24, 0x9B	; 155
      57e:	95 e0       	ldi	r25, 0x05	; 5
      580:	37 df       	rcall	.-402    	; 0x3f0 <initArrays>
-	initArrays(screen2,9,2,"PlayMode:");
      582:	21 ef       	ldi	r18, 0xF1	; 241
      584:	32 e0       	ldi	r19, 0x02	; 2
      586:	42 e0       	ldi	r20, 0x02	; 2
@@ -982,7 +842,6 @@ void initBank()
      58c:	8b e9       	ldi	r24, 0x9B	; 155
      58e:	95 e0       	ldi	r25, 0x05	; 5
      590:	2f df       	rcall	.-418    	; 0x3f0 <initArrays>
-	initArrays(screen2,9,3,"OutRoute:");
      592:	2b ef       	ldi	r18, 0xFB	; 251
      594:	32 e0       	ldi	r19, 0x02	; 2
      596:	43 e0       	ldi	r20, 0x03	; 3
@@ -991,7 +850,6 @@ void initBank()
      59c:	8b e9       	ldi	r24, 0x9B	; 155
      59e:	95 e0       	ldi	r25, 0x05	; 5
      5a0:	27 df       	rcall	.-434    	; 0x3f0 <initArrays>
-	initArrays(screen2,14,0,"Track Settings");
      5a2:	25 e0       	ldi	r18, 0x05	; 5
      5a4:	33 e0       	ldi	r19, 0x03	; 3
      5a6:	40 e0       	ldi	r20, 0x00	; 0
@@ -1000,9 +858,6 @@ void initBank()
      5ac:	8b e9       	ldi	r24, 0x9B	; 155
      5ae:	95 e0       	ldi	r25, 0x05	; 5
      5b0:	1f df       	rcall	.-450    	; 0x3f0 <initArrays>
-	//screen3
-	// = {"Global Settings     ","Midi Channel: xx    ", "Midi trig:  "};
-	initArrays(screen3,13,1,"Midi Channel:");
      5b2:	24 e1       	ldi	r18, 0x14	; 20
      5b4:	33 e0       	ldi	r19, 0x03	; 3
      5b6:	41 e0       	ldi	r20, 0x01	; 1
@@ -1011,7 +866,6 @@ void initBank()
      5bc:	8f e1       	ldi	r24, 0x1F	; 31
      5be:	96 e0       	ldi	r25, 0x06	; 6
      5c0:	17 df       	rcall	.-466    	; 0x3f0 <initArrays>
-	initArrays(screen3,18,2,"Midi trig:           ");
      5c2:	22 e2       	ldi	r18, 0x22	; 34
      5c4:	33 e0       	ldi	r19, 0x03	; 3
      5c6:	42 e0       	ldi	r20, 0x02	; 2
@@ -1020,7 +874,6 @@ void initBank()
      5cc:	8f e1       	ldi	r24, 0x1F	; 31
      5ce:	96 e0       	ldi	r25, 0x06	; 6
      5d0:	0f df       	rcall	.-482    	; 0x3f0 <initArrays>
-	initArrays(screen3,20,3,"                     ");
      5d2:	28 e3       	ldi	r18, 0x38	; 56
      5d4:	33 e0       	ldi	r19, 0x03	; 3
      5d6:	43 e0       	ldi	r20, 0x03	; 3
@@ -1029,7 +882,6 @@ void initBank()
      5dc:	8f e1       	ldi	r24, 0x1F	; 31
      5de:	96 e0       	ldi	r25, 0x06	; 6
      5e0:	07 df       	rcall	.-498    	; 0x3f0 <initArrays>
-	initArrays(screen3,15,0,"Global Settings");	
      5e2:	2e e4       	ldi	r18, 0x4E	; 78
      5e4:	33 e0       	ldi	r19, 0x03	; 3
      5e6:	40 e0       	ldi	r20, 0x00	; 0
@@ -1041,62 +893,35 @@ void initBank()
      5f2:	08 95       	ret
 
 000005f4 <startADCConversion>:
-char envelopeTimePrint[20] = "EnvelopeTimex:xxxxMS";
-
-uint8_t startADCConversion()
-{
-	
-	ADCSRA |= (1 << ADSC); //this moves the read instruction bit to the ADC Register.
      5f4:	ea e7       	ldi	r30, 0x7A	; 122
      5f6:	f0 e0       	ldi	r31, 0x00	; 0
      5f8:	80 81       	ld	r24, Z
      5fa:	80 64       	ori	r24, 0x40	; 64
      5fc:	80 83       	st	Z, r24
-	while (ADCSRA & (1 << ADSC));
      5fe:	80 81       	ld	r24, Z
      600:	86 fd       	sbrc	r24, 6
      602:	fd cf       	rjmp	.-6      	; 0x5fe <startADCConversion+0xa>
-	return ADCH; //this is the top 8 bits of the 10 bit ADC Read.
      604:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x700079>
-	
-}
      608:	08 95       	ret
 
 0000060a <initADC>:
-
-void initADC()
-{
-	DDRE = 0B00111000; //init pins E5, 4, and 3 as select pins on the external mux.
      60a:	88 e3       	ldi	r24, 0x38	; 56
      60c:	8d b9       	out	0x0d, r24	; 13
-	
-	ADMUX = (1 << ADLAR);//we're using the AREF pin to reduce analog noise, and only grabbing 8 bits from the ADC
      60e:	80 e2       	ldi	r24, 0x20	; 32
      610:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__TEXT_REGION_LENGTH__+0x70007c>
-	ADCSRA = (1 <<  ADEN) | (1 <<ADPS2) | (1 << ADPS1) | (1 << ADPS0);
      614:	87 e8       	ldi	r24, 0x87	; 135
      616:	80 93 7a 00 	sts	0x007A, r24	; 0x80007a <__TEXT_REGION_LENGTH__+0x70007a>
-	ADCSRB = (1 << MUX5);
      61a:	88 e0       	ldi	r24, 0x08	; 8
      61c:	80 93 7b 00 	sts	0x007B, r24	; 0x80007b <__TEXT_REGION_LENGTH__+0x70007b>
-	DIDR0 = 0xff; // we should set this register to all 1s, so there is no digital input triggering.
      620:	8f ef       	ldi	r24, 0xFF	; 255
      622:	80 93 7e 00 	sts	0x007E, r24	; 0x80007e <__TEXT_REGION_LENGTH__+0x70007e>
-	DIDR2 = 0xff;
      626:	80 93 7d 00 	sts	0x007D, r24	; 0x80007d <__TEXT_REGION_LENGTH__+0x70007d>
-	knobBufferCounter = 0;
      62a:	10 92 f0 05 	sts	0x05F0, r1	; 0x8005f0 <knobBufferCounter>
-	startADCConversion();
      62e:	e2 cf       	rjmp	.-60     	; 0x5f4 <startADCConversion>
      630:	08 95       	ret
 
 00000632 <selectKnob>:
-}
-
-void selectKnob(uint8_t select)
-{ 
      632:	cf 93       	push	r28
-	select = select%44; //accounts for overflows, may be unnecessary
      634:	98 2f       	mov	r25, r24
      636:	96 95       	lsr	r25
      638:	96 95       	lsr	r25
@@ -1110,34 +935,18 @@ void selectKnob(uint8_t select)
      648:	80 19       	sub	r24, r0
      64a:	11 24       	eor	r1, r1
      64c:	98 2f       	mov	r25, r24
-	if(select<40)
      64e:	88 32       	cpi	r24, 0x28	; 40
      650:	18 f5       	brcc	.+70     	; 0x698 <selectKnob+0x66>
-	{
-		ADCSRB = (1 << MUX5);
      652:	88 e0       	ldi	r24, 0x08	; 8
      654:	80 93 7b 00 	sts	0x007B, r24	; 0x80007b <__TEXT_REGION_LENGTH__+0x70007b>
-		uint8_t muxSelect = select%8; //this should produce a number between 1 and 7.
      658:	c9 2f       	mov	r28, r25
      65a:	c7 70       	andi	r28, 0x07	; 7
-		uint8_t tempMuxSelect = muxSelect;
-
-	//we need to set the internal multiplxer
-		uint8_t internalMuxSelect = select/8;
-		
-		ADMUX = internalMuxSelect|(1 << ADLAR);   
      65c:	96 95       	lsr	r25
      65e:	96 95       	lsr	r25
      660:	96 95       	lsr	r25
      662:	90 62       	ori	r25, 0x20	; 32
      664:	90 93 7c 00 	sts	0x007C, r25	; 0x80007c <__TEXT_REGION_LENGTH__+0x70007c>
-		startADCConversion();//this should throw away our first read after the mux changover.
      668:	c5 df       	rcall	.-118    	; 0x5f4 <startADCConversion>
-		//we might need to worry about the delay, but that's fine.
-		
-		//we put our select0 and select2 pins in the opposite ports, so we need to do some math to fix that.
-		//easy stupid fix:
-		switch (tempMuxSelect)
      66a:	c3 30       	cpi	r28, 0x03	; 3
      66c:	59 f0       	breq	.+22     	; 0x684 <selectKnob+0x52>
      66e:	18 f4       	brcc	.+6      	; 0x676 <selectKnob+0x44>
@@ -1149,38 +958,18 @@ void selectKnob(uint8_t select)
      67a:	c6 30       	cpi	r28, 0x06	; 6
      67c:	39 f0       	breq	.+14     	; 0x68c <selectKnob+0x5a>
      67e:	07 c0       	rjmp	.+14     	; 0x68e <selectKnob+0x5c>
-		{
-			case 1: muxSelect = 4;
      680:	c4 e0       	ldi	r28, 0x04	; 4
      682:	05 c0       	rjmp	.+10     	; 0x68e <selectKnob+0x5c>
-			break;
-			
-			case 3:	muxSelect = 6;
      684:	c6 e0       	ldi	r28, 0x06	; 6
-			break;
      686:	03 c0       	rjmp	.+6      	; 0x68e <selectKnob+0x5c>
-			
-			case 4: muxSelect = 1;
      688:	c1 e0       	ldi	r28, 0x01	; 1
-			break;
      68a:	01 c0       	rjmp	.+2      	; 0x68e <selectKnob+0x5c>
-			
-			case 6: muxSelect = 3;
      68c:	c3 e0       	ldi	r28, 0x03	; 3
-			break;
-		}
-
-	//then the external multiplexer
-		PORTE = (muxSelect << 3);
      68e:	cc 0f       	add	r28, r28
      690:	cc 0f       	add	r28, r28
      692:	cc 0f       	add	r28, r28
      694:	ce b9       	out	0x0e, r28	; 14
      696:	20 c0       	rjmp	.+64     	; 0x6d8 <selectKnob+0xa6>
-	
-	}else
-	{ //we only have to change the ADC Register, since these knobs are wired directly into our microcontroller.
-		switch (select){
      698:	89 32       	cpi	r24, 0x29	; 41
      69a:	71 f0       	breq	.+28     	; 0x6b8 <selectKnob+0x86>
      69c:	18 f4       	brcc	.+6      	; 0x6a4 <selectKnob+0x72>
@@ -1192,79 +981,43 @@ void selectKnob(uint8_t select)
      6a8:	8b 32       	cpi	r24, 0x2B	; 43
      6aa:	81 f0       	breq	.+32     	; 0x6cc <selectKnob+0x9a>
      6ac:	15 c0       	rjmp	.+42     	; 0x6d8 <selectKnob+0xa6>
-		case 40:
-		ADMUX = 5|(1 << ADLAR);
      6ae:	85 e2       	ldi	r24, 0x25	; 37
      6b0:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__TEXT_REGION_LENGTH__+0x70007c>
-		startADCConversion();
      6b4:	9f df       	rcall	.-194    	; 0x5f4 <startADCConversion>
-		break;
      6b6:	10 c0       	rjmp	.+32     	; 0x6d8 <selectKnob+0xa6>
-		
-		case 41:
-		ADMUX = 6|(1 << ADLAR);
      6b8:	86 e2       	ldi	r24, 0x26	; 38
      6ba:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__TEXT_REGION_LENGTH__+0x70007c>
-		startADCConversion();
      6be:	9a df       	rcall	.-204    	; 0x5f4 <startADCConversion>
-		break;
      6c0:	0b c0       	rjmp	.+22     	; 0x6d8 <selectKnob+0xa6>
-		
-		case 42:
-		ADMUX = 7|(1 << ADLAR);
      6c2:	87 e2       	ldi	r24, 0x27	; 39
      6c4:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__TEXT_REGION_LENGTH__+0x70007c>
-		startADCConversion();
      6c8:	95 df       	rcall	.-214    	; 0x5f4 <startADCConversion>
-		break;
      6ca:	06 c0       	rjmp	.+12     	; 0x6d8 <selectKnob+0xa6>
-		
-		case 43:
-		//remember, this knob is in port A0.
-		ADMUX = 0|(1 << ADLAR);
      6cc:	80 e2       	ldi	r24, 0x20	; 32
      6ce:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__TEXT_REGION_LENGTH__+0x70007c>
-		ADCSRB = (0 << MUX5); 
      6d2:	10 92 7b 00 	sts	0x007B, r1	; 0x80007b <__TEXT_REGION_LENGTH__+0x70007b>
-		startADCConversion();
      6d6:	8e df       	rcall	.-228    	; 0x5f4 <startADCConversion>
-		break;
-		}
-	
-	}
-	
-}
      6d8:	cf 91       	pop	r28
      6da:	08 95       	ret
 
 000006dc <updateKnob>:
-
-void updateKnob(uint8_t select)
-{
      6dc:	cf 93       	push	r28
      6de:	c8 2f       	mov	r28, r24
-
-	knobBuffer[select] = startADCConversion(); 
      6e0:	89 df       	rcall	.-238    	; 0x5f4 <startADCConversion>
      6e2:	ec 2f       	mov	r30, r28
      6e4:	f0 e0       	ldi	r31, 0x00	; 0
      6e6:	e5 5e       	subi	r30, 0xE5	; 229
      6e8:	fa 4f       	sbci	r31, 0xFA	; 250
      6ea:	80 83       	st	Z, r24
-}
      6ec:	cf 91       	pop	r28
      6ee:	08 95       	ret
 
 000006f0 <interperetKnob>:
-
-void interperetKnob(uint8_t select)
-{//this function will compare outputs, and write to our struct.
      6f0:	ef 92       	push	r14
      6f2:	ff 92       	push	r15
      6f4:	0f 93       	push	r16
      6f6:	1f 93       	push	r17
      6f8:	cf 93       	push	r28
-	select = select%44;
      6fa:	98 2f       	mov	r25, r24
      6fc:	96 95       	lsr	r25
      6fe:	96 95       	lsr	r25
@@ -1278,12 +1031,6 @@ void interperetKnob(uint8_t select)
      70e:	80 19       	sub	r24, r0
      710:	11 24       	eor	r1, r1
      712:	98 2f       	mov	r25, r24
-	//we might not need this with the IIR filter
-	float volumeDivisor = 3.1875;
-	
-	
-	//Change from FIR filter to IIR filter.
-     checkBuffer[select] += ((knobBuffer[select]-checkBuffer[select])/2);
      714:	a8 2f       	mov	r26, r24
      716:	b0 e0       	ldi	r27, 0x00	; 0
      718:	fd 01       	movw	r30, r26
@@ -1307,18 +1054,11 @@ void interperetKnob(uint8_t select)
      73c:	af 50       	subi	r26, 0x0F	; 15
      73e:	ba 4f       	sbci	r27, 0xFA	; 250
      740:	4c 93       	st	X, r20
-	
-	
-	if (select<40)
      742:	98 32       	cpi	r25, 0x28	; 40
      744:	08 f0       	brcs	.+2      	; 0x748 <interperetKnob+0x58>
      746:	1a c2       	rjmp	.+1076   	; 0xb7c <interperetKnob+0x48c>
-	{
-		uint8_t positionSelect = select%8;
      748:	c9 2f       	mov	r28, r25
      74a:	c7 70       	andi	r28, 0x07	; 7
-		uint8_t bankSwitch = select/8;
-		switch (bankSwitch)
      74c:	96 95       	lsr	r25
      74e:	96 95       	lsr	r25
      750:	96 95       	lsr	r25
@@ -1339,15 +1079,8 @@ void interperetKnob(uint8_t select)
      76e:	09 f4       	brne	.+2      	; 0x772 <interperetKnob+0x82>
      770:	6f c1       	rjmp	.+734    	; 0xa50 <interperetKnob+0x360>
      772:	23 c2       	rjmp	.+1094   	; 0xbba <interperetKnob+0x4ca>
-		{
-			
-			case 0:; //switch cases are "labels", used for goto stuff. so, you have to end the label before declaring variables. should be fine?
-			
-			int16_t currentOutVoulume = ((currentPattern.outputLevelMSB[positionSelect]<<8)|(currentPattern.outputLevelLSB[positionSelect])); 
      774:	0c 2f       	mov	r16, r28
      776:	10 e0       	ldi	r17, 0x00	; 0
-			//this should be a regular integer between -70 and +10
-			int16_t negCheckValue = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
      778:	64 2f       	mov	r22, r20
      77a:	70 e0       	ldi	r23, 0x00	; 0
      77c:	80 e0       	ldi	r24, 0x00	; 0
@@ -1367,18 +1100,9 @@ void interperetKnob(uint8_t select)
      7a0:	86 2f       	mov	r24, r22
      7a2:	97 2f       	mov	r25, r23
      7a4:	9c 01       	movw	r18, r24
-		switch (bankSwitch)
-		{
-			
-			case 0:; //switch cases are "labels", used for goto stuff. so, you have to end the label before declaring variables. should be fine?
-			
-			int16_t currentOutVoulume = ((currentPattern.outputLevelMSB[positionSelect]<<8)|(currentPattern.outputLevelLSB[positionSelect])); 
      7a6:	f8 01       	movw	r30, r16
      7a8:	e2 59       	subi	r30, 0x92	; 146
      7aa:	fc 4f       	sbci	r31, 0xFC	; 252
-			//this should be a regular integer between -70 and +10
-			int16_t negCheckValue = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
-			if(currentOutVoulume!=negCheckValue)
      7ac:	80 81       	ld	r24, Z
      7ae:	90 e0       	ldi	r25, 0x00	; 0
      7b0:	98 2f       	mov	r25, r24
@@ -1389,28 +1113,20 @@ void interperetKnob(uint8_t select)
      7ba:	93 07       	cpc	r25, r19
      7bc:	09 f4       	brne	.+2      	; 0x7c0 <interperetKnob+0xd0>
      7be:	fd c1       	rjmp	.+1018   	; 0xbba <interperetKnob+0x4ca>
-			{
-				currentPattern.outputLevelLSB[positionSelect] = (negCheckValue);
      7c0:	f8 01       	movw	r30, r16
      7c2:	e2 59       	subi	r30, 0x92	; 146
      7c4:	fc 4f       	sbci	r31, 0xFC	; 252
      7c6:	60 87       	std	Z+8, r22	; 0x08
-				if(negCheckValue>(-1))
      7c8:	33 23       	and	r19, r19
      7ca:	64 f1       	brlt	.+88     	; 0x824 <interperetKnob+0x134>
-				{
-					currentPattern.outputLevelMSB[positionSelect] = 0;
      7cc:	f8 01       	movw	r30, r16
      7ce:	e2 59       	subi	r30, 0x92	; 146
      7d0:	fc 4f       	sbci	r31, 0xFC	; 252
      7d2:	10 82       	st	Z, r1
-					//just hard coding this for now until we make a function.
-					outVolumePrint[14] = 48;
      7d4:	ec e3       	ldi	r30, 0x3C	; 60
      7d6:	f2 e0       	ldi	r31, 0x02	; 2
      7d8:	80 e3       	ldi	r24, 0x30	; 48
      7da:	86 87       	std	Z+14, r24	; 0x0e
-					outVolumePrint[16] = (currentPattern.outputLevelLSB[positionSelect]%10)+48;
      7dc:	2d ec       	ldi	r18, 0xCD	; 205
      7de:	62 9f       	mul	r22, r18
      7e0:	81 2d       	mov	r24, r1
@@ -1428,7 +1144,6 @@ void interperetKnob(uint8_t select)
      7f8:	89 2f       	mov	r24, r25
      7fa:	80 5d       	subi	r24, 0xD0	; 208
      7fc:	80 8b       	std	Z+16, r24	; 0x10
-					outVolumePrint[15] = ((currentPattern.outputLevelLSB[positionSelect]%100)/10)+48;
      7fe:	89 e2       	ldi	r24, 0x29	; 41
      800:	68 9f       	mul	r22, r24
      802:	81 2d       	mov	r24, r1
@@ -1448,20 +1163,15 @@ void interperetKnob(uint8_t select)
      81e:	60 5d       	subi	r22, 0xD0	; 208
      820:	67 87       	std	Z+15, r22	; 0x0f
      822:	23 c0       	rjmp	.+70     	; 0x86a <interperetKnob+0x17a>
-				}else
-				{
-					currentPattern.outputLevelMSB[positionSelect] = 255;
      824:	8f ef       	ldi	r24, 0xFF	; 255
      826:	f8 01       	movw	r30, r16
      828:	e2 59       	subi	r30, 0x92	; 146
      82a:	fc 4f       	sbci	r31, 0xFC	; 252
      82c:	80 83       	st	Z, r24
-					outVolumePrint[14] = '-';
      82e:	ec e3       	ldi	r30, 0x3C	; 60
      830:	f2 e0       	ldi	r31, 0x02	; 2
      832:	8d e2       	ldi	r24, 0x2D	; 45
      834:	86 87       	std	Z+14, r24	; 0x0e
-					outVolumePrint[15] = ((((currentPattern.outputLevelLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
      836:	60 95       	com	r22
      838:	26 2f       	mov	r18, r22
      83a:	30 e0       	ldi	r19, 0x00	; 0
@@ -1480,24 +1190,18 @@ void interperetKnob(uint8_t select)
      856:	0e 94 e8 0f 	call	0x1fd0	; 0x1fd0 <__divmodhi4>
      85a:	60 5d       	subi	r22, 0xD0	; 208
      85c:	67 87       	std	Z+15, r22	; 0x0f
-					outVolumePrint[16] = (((currentPattern.outputLevelLSB[positionSelect]^255)+1)%10)+48;
      85e:	c9 01       	movw	r24, r18
      860:	b7 01       	movw	r22, r14
      862:	0e 94 e8 0f 	call	0x1fd0	; 0x1fd0 <__divmodhi4>
      866:	80 5d       	subi	r24, 0xD0	; 208
      868:	80 8b       	std	Z+16, r24	; 0x10
-				}
-				//then output to screen. 
-				outVolumePrint[10] = positionSelect + 49;
      86a:	cf 5c       	subi	r28, 0xCF	; 207
      86c:	c0 93 46 02 	sts	0x0246, r28	; 0x800246 <outVolumePrint+0xa>
-				outputS(outVolumePrint, 3);
      870:	63 e0       	ldi	r22, 0x03	; 3
      872:	70 e0       	ldi	r23, 0x00	; 0
      874:	8c e3       	ldi	r24, 0x3C	; 60
      876:	92 e0       	ldi	r25, 0x02	; 2
      878:	0c d7       	rcall	.+3608   	; 0x1692 <outputS>
-				setOutputVolume(currentPattern.outputLevelLSB[positionSelect], currentPattern.outputLevelMSB[positionSelect], positionSelect);
      87a:	f8 01       	movw	r30, r16
      87c:	e2 59       	subi	r30, 0x92	; 146
      87e:	fc 4f       	sbci	r31, 0xFC	; 252
@@ -1508,11 +1212,6 @@ void interperetKnob(uint8_t select)
      888:	90 e0       	ldi	r25, 0x00	; 0
      88a:	0e 94 f2 0d 	call	0x1be4	; 0x1be4 <setOutputVolume>
      88e:	95 c1       	rjmp	.+810    	; 0xbba <interperetKnob+0x4ca>
-			}
-			break;
-			
- 			case 1:
- 			if(currentPattern.outputPitch[positionSelect]!=(checkBuffer[select]^128))
      890:	0c 2f       	mov	r16, r28
      892:	10 e0       	ldi	r17, 0x00	; 0
      894:	60 e8       	ldi	r22, 0x80	; 128
@@ -1524,29 +1223,19 @@ void interperetKnob(uint8_t select)
      8a0:	86 17       	cp	r24, r22
      8a2:	09 f4       	brne	.+2      	; 0x8a6 <interperetKnob+0x1b6>
      8a4:	8a c1       	rjmp	.+788    	; 0xbba <interperetKnob+0x4ca>
- 			{
- 				(currentPattern.outputPitch[positionSelect]) = (checkBuffer[select]^128);
      8a6:	f8 01       	movw	r30, r16
      8a8:	e2 59       	subi	r30, 0x92	; 146
      8aa:	fc 4f       	sbci	r31, 0xFC	; 252
      8ac:	60 8b       	std	Z+16, r22	; 0x10
-				 if(encoderAValue == 0)
      8ae:	80 91 6d 03 	lds	r24, 0x036D	; 0x80036d <encoderAValue>
      8b2:	81 11       	cpse	r24, r1
      8b4:	20 c0       	rjmp	.+64     	; 0x8f6 <interperetKnob+0x206>
-				 {
-					 pitchPrint[5] = (positionSelect+49);
      8b6:	cf 5c       	subi	r28, 0xCF	; 207
      8b8:	c0 93 55 02 	sts	0x0255, r28	; 0x800255 <pitchPrint+0x5>
-					 if(currentPattern.outputPitch[positionSelect]>>7)
      8bc:	66 23       	and	r22, r22
      8be:	64 f4       	brge	.+24     	; 0x8d8 <interperetKnob+0x1e8>
-					 {
-						 //again, hard coding.
-						 pitchPrint[7] = '-';
      8c0:	8d e2       	ldi	r24, 0x2D	; 45
      8c2:	80 93 57 02 	sts	0x0257, r24	; 0x800257 <pitchPrint+0x7>
-						 numPrinter(pitchPrint, 8, 3, (currentPattern.outputPitch[positionSelect]^255));
      8c6:	26 2f       	mov	r18, r22
      8c8:	20 95       	com	r18
      8ca:	30 e0       	ldi	r19, 0x00	; 0
@@ -1556,12 +1245,8 @@ void interperetKnob(uint8_t select)
      8d2:	92 e0       	ldi	r25, 0x02	; 2
      8d4:	f6 d6       	rcall	.+3564   	; 0x16c2 <numPrinter>
      8d6:	0a c0       	rjmp	.+20     	; 0x8ec <interperetKnob+0x1fc>
-					 
-					 }else{
-						 pitchPrint[7] = '+';
      8d8:	8b e2       	ldi	r24, 0x2B	; 43
      8da:	80 93 57 02 	sts	0x0257, r24	; 0x800257 <pitchPrint+0x7>
-					 numPrinter(pitchPrint,8,3,currentPattern.outputPitch[positionSelect]);}
      8de:	26 2f       	mov	r18, r22
      8e0:	30 e0       	ldi	r19, 0x00	; 0
      8e2:	43 e0       	ldi	r20, 0x03	; 3
@@ -1569,14 +1254,11 @@ void interperetKnob(uint8_t select)
      8e6:	80 e5       	ldi	r24, 0x50	; 80
      8e8:	92 e0       	ldi	r25, 0x02	; 2
      8ea:	eb d6       	rcall	.+3542   	; 0x16c2 <numPrinter>
-					 outputS(pitchPrint, 3);
      8ec:	63 e0       	ldi	r22, 0x03	; 3
      8ee:	70 e0       	ldi	r23, 0x00	; 0
      8f0:	80 e5       	ldi	r24, 0x50	; 80
      8f2:	92 e0       	ldi	r25, 0x02	; 2
      8f4:	ce d6       	rcall	.+3484   	; 0x1692 <outputS>
-				 }
-				 outputSampleRate(positionSelect, 0, currentPattern.outputPitch[positionSelect]);
      8f6:	f8 01       	movw	r30, r16
      8f8:	e2 59       	subi	r30, 0x92	; 146
      8fa:	fc 4f       	sbci	r31, 0xFC	; 252
@@ -1587,15 +1269,8 @@ void interperetKnob(uint8_t select)
      904:	c8 01       	movw	r24, r16
      906:	0e 94 39 0e 	call	0x1c72	; 0x1c72 <outputSampleRate>
      90a:	57 c1       	rjmp	.+686    	; 0xbba <interperetKnob+0x4ca>
- 			}
-			
- 			break;
- 			
- 			case 2:;
-			int16_t currentEnvelopeVolume = ((currentPattern.trackFadeGainMSB[positionSelect]<<8)|(currentPattern.trackFadeGainLSB[positionSelect]));
      90c:	0c 2f       	mov	r16, r28
      90e:	10 e0       	ldi	r17, 0x00	; 0
-			int16_t negCheckValueEnvelope = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
      910:	64 2f       	mov	r22, r20
      912:	70 e0       	ldi	r23, 0x00	; 0
      914:	80 e0       	ldi	r24, 0x00	; 0
@@ -1615,61 +1290,37 @@ void interperetKnob(uint8_t select)
      938:	86 2f       	mov	r24, r22
      93a:	97 2f       	mov	r25, r23
      93c:	9c 01       	movw	r18, r24
- 			}
-			
- 			break;
- 			
- 			case 2:;
-			int16_t currentEnvelopeVolume = ((currentPattern.trackFadeGainMSB[positionSelect]<<8)|(currentPattern.trackFadeGainLSB[positionSelect]));
      93e:	a8 01       	movw	r20, r16
      940:	42 59       	subi	r20, 0x92	; 146
      942:	5c 4f       	sbci	r21, 0xFC	; 252
      944:	fa 01       	movw	r30, r20
      946:	e8 5b       	subi	r30, 0xB8	; 184
      948:	ff 4f       	sbci	r31, 0xFF	; 255
-			int16_t negCheckValueEnvelope = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
-			if(currentEnvelopeVolume!=negCheckValueEnvelope)
      94a:	80 81       	ld	r24, Z
      94c:	90 e0       	ldi	r25, 0x00	; 0
      94e:	98 2f       	mov	r25, r24
      950:	88 27       	eor	r24, r24
- 			}
-			
- 			break;
- 			
- 			case 2:;
-			int16_t currentEnvelopeVolume = ((currentPattern.trackFadeGainMSB[positionSelect]<<8)|(currentPattern.trackFadeGainLSB[positionSelect]));
      952:	70 96       	adiw	r30, 0x10	; 16
-			int16_t negCheckValueEnvelope = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
-			if(currentEnvelopeVolume!=negCheckValueEnvelope)
      954:	40 81       	ld	r20, Z
      956:	84 2b       	or	r24, r20
      958:	82 17       	cp	r24, r18
      95a:	93 07       	cpc	r25, r19
      95c:	09 f4       	brne	.+2      	; 0x960 <interperetKnob+0x270>
      95e:	2d c1       	rjmp	.+602    	; 0xbba <interperetKnob+0x4ca>
-			{
-				currentPattern.trackFadeGainLSB[positionSelect] = (negCheckValueEnvelope);
      960:	f8 01       	movw	r30, r16
      962:	ea 53       	subi	r30, 0x3A	; 58
      964:	fc 4f       	sbci	r31, 0xFC	; 252
      966:	60 83       	st	Z, r22
-				if(negCheckValueEnvelope>(-1))
      968:	33 23       	and	r19, r19
      96a:	64 f1       	brlt	.+88     	; 0x9c4 <interperetKnob+0x2d4>
-				{
-					currentPattern.trackFadeGainMSB[positionSelect] = 0;
      96c:	f8 01       	movw	r30, r16
      96e:	ea 54       	subi	r30, 0x4A	; 74
      970:	fc 4f       	sbci	r31, 0xFC	; 252
      972:	10 82       	st	Z, r1
-					//just hard coding this for now until we make a function.
-					envelopeLevelPrint[15] = 48;
      974:	e4 e1       	ldi	r30, 0x14	; 20
      976:	f2 e0       	ldi	r31, 0x02	; 2
      978:	80 e3       	ldi	r24, 0x30	; 48
      97a:	87 87       	std	Z+15, r24	; 0x0f
-					envelopeLevelPrint[17] = (currentPattern.trackFadeGainLSB[positionSelect]%10)+48;
      97c:	2d ec       	ldi	r18, 0xCD	; 205
      97e:	62 9f       	mul	r22, r18
      980:	81 2d       	mov	r24, r1
@@ -1687,7 +1338,6 @@ void interperetKnob(uint8_t select)
      998:	89 2f       	mov	r24, r25
      99a:	80 5d       	subi	r24, 0xD0	; 208
      99c:	81 8b       	std	Z+17, r24	; 0x11
-					envelopeLevelPrint[16] = ((currentPattern.trackFadeGainLSB[positionSelect]%100)/10)+48;
      99e:	89 e2       	ldi	r24, 0x29	; 41
      9a0:	68 9f       	mul	r22, r24
      9a2:	81 2d       	mov	r24, r1
@@ -1707,20 +1357,15 @@ void interperetKnob(uint8_t select)
      9be:	60 5d       	subi	r22, 0xD0	; 208
      9c0:	60 8b       	std	Z+16, r22	; 0x10
      9c2:	20 c0       	rjmp	.+64     	; 0xa04 <interperetKnob+0x314>
-				}else
-				{
-					currentPattern.trackFadeGainMSB[positionSelect] = 255;
      9c4:	f8 01       	movw	r30, r16
      9c6:	ea 54       	subi	r30, 0x4A	; 74
      9c8:	fc 4f       	sbci	r31, 0xFC	; 252
      9ca:	8f ef       	ldi	r24, 0xFF	; 255
      9cc:	80 83       	st	Z, r24
-					envelopeLevelPrint[15] = '-';
      9ce:	e4 e1       	ldi	r30, 0x14	; 20
      9d0:	f2 e0       	ldi	r31, 0x02	; 2
      9d2:	8d e2       	ldi	r24, 0x2D	; 45
      9d4:	87 87       	std	Z+15, r24	; 0x0f
-					envelopeLevelPrint[16] = ((((currentPattern.trackFadeGainLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
      9d6:	60 95       	com	r22
      9d8:	26 2f       	mov	r18, r22
      9da:	30 e0       	ldi	r19, 0x00	; 0
@@ -1736,30 +1381,19 @@ void interperetKnob(uint8_t select)
      9f0:	0e 94 e8 0f 	call	0x1fd0	; 0x1fd0 <__divmodhi4>
      9f4:	60 5d       	subi	r22, 0xD0	; 208
      9f6:	60 8b       	std	Z+16, r22	; 0x10
-					envelopeLevelPrint[17] = (((currentPattern.trackFadeGainLSB[positionSelect]^255)+1)%10)+48;
      9f8:	c9 01       	movw	r24, r18
      9fa:	b8 01       	movw	r22, r16
      9fc:	0e 94 e8 0f 	call	0x1fd0	; 0x1fd0 <__divmodhi4>
      a00:	80 5d       	subi	r24, 0xD0	; 208
      a02:	81 8b       	std	Z+17, r24	; 0x11
-				}
-				//then output to screen.
-				envelopeLevelPrint[13] = positionSelect + 49;
      a04:	cf 5c       	subi	r28, 0xCF	; 207
      a06:	c0 93 21 02 	sts	0x0221, r28	; 0x800221 <envelopeLevelPrint+0xd>
-				outputS(envelopeLevelPrint, 3);
      a0a:	63 e0       	ldi	r22, 0x03	; 3
      a0c:	70 e0       	ldi	r23, 0x00	; 0
      a0e:	84 e1       	ldi	r24, 0x14	; 20
      a10:	92 e0       	ldi	r25, 0x02	; 2
      a12:	3f d6       	rcall	.+3198   	; 0x1692 <outputS>
      a14:	d2 c0       	rjmp	.+420    	; 0xbba <interperetKnob+0x4ca>
-				//nothing to "set", since envelopes are triggered after a sound is playing.
-			}
-			break;
- 			
- 			case 3:
- 			if(currentPattern.trackFadeTimeMSB[positionSelect]!=checkBuffer[select])
      a16:	8c 2f       	mov	r24, r28
      a18:	90 e0       	ldi	r25, 0x00	; 0
      a1a:	fc 01       	movw	r30, r24
@@ -1769,13 +1403,10 @@ void interperetKnob(uint8_t select)
      a22:	42 17       	cp	r20, r18
      a24:	09 f4       	brne	.+2      	; 0xa28 <interperetKnob+0x338>
      a26:	c9 c0       	rjmp	.+402    	; 0xbba <interperetKnob+0x4ca>
- 			{
- 				(currentPattern.trackFadeTimeMSB[positionSelect]) = checkBuffer[select];
      a28:	fc 01       	movw	r30, r24
      a2a:	ea 52       	subi	r30, 0x2A	; 42
      a2c:	fc 4f       	sbci	r31, 0xFC	; 252
      a2e:	40 83       	st	Z, r20
-				 numPrinter(envelopeTimePrint,14,4,currentPattern.trackFadeTimeMSB[positionSelect]);
      a30:	24 2f       	mov	r18, r20
      a32:	30 e0       	ldi	r19, 0x00	; 0
      a34:	44 e0       	ldi	r20, 0x04	; 4
@@ -1783,24 +1414,16 @@ void interperetKnob(uint8_t select)
      a38:	80 e0       	ldi	r24, 0x00	; 0
      a3a:	92 e0       	ldi	r25, 0x02	; 2
      a3c:	42 d6       	rcall	.+3204   	; 0x16c2 <numPrinter>
-				 envelopeTimePrint[12] = positionSelect+49;
      a3e:	cf 5c       	subi	r28, 0xCF	; 207
      a40:	c0 93 0c 02 	sts	0x020C, r28	; 0x80020c <__data_start+0xc>
-				 outputS(envelopeTimePrint, 3);
      a44:	63 e0       	ldi	r22, 0x03	; 3
      a46:	70 e0       	ldi	r23, 0x00	; 0
      a48:	80 e0       	ldi	r24, 0x00	; 0
      a4a:	92 e0       	ldi	r25, 0x02	; 2
      a4c:	22 d6       	rcall	.+3140   	; 0x1692 <outputS>
      a4e:	b5 c0       	rjmp	.+362    	; 0xbba <interperetKnob+0x4ca>
- 			}
- 			break;
- 			
- 			case 4:;
- 			int16_t currentTrackVolume = ((currentPattern.trackMainVolumeMSB[positionSelect]<<8)|(currentPattern.trackMainVolumeLSB[positionSelect]));
      a50:	0c 2f       	mov	r16, r28
      a52:	10 e0       	ldi	r17, 0x00	; 0
- 			int16_t negCheckValueTrack = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
      a54:	64 2f       	mov	r22, r20
      a56:	70 e0       	ldi	r23, 0x00	; 0
      a58:	80 e0       	ldi	r24, 0x00	; 0
@@ -1820,17 +1443,9 @@ void interperetKnob(uint8_t select)
      a7c:	86 2f       	mov	r24, r22
      a7e:	97 2f       	mov	r25, r23
      a80:	9c 01       	movw	r18, r24
-				 outputS(envelopeTimePrint, 3);
- 			}
- 			break;
- 			
- 			case 4:;
- 			int16_t currentTrackVolume = ((currentPattern.trackMainVolumeMSB[positionSelect]<<8)|(currentPattern.trackMainVolumeLSB[positionSelect]));
      a82:	f8 01       	movw	r30, r16
      a84:	e2 59       	subi	r30, 0x92	; 146
      a86:	fc 4f       	sbci	r31, 0xFC	; 252
- 			int16_t negCheckValueTrack = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
- 			if(currentTrackVolume!=negCheckValueTrack)
      a88:	80 a5       	ldd	r24, Z+40	; 0x28
      a8a:	90 e0       	ldi	r25, 0x00	; 0
      a8c:	98 2f       	mov	r25, r24
@@ -1841,28 +1456,20 @@ void interperetKnob(uint8_t select)
      a96:	93 07       	cpc	r25, r19
      a98:	09 f4       	brne	.+2      	; 0xa9c <interperetKnob+0x3ac>
      a9a:	8f c0       	rjmp	.+286    	; 0xbba <interperetKnob+0x4ca>
- 			{
-	 			currentPattern.trackMainVolumeLSB[positionSelect] = (negCheckValueTrack);
      a9c:	f8 01       	movw	r30, r16
      a9e:	e2 59       	subi	r30, 0x92	; 146
      aa0:	fc 4f       	sbci	r31, 0xFC	; 252
      aa2:	60 af       	std	Z+56, r22	; 0x38
-	 			if(negCheckValueTrack>(-1))
      aa4:	33 23       	and	r19, r19
      aa6:	64 f1       	brlt	.+88     	; 0xb00 <interperetKnob+0x410>
-	 			{
-		 			currentPattern.trackMainVolumeMSB[positionSelect] = 0;
      aa8:	f8 01       	movw	r30, r16
      aaa:	e2 59       	subi	r30, 0x92	; 146
      aac:	fc 4f       	sbci	r31, 0xFC	; 252
      aae:	10 a6       	std	Z+40, r1	; 0x28
-		 			//just hard coding this for now until we make a function.
-		 			trackVolumePrint[15] = 48;
      ab0:	e8 e2       	ldi	r30, 0x28	; 40
      ab2:	f2 e0       	ldi	r31, 0x02	; 2
      ab4:	80 e3       	ldi	r24, 0x30	; 48
      ab6:	87 87       	std	Z+15, r24	; 0x0f
-		 			trackVolumePrint[17] = (currentPattern.trackMainVolumeLSB[positionSelect]%10)+48;
      ab8:	2d ec       	ldi	r18, 0xCD	; 205
      aba:	62 9f       	mul	r22, r18
      abc:	81 2d       	mov	r24, r1
@@ -1880,7 +1487,6 @@ void interperetKnob(uint8_t select)
      ad4:	89 2f       	mov	r24, r25
      ad6:	80 5d       	subi	r24, 0xD0	; 208
      ad8:	81 8b       	std	Z+17, r24	; 0x11
-		 			trackVolumePrint[16] = ((currentPattern.trackMainVolumeLSB[positionSelect]%100)/10)+48;
      ada:	89 e2       	ldi	r24, 0x29	; 41
      adc:	68 9f       	mul	r22, r24
      ade:	81 2d       	mov	r24, r1
@@ -1900,20 +1506,15 @@ void interperetKnob(uint8_t select)
      afa:	60 5d       	subi	r22, 0xD0	; 208
      afc:	60 8b       	std	Z+16, r22	; 0x10
      afe:	23 c0       	rjmp	.+70     	; 0xb46 <interperetKnob+0x456>
-	 			}else
-	 			{
-		 			currentPattern.trackMainVolumeMSB[positionSelect] = 255;
      b00:	8f ef       	ldi	r24, 0xFF	; 255
      b02:	f8 01       	movw	r30, r16
      b04:	e2 59       	subi	r30, 0x92	; 146
      b06:	fc 4f       	sbci	r31, 0xFC	; 252
      b08:	80 a7       	std	Z+40, r24	; 0x28
-		 			trackVolumePrint[15] = '-';
      b0a:	e8 e2       	ldi	r30, 0x28	; 40
      b0c:	f2 e0       	ldi	r31, 0x02	; 2
      b0e:	8d e2       	ldi	r24, 0x2D	; 45
      b10:	87 87       	std	Z+15, r24	; 0x0f
-		 			trackVolumePrint[16] = ((((currentPattern.trackMainVolumeLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
      b12:	60 95       	com	r22
      b14:	26 2f       	mov	r18, r22
      b16:	30 e0       	ldi	r19, 0x00	; 0
@@ -1932,34 +1533,21 @@ void interperetKnob(uint8_t select)
      b32:	0e 94 e8 0f 	call	0x1fd0	; 0x1fd0 <__divmodhi4>
      b36:	60 5d       	subi	r22, 0xD0	; 208
      b38:	60 8b       	std	Z+16, r22	; 0x10
-		 			trackVolumePrint[17] = (((currentPattern.trackMainVolumeLSB[positionSelect]^255)+1)%10)+48;
      b3a:	c9 01       	movw	r24, r18
      b3c:	b7 01       	movw	r22, r14
      b3e:	0e 94 e8 0f 	call	0x1fd0	; 0x1fd0 <__divmodhi4>
      b42:	80 5d       	subi	r24, 0xD0	; 208
      b44:	81 8b       	std	Z+17, r24	; 0x11
-	 			}
-	 			//then output to screen.
-	 			trackVolumePrint[11] = positionSelect + 49;
      b46:	cf 5c       	subi	r28, 0xCF	; 207
      b48:	c0 93 33 02 	sts	0x0233, r28	; 0x800233 <trackVolumePrint+0xb>
-	 			outputS(trackVolumePrint, 3);
      b4c:	63 e0       	ldi	r22, 0x03	; 3
      b4e:	70 e0       	ldi	r23, 0x00	; 0
      b50:	88 e2       	ldi	r24, 0x28	; 40
      b52:	92 e0       	ldi	r25, 0x02	; 2
      b54:	9e d5       	rcall	.+2876   	; 0x1692 <outputS>
-	 			setTrackVolume(currentPattern.trackSampleLSB[positionSelect], currentPattern.trackSampleMSB[positionSelect],
-				 currentPattern.trackMainVolumeLSB[positionSelect], currentPattern.trackMainVolumeMSB[positionSelect]);
      b56:	f8 01       	movw	r30, r16
      b58:	e2 59       	subi	r30, 0x92	; 146
      b5a:	fc 4f       	sbci	r31, 0xFC	; 252
-		 			trackVolumePrint[17] = (((currentPattern.trackMainVolumeLSB[positionSelect]^255)+1)%10)+48;
-	 			}
-	 			//then output to screen.
-	 			trackVolumePrint[11] = positionSelect + 49;
-	 			outputS(trackVolumePrint, 3);
-	 			setTrackVolume(currentPattern.trackSampleLSB[positionSelect], currentPattern.trackSampleMSB[positionSelect],
      b5c:	20 a5       	ldd	r18, Z+40	; 0x28
      b5e:	30 e0       	ldi	r19, 0x00	; 0
      b60:	40 ad       	ldd	r20, Z+56	; 0x38
@@ -1975,20 +1563,8 @@ void interperetKnob(uint8_t select)
      b74:	90 e0       	ldi	r25, 0x00	; 0
      b76:	0e 94 15 0e 	call	0x1c2a	; 0x1c2a <setTrackVolume>
      b7a:	1f c0       	rjmp	.+62     	; 0xbba <interperetKnob+0x4ca>
-		}
-		
-		
-	}else
-	{
-		switch (select)
      b7c:	9a 32       	cpi	r25, 0x2A	; 42
      b7e:	e9 f4       	brne	.+58     	; 0xbba <interperetKnob+0x4ca>
-// 				gpKnob1 = checkValue;
-// 			}
-// 			break;
-// 			
- 			case 42:
- 			if(currentPattern.patternBPM!=checkBuffer[select]+30)
      b80:	24 2f       	mov	r18, r20
      b82:	30 e0       	ldi	r19, 0x00	; 0
      b84:	22 5e       	subi	r18, 0xE2	; 226
@@ -1998,32 +1574,21 @@ void interperetKnob(uint8_t select)
      b90:	82 17       	cp	r24, r18
      b92:	93 07       	cpc	r25, r19
      b94:	91 f0       	breq	.+36     	; 0xbba <interperetKnob+0x4ca>
-			{
- 				currentPattern.patternBPM = checkBuffer[select]+30;
      b96:	30 93 c7 04 	sts	0x04C7, r19	; 0x8004c7 <currentPattern+0x159>
      b9a:	20 93 c6 04 	sts	0x04C6, r18	; 0x8004c6 <currentPattern+0x158>
-				if(encoderAValue==0){
      b9e:	80 91 6d 03 	lds	r24, 0x036D	; 0x80036d <encoderAValue>
      ba2:	81 11       	cpse	r24, r1
-				 numPrinter(screen0[2], 5, 3, currentPattern.patternBPM);
      ba4:	0a c0       	rjmp	.+20     	; 0xbba <interperetKnob+0x4ca>
      ba6:	43 e0       	ldi	r20, 0x03	; 3
      ba8:	65 e0       	ldi	r22, 0x05	; 5
      baa:	8f e6       	ldi	r24, 0x6F	; 111
      bac:	95 e0       	ldi	r25, 0x05	; 5
-				 outputS(screen0[2], 2);
      bae:	89 d5       	rcall	.+2834   	; 0x16c2 <numPrinter>
      bb0:	62 e0       	ldi	r22, 0x02	; 2
      bb2:	70 e0       	ldi	r23, 0x00	; 0
      bb4:	8f e6       	ldi	r24, 0x6F	; 111
      bb6:	95 e0       	ldi	r25, 0x05	; 5
      bb8:	6c d5       	rcall	.+2776   	; 0x1692 <outputS>
-// 			break;
-		}
-		
-	}
-
-}
      bba:	cf 91       	pop	r28
      bbc:	1f 91       	pop	r17
      bbe:	0f 91       	pop	r16
@@ -2032,106 +1597,44 @@ void interperetKnob(uint8_t select)
      bc4:	08 95       	ret
 
 00000bc6 <listenKnobs>:
-
-void listenKnobs()
-{
      bc6:	cf 93       	push	r28
-	for(uint8_t loopCounter = 0; loopCounter<44; loopCounter++)
      bc8:	c0 e0       	ldi	r28, 0x00	; 0
-	{
-		selectKnob(loopCounter);
      bca:	8c 2f       	mov	r24, r28
      bcc:	32 dd       	rcall	.-1436   	; 0x632 <selectKnob>
-		updateKnob(loopCounter);
      bce:	8c 2f       	mov	r24, r28
      bd0:	85 dd       	rcall	.-1270   	; 0x6dc <updateKnob>
-		interperetKnob(loopCounter);
      bd2:	8c 2f       	mov	r24, r28
      bd4:	8d dd       	rcall	.-1254   	; 0x6f0 <interperetKnob>
      bd6:	cf 5f       	subi	r28, 0xFF	; 255
-
-}
-
-void listenKnobs()
-{
-	for(uint8_t loopCounter = 0; loopCounter<44; loopCounter++)
      bd8:	cc 32       	cpi	r28, 0x2C	; 44
      bda:	b9 f7       	brne	.-18     	; 0xbca <listenKnobs+0x4>
      bdc:	cf 91       	pop	r28
-		updateKnob(loopCounter);
-		interperetKnob(loopCounter);
-	}
-
-
-}
      bde:	08 95       	ret
 
 00000be0 <initLEDs>:
-
-uint16_t holdTrig = 0;
-
-void initLEDs()
-{
-	DDRG = 0B00100101; //outputs on G5,2, and 0.
      be0:	85 e2       	ldi	r24, 0x25	; 37
      be2:	83 bb       	out	0x13, r24	; 19
      be4:	08 95       	ret
 
 00000be6 <parseLEDs>:
-
-}
-void parseLEDs(uint16_t LEDInput)
-{
      be6:	9c 01       	movw	r18, r24
-	uint16_t trigLEDParse = LEDInput;
-	PORTG &= (~(1 << PG2)); //set latch low for data input
      be8:	a2 98       	cbi	0x14, 2	; 20
      bea:	91 e1       	ldi	r25, 0x11	; 17
-	for(uint8_t i = 0; i<17; i++)
-	{
-		PORTG |= (1 << PG0); //turn clock pin high
      bec:	a0 9a       	sbi	0x14, 0	; 20
-		if(trigLEDParse&32768)
      bee:	33 23       	and	r19, r19
      bf0:	14 f4       	brge	.+4      	; 0xbf6 <parseLEDs+0x10>
-		{
-			PORTG |= (1 << PG5); //send current 1's place bit to the data pin
      bf2:	a5 9a       	sbi	0x14, 5	; 20
      bf4:	01 c0       	rjmp	.+2      	; 0xbf8 <parseLEDs+0x12>
-		}
-		else
-		{
-			PORTG &= (~(1 << PG5));
      bf6:	a5 98       	cbi	0x14, 5	; 20
-		}
-		PORTG &= (~(1 << PG0)); //turn clock pin low.
      bf8:	a0 98       	cbi	0x14, 0	; 20
-		trigLEDParse = trigLEDParse << 1;
      bfa:	22 0f       	add	r18, r18
      bfc:	33 1f       	adc	r19, r19
      bfe:	91 50       	subi	r25, 0x01	; 1
-}
-void parseLEDs(uint16_t LEDInput)
-{
-	uint16_t trigLEDParse = LEDInput;
-	PORTG &= (~(1 << PG2)); //set latch low for data input
-	for(uint8_t i = 0; i<17; i++)
      c00:	a9 f7       	brne	.-22     	; 0xbec <parseLEDs+0x6>
-			PORTG &= (~(1 << PG5));
-		}
-		PORTG &= (~(1 << PG0)); //turn clock pin low.
-		trigLEDParse = trigLEDParse << 1;
-	}
-	PORTG |= (1 << PG2); //latch pin high
      c02:	a2 9a       	sbi	0x14, 2	; 20
      c04:	08 95       	ret
 
 00000c06 <updateLEDs>:
-}
-
-void updateLEDs()
-{
-	switch(encoderAValue)
      c06:	80 91 6d 03 	lds	r24, 0x036D	; 0x80036d <encoderAValue>
      c0a:	81 30       	cpi	r24, 0x01	; 1
      c0c:	61 f0       	breq	.+24     	; 0xc26 <updateLEDs+0x20>
@@ -2141,17 +1644,10 @@ void updateLEDs()
      c14:	83 30       	cpi	r24, 0x03	; 3
      c16:	c1 f0       	breq	.+48     	; 0xc48 <updateLEDs+0x42>
      c18:	08 95       	ret
-	{
-		case 0:
-		parseLEDs(currentTrigButtons);
      c1a:	80 91 97 05 	lds	r24, 0x0597	; 0x800597 <currentTrigButtons>
      c1e:	90 91 98 05 	lds	r25, 0x0598	; 0x800598 <currentTrigButtons+0x1>
      c22:	e1 cf       	rjmp	.-62     	; 0xbe6 <parseLEDs>
-		break;
      c24:	08 95       	ret
-		
-		case 1:
-		parseLEDs(currentPattern.trackSequence[currentStep]);
      c26:	e0 91 73 06 	lds	r30, 0x0673	; 0x800673 <currentStep>
      c2a:	f0 e0       	ldi	r31, 0x00	; 0
      c2c:	ee 0f       	add	r30, r30
@@ -2161,19 +1657,11 @@ void updateLEDs()
      c34:	80 81       	ld	r24, Z
      c36:	91 81       	ldd	r25, Z+1	; 0x01
      c38:	d6 cf       	rjmp	.-84     	; 0xbe6 <parseLEDs>
-		break;
      c3a:	08 95       	ret
-		
-		case 2:
-		parseLEDs(currentTrigButtons);
      c3c:	80 91 97 05 	lds	r24, 0x0597	; 0x800597 <currentTrigButtons>
      c40:	90 91 98 05 	lds	r25, 0x0598	; 0x800598 <currentTrigButtons+0x1>
      c44:	d0 cf       	rjmp	.-96     	; 0xbe6 <parseLEDs>
-		break;
      c46:	08 95       	ret
-		
-		case 3:
-		parseLEDs(currentTrigButtons);
      c48:	80 91 97 05 	lds	r24, 0x0597	; 0x800597 <currentTrigButtons>
      c4c:	90 91 98 05 	lds	r25, 0x0598	; 0x800598 <currentTrigButtons+0x1>
      c50:	ca cf       	rjmp	.-108    	; 0xbe6 <parseLEDs>
@@ -2181,7 +1669,7 @@ void updateLEDs()
 
 00000c54 <main>:
 #include <avr/interrupt.h>
-
+//test, can I push from a different PC?
 
 int main(void)
 {
@@ -2246,17 +1734,10 @@ int main(void)
      c90:	28 81       	ld	r18, Y
      c92:	39 81       	ldd	r19, Y+1	; 0x01
      c94:	43 e0       	ldi	r20, 0x03	; 3
-char midiNote[3] = "C-0";
-
-void initMenu()
-{
-
-numPrinter(screen0[2],5,3, currentPattern.patternBPM);
      c96:	65 e0       	ldi	r22, 0x05	; 5
      c98:	8f e6       	ldi	r24, 0x6F	; 111
      c9a:	95 e0       	ldi	r25, 0x05	; 5
      c9c:	12 d5       	rcall	.+2596   	; 0x16c2 <numPrinter>
-numPrinter(screen3[1],14,2, (midiChannel+1));
      c9e:	20 91 99 05 	lds	r18, 0x0599	; 0x800599 <midiChannel>
      ca2:	30 e0       	ldi	r19, 0x00	; 0
      ca4:	2f 5f       	subi	r18, 0xFF	; 255
@@ -2266,7 +1747,6 @@ numPrinter(screen3[1],14,2, (midiChannel+1));
      cac:	83 e3       	ldi	r24, 0x33	; 51
      cae:	96 e0       	ldi	r25, 0x06	; 6
      cb0:	08 d5       	rcall	.+2576   	; 0x16c2 <numPrinter>
-numPrinter(screen0[1], 9, 3, currentPatternNumber);
      cb2:	20 91 1d 06 	lds	r18, 0x061D	; 0x80061d <currentPatternNumber>
      cb6:	30 e0       	ldi	r19, 0x00	; 0
      cb8:	43 e0       	ldi	r20, 0x03	; 3
@@ -2274,7 +1754,6 @@ numPrinter(screen0[1], 9, 3, currentPatternNumber);
      cbc:	8b e5       	ldi	r24, 0x5B	; 91
      cbe:	95 e0       	ldi	r25, 0x05	; 5
      cc0:	00 d5       	rcall	.+2560   	; 0x16c2 <numPrinter>
-numPrinter(screen1[1], 9, 3, currentPatternNumber);
      cc2:	20 91 1d 06 	lds	r18, 0x061D	; 0x80061d <currentPatternNumber>
      cc6:	30 e0       	ldi	r19, 0x00	; 0
      cc8:	43 e0       	ldi	r20, 0x03	; 3
@@ -2282,7 +1761,6 @@ numPrinter(screen1[1], 9, 3, currentPatternNumber);
      ccc:	8f ed       	ldi	r24, 0xDF	; 223
      cce:	94 e0       	ldi	r25, 0x04	; 4
      cd0:	f8 d4       	rcall	.+2544   	; 0x16c2 <numPrinter>
-numPrinter(screen0[2], 5, 3, currentPattern.patternBPM);
      cd2:	28 81       	ld	r18, Y
      cd4:	39 81       	ldd	r19, Y+1	; 0x01
      cd6:	43 e0       	ldi	r20, 0x03	; 3
@@ -2293,9 +1771,6 @@ numPrinter(screen0[2], 5, 3, currentPattern.patternBPM);
      ce0:	07 e4       	ldi	r16, 0x47	; 71
      ce2:	15 e0       	ldi	r17, 0x05	; 5
      ce4:	c0 e0       	ldi	r28, 0x00	; 0
-
-for(uint8_t i=0;i<4; i++ ){
-	outputS(screen0[i],i);
      ce6:	d0 e0       	ldi	r29, 0x00	; 0
      ce8:	be 01       	movw	r22, r28
      cea:	c8 01       	movw	r24, r16
@@ -2303,20 +1778,9 @@ for(uint8_t i=0;i<4; i++ ){
      cee:	21 96       	adiw	r28, 0x01	; 1
      cf0:	0c 5e       	subi	r16, 0xEC	; 236
      cf2:	1f 4f       	sbci	r17, 0xFF	; 255
-numPrinter(screen3[1],14,2, (midiChannel+1));
-numPrinter(screen0[1], 9, 3, currentPatternNumber);
-numPrinter(screen1[1], 9, 3, currentPatternNumber);
-numPrinter(screen0[2], 5, 3, currentPattern.patternBPM);
-
-for(uint8_t i=0;i<4; i++ ){
      cf4:	c4 30       	cpi	r28, 0x04	; 4
      cf6:	d1 05       	cpc	r29, r1
      cf8:	b9 f7       	brne	.-18     	; 0xce8 <initMenu+0x64>
-	outputS(screen0[i],i);
-}
-
-
-}
      cfa:	df 91       	pop	r29
      cfc:	cf 91       	pop	r28
      cfe:	1f 91       	pop	r17
@@ -2324,27 +1788,18 @@ for(uint8_t i=0;i<4; i++ ){
      d02:	08 95       	ret
 
 00000d04 <updateScreen>:
-
-void updateScreen()
-{
      d04:	0f 93       	push	r16
      d06:	1f 93       	push	r17
      d08:	cf 93       	push	r28
      d0a:	df 93       	push	r29
-	if(prevEncoderBValue!=encoderBValue)
      d0c:	90 91 ed 05 	lds	r25, 0x05ED	; 0x8005ed <prevEncoderBValue>
      d10:	80 91 72 06 	lds	r24, 0x0672	; 0x800672 <encoderBValue>
      d14:	98 17       	cp	r25, r24
      d16:	09 f4       	brne	.+2      	; 0xd1a <updateScreen+0x16>
      d18:	45 c3       	rjmp	.+1674   	; 0x13a4 <updateScreen+0x6a0>
-	{
-		encoderBValue = encoderBValue%4;
      d1a:	83 70       	andi	r24, 0x03	; 3
      d1c:	80 93 72 06 	sts	0x0672, r24	; 0x800672 <encoderBValue>
-		//this needs some work...
-		uint8_t menuMoveArrow = encoderBValue - prevEncoderBValue; //this tells us whether we need to move up or down.
      d20:	89 1b       	sub	r24, r25
-		switch(encoderAValue)
      d22:	90 91 6d 03 	lds	r25, 0x036D	; 0x80036d <encoderAValue>
      d26:	92 30       	cpi	r25, 0x02	; 2
      d28:	09 f4       	brne	.+2      	; 0xd2c <updateScreen+0x28>
@@ -2355,16 +1810,10 @@ void updateScreen()
      d32:	91 30       	cpi	r25, 0x01	; 1
      d34:	09 f0       	breq	.+2      	; 0xd38 <updateScreen+0x34>
      d36:	32 c3       	rjmp	.+1636   	; 0x139c <updateScreen+0x698>
-		{
-			///Sequencer Edit Screen
-			case 1:
-			if(encoderBFlag)
      d38:	90 91 ec 05 	lds	r25, 0x05EC	; 0x8005ec <encoderBFlag>
      d3c:	99 23       	and	r25, r25
      d3e:	09 f4       	brne	.+2      	; 0xd42 <updateScreen+0x3e>
      d40:	9e c0       	rjmp	.+316    	; 0xe7e <updateScreen+0x17a>
-			{
-				switch (screen1Index)
      d42:	90 91 9a 05 	lds	r25, 0x059A	; 0x80059a <screen1Index>
      d46:	92 30       	cpi	r25, 0x02	; 2
      d48:	51 f1       	breq	.+84     	; 0xd9e <updateScreen+0x9a>
@@ -2374,80 +1823,48 @@ void updateScreen()
      d50:	91 30       	cpi	r25, 0x01	; 1
      d52:	09 f0       	breq	.+2      	; 0xd56 <updateScreen+0x52>
      d54:	23 c3       	rjmp	.+1606   	; 0x139c <updateScreen+0x698>
-				{
-					// change pattern
-					case 1:
-					if(menuMoveArrow==1)
      d56:	81 30       	cpi	r24, 0x01	; 1
      d58:	89 f4       	brne	.+34     	; 0xd7c <updateScreen+0x78>
-					{
-						currentPatternNumber = currentPatternNumber + 1;
      d5a:	20 91 1d 06 	lds	r18, 0x061D	; 0x80061d <currentPatternNumber>
      d5e:	2f 5f       	subi	r18, 0xFF	; 255
      d60:	20 93 1d 06 	sts	0x061D, r18	; 0x80061d <currentPatternNumber>
-						numPrinter(screen1[1],9,3,currentPatternNumber);
      d64:	30 e0       	ldi	r19, 0x00	; 0
      d66:	43 e0       	ldi	r20, 0x03	; 3
      d68:	69 e0       	ldi	r22, 0x09	; 9
      d6a:	8f ed       	ldi	r24, 0xDF	; 223
      d6c:	94 e0       	ldi	r25, 0x04	; 4
      d6e:	a9 d4       	rcall	.+2386   	; 0x16c2 <numPrinter>
-						outputS(screen1[1], 1);
      d70:	61 e0       	ldi	r22, 0x01	; 1
      d72:	70 e0       	ldi	r23, 0x00	; 0
      d74:	8f ed       	ldi	r24, 0xDF	; 223
      d76:	94 e0       	ldi	r25, 0x04	; 4
      d78:	8c d4       	rcall	.+2328   	; 0x1692 <outputS>
      d7a:	10 c3       	rjmp	.+1568   	; 0x139c <updateScreen+0x698>
-					}else
-					{
-						currentPatternNumber = currentPatternNumber - 1;
      d7c:	20 91 1d 06 	lds	r18, 0x061D	; 0x80061d <currentPatternNumber>
      d80:	21 50       	subi	r18, 0x01	; 1
      d82:	20 93 1d 06 	sts	0x061D, r18	; 0x80061d <currentPatternNumber>
-						numPrinter(screen1[1],9,3,currentPatternNumber);
      d86:	30 e0       	ldi	r19, 0x00	; 0
      d88:	43 e0       	ldi	r20, 0x03	; 3
      d8a:	69 e0       	ldi	r22, 0x09	; 9
      d8c:	8f ed       	ldi	r24, 0xDF	; 223
      d8e:	94 e0       	ldi	r25, 0x04	; 4
      d90:	98 d4       	rcall	.+2352   	; 0x16c2 <numPrinter>
-						outputS(screen1[1], 1);
      d92:	61 e0       	ldi	r22, 0x01	; 1
      d94:	70 e0       	ldi	r23, 0x00	; 0
      d96:	8f ed       	ldi	r24, 0xDF	; 223
      d98:	94 e0       	ldi	r25, 0x04	; 4
      d9a:	7b d4       	rcall	.+2294   	; 0x1692 <outputS>
      d9c:	ff c2       	rjmp	.+1534   	; 0x139c <updateScreen+0x698>
-					}
-					break;
-				
-					//edit number of steps
-					case 2:
-					if(menuMoveArrow==1){
      d9e:	81 30       	cpi	r24, 0x01	; 1
      da0:	c9 f4       	brne	.+50     	; 0xdd4 <updateScreen+0xd0>
-						currentPattern.numSteps = currentPattern.numSteps+1;
      da2:	80 91 c8 04 	lds	r24, 0x04C8	; 0x8004c8 <currentPattern+0x15a>
      da6:	8f 5f       	subi	r24, 0xFF	; 255
-						if(currentPattern.numSteps>64)
      da8:	81 34       	cpi	r24, 0x41	; 65
      daa:	18 f4       	brcc	.+6      	; 0xdb2 <updateScreen+0xae>
-					break;
-				
-					//edit number of steps
-					case 2:
-					if(menuMoveArrow==1){
-						currentPattern.numSteps = currentPattern.numSteps+1;
      dac:	80 93 c8 04 	sts	0x04C8, r24	; 0x8004c8 <currentPattern+0x15a>
      db0:	03 c0       	rjmp	.+6      	; 0xdb8 <updateScreen+0xb4>
-						if(currentPattern.numSteps>64)
-						{
-							currentPattern.numSteps = 64;
      db2:	80 e4       	ldi	r24, 0x40	; 64
      db4:	80 93 c8 04 	sts	0x04C8, r24	; 0x8004c8 <currentPattern+0x15a>
-						}
-						numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
      db8:	20 91 c8 04 	lds	r18, 0x04C8	; 0x8004c8 <currentPattern+0x15a>
      dbc:	30 e0       	ldi	r19, 0x00	; 0
      dbe:	42 e0       	ldi	r20, 0x02	; 2
@@ -2455,7 +1872,6 @@ void updateScreen()
      dc2:	83 ef       	ldi	r24, 0xF3	; 243
      dc4:	94 e0       	ldi	r25, 0x04	; 4
      dc6:	7d d4       	rcall	.+2298   	; 0x16c2 <numPrinter>
-						outputS(screen1[2], 2);
      dc8:	62 e0       	ldi	r22, 0x02	; 2
      dca:	70 e0       	ldi	r23, 0x00	; 0
      dcc:	83 ef       	ldi	r24, 0xF3	; 243
@@ -2463,37 +1879,19 @@ void updateScreen()
      dd0:	60 d4       	rcall	.+2240   	; 0x1692 <outputS>
      dd2:	e4 c2       	rjmp	.+1480   	; 0x139c <updateScreen+0x698>
      dd4:	80 91 c8 04 	lds	r24, 0x04C8	; 0x8004c8 <currentPattern+0x15a>
-					}else
-					{
-					
-						currentPattern.numSteps = currentPattern.numSteps-1;
      dd8:	81 50       	subi	r24, 0x01	; 1
      dda:	19 f0       	breq	.+6      	; 0xde2 <updateScreen+0xde>
-						if(currentPattern.numSteps<1)
      ddc:	80 93 c8 04 	sts	0x04C8, r24	; 0x8004c8 <currentPattern+0x15a>
-						numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
-						outputS(screen1[2], 2);
-					}else
-					{
-					
-						currentPattern.numSteps = currentPattern.numSteps-1;
      de0:	03 c0       	rjmp	.+6      	; 0xde8 <updateScreen+0xe4>
      de2:	81 e0       	ldi	r24, 0x01	; 1
-						if(currentPattern.numSteps<1)
-						{
-							currentPattern.numSteps= 1;
      de4:	80 93 c8 04 	sts	0x04C8, r24	; 0x8004c8 <currentPattern+0x15a>
      de8:	20 91 c8 04 	lds	r18, 0x04C8	; 0x8004c8 <currentPattern+0x15a>
-			
-						}
-						numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
      dec:	30 e0       	ldi	r19, 0x00	; 0
      dee:	42 e0       	ldi	r20, 0x02	; 2
      df0:	66 e0       	ldi	r22, 0x06	; 6
      df2:	83 ef       	ldi	r24, 0xF3	; 243
      df4:	94 e0       	ldi	r25, 0x04	; 4
      df6:	65 d4       	rcall	.+2250   	; 0x16c2 <numPrinter>
-						outputS(screen1[2],2);
      df8:	62 e0       	ldi	r22, 0x02	; 2
      dfa:	70 e0       	ldi	r23, 0x00	; 0
      dfc:	83 ef       	ldi	r24, 0xF3	; 243
@@ -2501,20 +1899,11 @@ void updateScreen()
      e00:	48 d4       	rcall	.+2192   	; 0x1692 <outputS>
      e02:	cc c2       	rjmp	.+1432   	; 0x139c <updateScreen+0x698>
      e04:	81 30       	cpi	r24, 0x01	; 1
-				
-				
-				
-				//edit current step
-				case 3:
-					if(menuMoveArrow==1)
      e06:	11 f5       	brne	.+68     	; 0xe4c <updateScreen+0x148>
      e08:	80 91 73 06 	lds	r24, 0x0673	; 0x800673 <currentStep>
-					{
-						currentStep = currentStep+1;
      e0c:	8f 5f       	subi	r24, 0xFF	; 255
      e0e:	80 93 73 06 	sts	0x0673, r24	; 0x800673 <currentStep>
      e12:	40 91 c8 04 	lds	r20, 0x04C8	; 0x8004c8 <currentPattern+0x15a>
-						if(currentStep>(currentPattern.numSteps)-1)
      e16:	90 e0       	ldi	r25, 0x00	; 0
      e18:	24 2f       	mov	r18, r20
      e1a:	30 e0       	ldi	r19, 0x00	; 0
@@ -2524,12 +1913,8 @@ void updateScreen()
      e22:	39 07       	cpc	r19, r25
      e24:	1c f4       	brge	.+6      	; 0xe2c <updateScreen+0x128>
      e26:	41 50       	subi	r20, 0x01	; 1
-						{
-							currentStep = (currentPattern.numSteps)-1;
      e28:	40 93 73 06 	sts	0x0673, r20	; 0x800673 <currentStep>
      e2c:	20 91 73 06 	lds	r18, 0x0673	; 0x800673 <currentStep>
-						}
-						numPrinter(screen1[3], 13, 2, currentStep+1);
      e30:	30 e0       	ldi	r19, 0x00	; 0
      e32:	2f 5f       	subi	r18, 0xFF	; 255
      e34:	3f 4f       	sbci	r19, 0xFF	; 255
@@ -2538,7 +1923,6 @@ void updateScreen()
      e3a:	87 e0       	ldi	r24, 0x07	; 7
      e3c:	95 e0       	ldi	r25, 0x05	; 5
      e3e:	41 d4       	rcall	.+2178   	; 0x16c2 <numPrinter>
-						outputS(screen1[3], 3);
      e40:	63 e0       	ldi	r22, 0x03	; 3
      e42:	70 e0       	ldi	r23, 0x00	; 0
      e44:	87 e0       	ldi	r24, 0x07	; 7
@@ -2546,20 +1930,11 @@ void updateScreen()
      e48:	24 d4       	rcall	.+2120   	; 0x1692 <outputS>
      e4a:	a8 c2       	rjmp	.+1360   	; 0x139c <updateScreen+0x698>
      e4c:	80 91 73 06 	lds	r24, 0x0673	; 0x800673 <currentStep>
-					
-					}else
-					{
-						currentStep = currentStep-1;
      e50:	81 50       	subi	r24, 0x01	; 1
      e52:	18 f0       	brcs	.+6      	; 0xe5a <updateScreen+0x156>
      e54:	80 93 73 06 	sts	0x0673, r24	; 0x800673 <currentStep>
      e58:	02 c0       	rjmp	.+4      	; 0xe5e <updateScreen+0x15a>
      e5a:	10 92 73 06 	sts	0x0673, r1	; 0x800673 <currentStep>
-						if(currentStep==255)
-						{
-							currentStep = 0;
-						}
-						numPrinter(screen1[3], 13, 2, currentStep+1);
      e5e:	20 91 73 06 	lds	r18, 0x0673	; 0x800673 <currentStep>
      e62:	30 e0       	ldi	r19, 0x00	; 0
      e64:	2f 5f       	subi	r18, 0xFF	; 255
@@ -2569,7 +1944,6 @@ void updateScreen()
      e6c:	87 e0       	ldi	r24, 0x07	; 7
      e6e:	95 e0       	ldi	r25, 0x05	; 5
      e70:	28 d4       	rcall	.+2128   	; 0x16c2 <numPrinter>
-						outputS(screen1[3], 3);
      e72:	63 e0       	ldi	r22, 0x03	; 3
      e74:	70 e0       	ldi	r23, 0x00	; 0
      e76:	87 e0       	ldi	r24, 0x07	; 7
@@ -2577,37 +1951,16 @@ void updateScreen()
      e7a:	0b d4       	rcall	.+2070   	; 0x1692 <outputS>
      e7c:	8f c2       	rjmp	.+1310   	; 0x139c <updateScreen+0x698>
      e7e:	81 30       	cpi	r24, 0x01	; 1
-					break;
-				}//end of switch statment.
-				
-				//Move screen arrow/
-			}else{
-			if(menuMoveArrow==1)
      e80:	a1 f5       	brne	.+104    	; 0xeea <updateScreen+0x1e6>
      e82:	80 91 9a 05 	lds	r24, 0x059A	; 0x80059a <screen1Index>
-			{
-				//move screen arrow down
-				screen1Index++;
      e86:	8f 5f       	subi	r24, 0xFF	; 255
      e88:	84 30       	cpi	r24, 0x04	; 4
-				if(screen1Index>3)
      e8a:	18 f4       	brcc	.+6      	; 0xe92 <updateScreen+0x18e>
      e8c:	80 93 9a 05 	sts	0x059A, r24	; 0x80059a <screen1Index>
-				//Move screen arrow/
-			}else{
-			if(menuMoveArrow==1)
-			{
-				//move screen arrow down
-				screen1Index++;
      e90:	03 c0       	rjmp	.+6      	; 0xe98 <updateScreen+0x194>
      e92:	83 e0       	ldi	r24, 0x03	; 3
-				if(screen1Index>3)
-				{
-					screen1Index = 3;
      e94:	80 93 9a 05 	sts	0x059A, r24	; 0x80059a <screen1Index>
      e98:	60 91 9a 05 	lds	r22, 0x059A	; 0x80059a <screen1Index>
-				}
-				screen1[screen1Index][19] = '<';
      e9c:	70 e0       	ldi	r23, 0x00	; 0
      e9e:	c4 e1       	ldi	r28, 0x14	; 20
      ea0:	c6 9f       	mul	r28, r22
@@ -2621,7 +1974,6 @@ void updateScreen()
      eb0:	fc 01       	movw	r30, r24
      eb2:	23 8b       	std	Z+19, r18	; 0x13
      eb4:	9b 01       	movw	r18, r22
-				screen1[screen1Index-1][19] = ' ';
      eb6:	21 50       	subi	r18, 0x01	; 1
      eb8:	31 09       	sbc	r19, r1
      eba:	c2 9f       	mul	r28, r18
@@ -2633,9 +1985,7 @@ void updateScreen()
      ec6:	fb 4f       	sbci	r31, 0xFB	; 251
      ec8:	20 e2       	ldi	r18, 0x20	; 32
      eca:	23 8b       	std	Z+19, r18	; 0x13
-				outputS(screen1[screen1Index], screen1Index);
      ecc:	e2 d3       	rcall	.+1988   	; 0x1692 <outputS>
-				outputS(screen1[screen1Index-1], screen1Index-1);
      ece:	60 91 9a 05 	lds	r22, 0x059A	; 0x80059a <screen1Index>
      ed2:	70 e0       	ldi	r23, 0x00	; 0
      ed4:	61 50       	subi	r22, 0x01	; 1
@@ -2650,32 +2000,16 @@ void updateScreen()
      ee6:	d5 d3       	rcall	.+1962   	; 0x1692 <outputS>
      ee8:	59 c2       	rjmp	.+1202   	; 0x139c <updateScreen+0x698>
      eea:	80 91 9a 05 	lds	r24, 0x059A	; 0x80059a <screen1Index>
-			}else 
-			{
-				//move arrow up
-				screen1Index--;
      eee:	9e ef       	ldi	r25, 0xFE	; 254
-				if(screen1Index>250||screen1Index==0)
      ef0:	98 0f       	add	r25, r24
      ef2:	9a 3f       	cpi	r25, 0xFA	; 250
      ef4:	20 f4       	brcc	.+8      	; 0xefe <updateScreen+0x1fa>
      ef6:	81 50       	subi	r24, 0x01	; 1
-				outputS(screen1[screen1Index], screen1Index);
-				outputS(screen1[screen1Index-1], screen1Index-1);
-			}else 
-			{
-				//move arrow up
-				screen1Index--;
      ef8:	80 93 9a 05 	sts	0x059A, r24	; 0x80059a <screen1Index>
      efc:	03 c0       	rjmp	.+6      	; 0xf04 <updateScreen+0x200>
      efe:	81 e0       	ldi	r24, 0x01	; 1
-				if(screen1Index>250||screen1Index==0)
-				{
-					screen1Index = 1;
      f00:	80 93 9a 05 	sts	0x059A, r24	; 0x80059a <screen1Index>
      f04:	60 91 9a 05 	lds	r22, 0x059A	; 0x80059a <screen1Index>
-				}
-				screen1[screen1Index][19] = '<';
      f08:	70 e0       	ldi	r23, 0x00	; 0
      f0a:	c4 e1       	ldi	r28, 0x14	; 20
      f0c:	c6 9f       	mul	r28, r22
@@ -2688,7 +2022,6 @@ void updateScreen()
      f1a:	2c e3       	ldi	r18, 0x3C	; 60
      f1c:	fc 01       	movw	r30, r24
      f1e:	23 8b       	std	Z+19, r18	; 0x13
-				screen1[screen1Index+1][19] = ' ';
      f20:	9b 01       	movw	r18, r22
      f22:	2f 5f       	subi	r18, 0xFF	; 255
      f24:	3f 4f       	sbci	r19, 0xFF	; 255
@@ -2700,10 +2033,8 @@ void updateScreen()
      f30:	e5 53       	subi	r30, 0x35	; 53
      f32:	fb 4f       	sbci	r31, 0xFB	; 251
      f34:	20 e2       	ldi	r18, 0x20	; 32
-				outputS(screen1[screen1Index], screen1Index);
      f36:	23 8b       	std	Z+19, r18	; 0x13
      f38:	ac d3       	rcall	.+1880   	; 0x1692 <outputS>
-				outputS(screen1[screen1Index+1], screen1Index+1);
      f3a:	60 91 9a 05 	lds	r22, 0x059A	; 0x80059a <screen1Index>
      f3e:	70 e0       	ldi	r23, 0x00	; 0
      f40:	6f 5f       	subi	r22, 0xFF	; 255
@@ -2718,18 +2049,10 @@ void updateScreen()
      f52:	9f d3       	rcall	.+1854   	; 0x1692 <outputS>
      f54:	23 c2       	rjmp	.+1094   	; 0x139c <updateScreen+0x698>
      f56:	90 91 ec 05 	lds	r25, 0x05EC	; 0x8005ec <encoderBFlag>
-		break;
-			
-			
-			//track setting screen
-			case 2:
-			if(encoderBFlag)
      f5a:	99 23       	and	r25, r25
      f5c:	09 f4       	brne	.+2      	; 0xf60 <updateScreen+0x25c>
      f5e:	d4 c0       	rjmp	.+424    	; 0x1108 <updateScreen+0x404>
      f60:	90 91 ee 05 	lds	r25, 0x05EE	; 0x8005ee <screen2Index>
-			{
-				switch (screen2Index)
      f64:	92 30       	cpi	r25, 0x02	; 2
      f66:	09 f4       	brne	.+2      	; 0xf6a <updateScreen+0x266>
      f68:	4e c0       	rjmp	.+156    	; 0x1006 <updateScreen+0x302>
@@ -2740,13 +2063,8 @@ void updateScreen()
      f72:	09 f0       	breq	.+2      	; 0xf76 <updateScreen+0x272>
      f74:	13 c2       	rjmp	.+1062   	; 0x139c <updateScreen+0x698>
      f76:	81 30       	cpi	r24, 0x01	; 1
-				{
-					case 1:
-					if(menuMoveArrow==1)
      f78:	19 f5       	brne	.+70     	; 0xfc0 <updateScreen+0x2bc>
      f7a:	20 91 1e 06 	lds	r18, 0x061E	; 0x80061e <currentTrack>
-					{
-						currentPattern.trackSampleLSB[currentTrack] = (currentPattern.trackSampleLSB[currentTrack])+ 1;
      f7e:	30 e0       	ldi	r19, 0x00	; 0
      f80:	c9 01       	movw	r24, r18
      f82:	82 59       	subi	r24, 0x92	; 146
@@ -2757,11 +2075,9 @@ void updateScreen()
      f8c:	c0 81       	ld	r28, Z
      f8e:	cf 5f       	subi	r28, 0xFF	; 255
      f90:	c0 83       	st	Z, r28
-						uint16_t currentSample = (currentPattern.trackSampleMSB[currentTrack]<<8)|(currentPattern.trackSampleLSB[currentTrack]);
      f92:	70 97       	sbiw	r30, 0x10	; 16
      f94:	80 81       	ld	r24, Z
      f96:	d0 e0       	ldi	r29, 0x00	; 0
-						numPrinter(screen2[1], 7, 2, (currentTrack+1));
      f98:	d8 2b       	or	r29, r24
      f9a:	2f 5f       	subi	r18, 0xFF	; 255
      f9c:	3f 4f       	sbci	r19, 0xFF	; 255
@@ -2769,7 +2085,6 @@ void updateScreen()
      fa0:	67 e0       	ldi	r22, 0x07	; 7
      fa2:	8f ea       	ldi	r24, 0xAF	; 175
      fa4:	95 e0       	ldi	r25, 0x05	; 5
-						numPrinter(screen2[1], 10, 4, currentSample);
      fa6:	8d d3       	rcall	.+1818   	; 0x16c2 <numPrinter>
      fa8:	9e 01       	movw	r18, r28
      faa:	44 e0       	ldi	r20, 0x04	; 4
@@ -2777,7 +2092,6 @@ void updateScreen()
      fae:	8f ea       	ldi	r24, 0xAF	; 175
      fb0:	95 e0       	ldi	r25, 0x05	; 5
      fb2:	87 d3       	rcall	.+1806   	; 0x16c2 <numPrinter>
-						outputS(screen2[1], 1);
      fb4:	61 e0       	ldi	r22, 0x01	; 1
      fb6:	70 e0       	ldi	r23, 0x00	; 0
      fb8:	8f ea       	ldi	r24, 0xAF	; 175
@@ -2785,10 +2099,6 @@ void updateScreen()
      fbc:	6a d3       	rcall	.+1748   	; 0x1692 <outputS>
      fbe:	ee c1       	rjmp	.+988    	; 0x139c <updateScreen+0x698>
      fc0:	20 91 1e 06 	lds	r18, 0x061E	; 0x80061e <currentTrack>
-						
-					}else
-					{
-						currentPattern.trackSampleLSB[currentTrack] = (currentPattern.trackSampleLSB[currentTrack])- 1;
      fc4:	30 e0       	ldi	r19, 0x00	; 0
      fc6:	c9 01       	movw	r24, r18
      fc8:	82 59       	subi	r24, 0x92	; 146
@@ -2798,11 +2108,9 @@ void updateScreen()
      fd0:	ff 4f       	sbci	r31, 0xFF	; 255
      fd2:	c0 81       	ld	r28, Z
      fd4:	c1 50       	subi	r28, 0x01	; 1
-						uint16_t currentSample = (currentPattern.trackSampleMSB[currentTrack]<<8)|(currentPattern.trackSampleLSB[currentTrack]);
      fd6:	c0 83       	st	Z, r28
      fd8:	70 97       	sbiw	r30, 0x10	; 16
      fda:	80 81       	ld	r24, Z
-						numPrinter(screen2[1], 7, 2, (currentTrack+1));
      fdc:	d0 e0       	ldi	r29, 0x00	; 0
      fde:	d8 2b       	or	r29, r24
      fe0:	2f 5f       	subi	r18, 0xFF	; 255
@@ -2811,7 +2119,6 @@ void updateScreen()
      fe6:	67 e0       	ldi	r22, 0x07	; 7
      fe8:	8f ea       	ldi	r24, 0xAF	; 175
      fea:	95 e0       	ldi	r25, 0x05	; 5
-						numPrinter(screen2[1], 10, 4, currentSample);
      fec:	6a d3       	rcall	.+1748   	; 0x16c2 <numPrinter>
      fee:	9e 01       	movw	r18, r28
      ff0:	44 e0       	ldi	r20, 0x04	; 4
@@ -2819,7 +2126,6 @@ void updateScreen()
      ff4:	8f ea       	ldi	r24, 0xAF	; 175
      ff6:	95 e0       	ldi	r25, 0x05	; 5
      ff8:	64 d3       	rcall	.+1736   	; 0x16c2 <numPrinter>
-						outputS(screen2[1], 1);
      ffa:	61 e0       	ldi	r22, 0x01	; 1
      ffc:	70 e0       	ldi	r23, 0x00	; 0
      ffe:	8f ea       	ldi	r24, 0xAF	; 175
@@ -2827,48 +2133,26 @@ void updateScreen()
     1002:	47 d3       	rcall	.+1678   	; 0x1692 <outputS>
     1004:	cb c1       	rjmp	.+918    	; 0x139c <updateScreen+0x698>
     1006:	81 30       	cpi	r24, 0x01	; 1
-					}
-					
-					break;
-					
-					case 2:
-					if(menuMoveArrow==1)
     1008:	d1 f4       	brne	.+52     	; 0x103e <updateScreen+0x33a>
     100a:	80 91 1e 06 	lds	r24, 0x061E	; 0x80061e <currentTrack>
-					{
-						currentPattern.trackPlayMode[currentTrack] = (currentPattern.trackPlayMode[currentTrack])+1;
     100e:	90 e0       	ldi	r25, 0x00	; 0
     1010:	fc 01       	movw	r30, r24
     1012:	ea 50       	subi	r30, 0x0A	; 10
     1014:	fc 4f       	sbci	r31, 0xFC	; 252
     1016:	20 81       	ld	r18, Z
     1018:	2f 5f       	subi	r18, 0xFF	; 255
-						if(currentPattern.trackPlayMode[currentTrack]>6)
     101a:	27 30       	cpi	r18, 0x07	; 7
     101c:	28 f4       	brcc	.+10     	; 0x1028 <updateScreen+0x324>
-					break;
-					
-					case 2:
-					if(menuMoveArrow==1)
-					{
-						currentPattern.trackPlayMode[currentTrack] = (currentPattern.trackPlayMode[currentTrack])+1;
     101e:	fc 01       	movw	r30, r24
     1020:	ea 50       	subi	r30, 0x0A	; 10
     1022:	fc 4f       	sbci	r31, 0xFC	; 252
     1024:	20 83       	st	Z, r18
     1026:	05 c0       	rjmp	.+10     	; 0x1032 <updateScreen+0x32e>
-						if(currentPattern.trackPlayMode[currentTrack]>6)
-						{
-							currentPattern.trackPlayMode[currentTrack] = 6;
     1028:	fc 01       	movw	r30, r24
     102a:	ea 50       	subi	r30, 0x0A	; 10
     102c:	fc 4f       	sbci	r31, 0xFC	; 252
     102e:	26 e0       	ldi	r18, 0x06	; 6
     1030:	20 83       	st	Z, r18
-						}
-						//do printing poly or solo stuff here.
-						
-						outputS(screen2[2], 2);
     1032:	62 e0       	ldi	r22, 0x02	; 2
     1034:	70 e0       	ldi	r23, 0x00	; 0
     1036:	83 ec       	ldi	r24, 0xC3	; 195
@@ -2876,40 +2160,23 @@ void updateScreen()
     103a:	2b d3       	rcall	.+1622   	; 0x1692 <outputS>
     103c:	af c1       	rjmp	.+862    	; 0x139c <updateScreen+0x698>
     103e:	80 91 1e 06 	lds	r24, 0x061E	; 0x80061e <currentTrack>
-						
-					}else
-					{
-						currentPattern.trackPlayMode[currentTrack] = (currentPattern.trackPlayMode[currentTrack])+1;
     1042:	90 e0       	ldi	r25, 0x00	; 0
     1044:	fc 01       	movw	r30, r24
     1046:	ea 50       	subi	r30, 0x0A	; 10
     1048:	fc 4f       	sbci	r31, 0xFC	; 252
     104a:	20 81       	ld	r18, Z
     104c:	2f 5f       	subi	r18, 0xFF	; 255
-						if(currentPattern.trackPlayMode[currentTrack]==255)
     104e:	2f 3f       	cpi	r18, 0xFF	; 255
     1050:	29 f0       	breq	.+10     	; 0x105c <updateScreen+0x358>
-						
-						outputS(screen2[2], 2);
-						
-					}else
-					{
-						currentPattern.trackPlayMode[currentTrack] = (currentPattern.trackPlayMode[currentTrack])+1;
     1052:	fc 01       	movw	r30, r24
     1054:	ea 50       	subi	r30, 0x0A	; 10
     1056:	fc 4f       	sbci	r31, 0xFC	; 252
     1058:	20 83       	st	Z, r18
     105a:	04 c0       	rjmp	.+8      	; 0x1064 <updateScreen+0x360>
-						if(currentPattern.trackPlayMode[currentTrack]==255)
-						{
-							currentPattern.trackPlayMode[currentTrack] = 0;
     105c:	fc 01       	movw	r30, r24
     105e:	ea 50       	subi	r30, 0x0A	; 10
     1060:	fc 4f       	sbci	r31, 0xFC	; 252
     1062:	10 82       	st	Z, r1
-						}
-						//do printing poly or solo stuff here
-						outputS(screen2[2], 2);
     1064:	62 e0       	ldi	r22, 0x02	; 2
     1066:	70 e0       	ldi	r23, 0x00	; 0
     1068:	83 ec       	ldi	r24, 0xC3	; 195
@@ -2917,45 +2184,25 @@ void updateScreen()
     106c:	12 d3       	rcall	.+1572   	; 0x1692 <outputS>
     106e:	96 c1       	rjmp	.+812    	; 0x139c <updateScreen+0x698>
     1070:	81 30       	cpi	r24, 0x01	; 1
-					}
-					break;
-					
-					//output routing on track setting screen
-					case 3:
-					if(menuMoveArrow==1)
     1072:	31 f5       	brne	.+76     	; 0x10c0 <updateScreen+0x3bc>
     1074:	80 91 1e 06 	lds	r24, 0x061E	; 0x80061e <currentTrack>
-					{
-						currentPattern.trackOutputRoute[currentTrack] = (currentPattern.trackOutputRoute[currentTrack])+1;
     1078:	90 e0       	ldi	r25, 0x00	; 0
     107a:	fc 01       	movw	r30, r24
     107c:	e2 59       	subi	r30, 0x92	; 146
     107e:	fc 4f       	sbci	r31, 0xFC	; 252
     1080:	20 8d       	ldd	r18, Z+24	; 0x18
     1082:	2f 5f       	subi	r18, 0xFF	; 255
-						if(currentPattern.trackOutputRoute[currentTrack]>7)
     1084:	28 30       	cpi	r18, 0x08	; 8
     1086:	28 f4       	brcc	.+10     	; 0x1092 <updateScreen+0x38e>
-					
-					//output routing on track setting screen
-					case 3:
-					if(menuMoveArrow==1)
-					{
-						currentPattern.trackOutputRoute[currentTrack] = (currentPattern.trackOutputRoute[currentTrack])+1;
     1088:	fc 01       	movw	r30, r24
     108a:	e2 59       	subi	r30, 0x92	; 146
     108c:	fc 4f       	sbci	r31, 0xFC	; 252
     108e:	20 8f       	std	Z+24, r18	; 0x18
-						if(currentPattern.trackOutputRoute[currentTrack]>7)
-						{
-							currentPattern.trackOutputRoute[currentTrack] = 7;
     1090:	05 c0       	rjmp	.+10     	; 0x109c <updateScreen+0x398>
     1092:	27 e0       	ldi	r18, 0x07	; 7
     1094:	fc 01       	movw	r30, r24
     1096:	e2 59       	subi	r30, 0x92	; 146
     1098:	fc 4f       	sbci	r31, 0xFC	; 252
-						}
-						numPrinter(screen2[3], 10, 2, (currentPattern.trackOutputRoute[currentTrack])+1);
     109a:	20 8f       	std	Z+24, r18	; 0x18
     109c:	fc 01       	movw	r30, r24
     109e:	e2 59       	subi	r30, 0x92	; 146
@@ -2969,7 +2216,6 @@ void updateScreen()
     10ae:	87 ed       	ldi	r24, 0xD7	; 215
     10b0:	95 e0       	ldi	r25, 0x05	; 5
     10b2:	07 d3       	rcall	.+1550   	; 0x16c2 <numPrinter>
-						outputS(screen2[3],3);
     10b4:	63 e0       	ldi	r22, 0x03	; 3
     10b6:	70 e0       	ldi	r23, 0x00	; 0
     10b8:	87 ed       	ldi	r24, 0xD7	; 215
@@ -2977,10 +2223,6 @@ void updateScreen()
     10bc:	ea d2       	rcall	.+1492   	; 0x1692 <outputS>
     10be:	6e c1       	rjmp	.+732    	; 0x139c <updateScreen+0x698>
     10c0:	80 91 1e 06 	lds	r24, 0x061E	; 0x80061e <currentTrack>
-						
-					}else
-					{
-						currentPattern.trackOutputRoute[currentTrack] = (currentPattern.trackOutputRoute[currentTrack])-1;
     10c4:	90 e0       	ldi	r25, 0x00	; 0
     10c6:	fc 01       	movw	r30, r24
     10c8:	e2 59       	subi	r30, 0x92	; 146
@@ -2992,15 +2234,10 @@ void updateScreen()
     10d4:	e2 59       	subi	r30, 0x92	; 146
     10d6:	fc 4f       	sbci	r31, 0xFC	; 252
     10d8:	20 8f       	std	Z+24, r18	; 0x18
-						if(currentPattern.trackOutputRoute[currentTrack]==255)
-						{
-							currentPattern.trackOutputRoute[currentTrack] = 0;
     10da:	04 c0       	rjmp	.+8      	; 0x10e4 <updateScreen+0x3e0>
     10dc:	fc 01       	movw	r30, r24
     10de:	e2 59       	subi	r30, 0x92	; 146
     10e0:	fc 4f       	sbci	r31, 0xFC	; 252
-						}
-						numPrinter(screen2[3], 10, 2, (currentPattern.trackOutputRoute[currentTrack])+1);
     10e2:	10 8e       	std	Z+24, r1	; 0x18
     10e4:	fc 01       	movw	r30, r24
     10e6:	e2 59       	subi	r30, 0x92	; 146
@@ -3014,7 +2251,6 @@ void updateScreen()
     10f6:	87 ed       	ldi	r24, 0xD7	; 215
     10f8:	95 e0       	ldi	r25, 0x05	; 5
     10fa:	e3 d2       	rcall	.+1478   	; 0x16c2 <numPrinter>
-						outputS(screen2[3],3);
     10fc:	63 e0       	ldi	r22, 0x03	; 3
     10fe:	70 e0       	ldi	r23, 0x00	; 0
     1100:	87 ed       	ldi	r24, 0xD7	; 215
@@ -3022,35 +2258,15 @@ void updateScreen()
     1104:	c6 d2       	rcall	.+1420   	; 0x1692 <outputS>
     1106:	4a c1       	rjmp	.+660    	; 0x139c <updateScreen+0x698>
     1108:	81 30       	cpi	r24, 0x01	; 1
-					break;
-					
-				}
-				
-			}else{
-			if(menuMoveArrow==1)
     110a:	a1 f5       	brne	.+104    	; 0x1174 <updateScreen+0x470>
     110c:	80 91 ee 05 	lds	r24, 0x05EE	; 0x8005ee <screen2Index>
-			{
-				screen2Index++;
     1110:	8f 5f       	subi	r24, 0xFF	; 255
     1112:	84 30       	cpi	r24, 0x04	; 4
-				if(screen2Index>3)
     1114:	18 f4       	brcc	.+6      	; 0x111c <updateScreen+0x418>
     1116:	80 93 ee 05 	sts	0x05EE, r24	; 0x8005ee <screen2Index>
-				}
-				
-			}else{
-			if(menuMoveArrow==1)
-			{
-				screen2Index++;
     111a:	03 c0       	rjmp	.+6      	; 0x1122 <updateScreen+0x41e>
     111c:	83 e0       	ldi	r24, 0x03	; 3
-				if(screen2Index>3)
-				{
-					screen2Index = 3;
     111e:	80 93 ee 05 	sts	0x05EE, r24	; 0x8005ee <screen2Index>
-				}
-				screen2[screen2Index][19] = '<';
     1122:	60 91 ee 05 	lds	r22, 0x05EE	; 0x8005ee <screen2Index>
     1126:	70 e0       	ldi	r23, 0x00	; 0
     1128:	c4 e1       	ldi	r28, 0x14	; 20
@@ -3063,7 +2279,6 @@ void updateScreen()
     1136:	9a 4f       	sbci	r25, 0xFA	; 250
     1138:	2c e3       	ldi	r18, 0x3C	; 60
     113a:	fc 01       	movw	r30, r24
-				screen2[screen2Index-1][19] = ' ';
     113c:	23 8b       	std	Z+19, r18	; 0x13
     113e:	9b 01       	movw	r18, r22
     1140:	21 50       	subi	r18, 0x01	; 1
@@ -3076,10 +2291,8 @@ void updateScreen()
     114e:	e5 56       	subi	r30, 0x65	; 101
     1150:	fa 4f       	sbci	r31, 0xFA	; 250
     1152:	20 e2       	ldi	r18, 0x20	; 32
-				outputS(screen2[screen2Index], screen2Index);
     1154:	23 8b       	std	Z+19, r18	; 0x13
     1156:	9d d2       	rcall	.+1338   	; 0x1692 <outputS>
-				outputS(screen2[screen2Index-1], screen2Index-1);
     1158:	60 91 ee 05 	lds	r22, 0x05EE	; 0x8005ee <screen2Index>
     115c:	70 e0       	ldi	r23, 0x00	; 0
     115e:	61 50       	subi	r22, 0x01	; 1
@@ -3094,33 +2307,15 @@ void updateScreen()
     1170:	90 d2       	rcall	.+1312   	; 0x1692 <outputS>
     1172:	14 c1       	rjmp	.+552    	; 0x139c <updateScreen+0x698>
     1174:	80 91 ee 05 	lds	r24, 0x05EE	; 0x8005ee <screen2Index>
-				
-				
-			}else
-			{
-				//moving arrow on track setting screen
-				screen2Index--;
     1178:	9e ef       	ldi	r25, 0xFE	; 254
-				if(screen2Index>250||screen2Index==0) //this should account for any negative numbers from overflow.
     117a:	98 0f       	add	r25, r24
     117c:	9a 3f       	cpi	r25, 0xFA	; 250
     117e:	20 f4       	brcc	.+8      	; 0x1188 <updateScreen+0x484>
     1180:	81 50       	subi	r24, 0x01	; 1
-				
-				
-			}else
-			{
-				//moving arrow on track setting screen
-				screen2Index--;
     1182:	80 93 ee 05 	sts	0x05EE, r24	; 0x8005ee <screen2Index>
     1186:	03 c0       	rjmp	.+6      	; 0x118e <updateScreen+0x48a>
-				if(screen2Index>250||screen2Index==0) //this should account for any negative numbers from overflow.
-				{
-					screen2Index = 1;
     1188:	81 e0       	ldi	r24, 0x01	; 1
     118a:	80 93 ee 05 	sts	0x05EE, r24	; 0x8005ee <screen2Index>
-				}
-				screen2[screen2Index][19] = '<';
     118e:	60 91 ee 05 	lds	r22, 0x05EE	; 0x8005ee <screen2Index>
     1192:	70 e0       	ldi	r23, 0x00	; 0
     1194:	c4 e1       	ldi	r28, 0x14	; 20
@@ -3133,7 +2328,6 @@ void updateScreen()
     11a2:	9a 4f       	sbci	r25, 0xFA	; 250
     11a4:	2c e3       	ldi	r18, 0x3C	; 60
     11a6:	fc 01       	movw	r30, r24
-				screen2[screen2Index+1][19] = ' ';
     11a8:	23 8b       	std	Z+19, r18	; 0x13
     11aa:	9b 01       	movw	r18, r22
     11ac:	2f 5f       	subi	r18, 0xFF	; 255
@@ -3146,10 +2340,8 @@ void updateScreen()
     11ba:	e5 56       	subi	r30, 0x65	; 101
     11bc:	fa 4f       	sbci	r31, 0xFA	; 250
     11be:	20 e2       	ldi	r18, 0x20	; 32
-				outputS(screen2[screen2Index], screen2Index);
     11c0:	23 8b       	std	Z+19, r18	; 0x13
     11c2:	67 d2       	rcall	.+1230   	; 0x1692 <outputS>
-				outputS(screen2[screen2Index+1], screen2Index+1);
     11c4:	60 91 ee 05 	lds	r22, 0x05EE	; 0x8005ee <screen2Index>
     11c8:	70 e0       	ldi	r23, 0x00	; 0
     11ca:	6f 5f       	subi	r22, 0xFF	; 255
@@ -3164,49 +2356,24 @@ void updateScreen()
     11dc:	5a d2       	rcall	.+1204   	; 0x1692 <outputS>
     11de:	de c0       	rjmp	.+444    	; 0x139c <updateScreen+0x698>
     11e0:	81 30       	cpi	r24, 0x01	; 1
-			
-			case 3:
-			
-				//this is the functionality if encoder B flag is not pressed
-				//haha, I probably need to change this to how all of the other cases work up there. 
-				if(menuMoveArrow==1)
     11e2:	09 f0       	breq	.+2      	; 0x11e6 <updateScreen+0x4e2>
     11e4:	6e c0       	rjmp	.+220    	; 0x12c2 <updateScreen+0x5be>
-				{
-					if(encoderBFlag)
     11e6:	80 91 ec 05 	lds	r24, 0x05EC	; 0x8005ec <encoderBFlag>
     11ea:	88 23       	and	r24, r24
     11ec:	b1 f1       	breq	.+108    	; 0x125a <updateScreen+0x556>
-					{
-						switch(screen3Index)
     11ee:	80 91 6f 06 	lds	r24, 0x066F	; 0x80066f <screen3Index>
     11f2:	81 30       	cpi	r24, 0x01	; 1
     11f4:	19 f0       	breq	.+6      	; 0x11fc <updateScreen+0x4f8>
     11f6:	82 30       	cpi	r24, 0x02	; 2
     11f8:	e1 f0       	breq	.+56     	; 0x1232 <updateScreen+0x52e>
-						{
-							case 1:
-							midiChannel = midiChannel+1;
     11fa:	d0 c0       	rjmp	.+416    	; 0x139c <updateScreen+0x698>
     11fc:	80 91 99 05 	lds	r24, 0x0599	; 0x800599 <midiChannel>
-							if(midiChannel>15)
     1200:	8f 5f       	subi	r24, 0xFF	; 255
     1202:	80 31       	cpi	r24, 0x10	; 16
-					if(encoderBFlag)
-					{
-						switch(screen3Index)
-						{
-							case 1:
-							midiChannel = midiChannel+1;
     1204:	18 f4       	brcc	.+6      	; 0x120c <updateScreen+0x508>
     1206:	80 93 99 05 	sts	0x0599, r24	; 0x800599 <midiChannel>
-							if(midiChannel>15)
-							{
-								midiChannel = 15;
     120a:	03 c0       	rjmp	.+6      	; 0x1212 <updateScreen+0x50e>
     120c:	8f e0       	ldi	r24, 0x0F	; 15
-							}
-							numPrinter(screen3[1], 14, 2, (midiChannel+1));
     120e:	80 93 99 05 	sts	0x0599, r24	; 0x800599 <midiChannel>
     1212:	20 91 99 05 	lds	r18, 0x0599	; 0x800599 <midiChannel>
     1216:	30 e0       	ldi	r19, 0x00	; 0
@@ -3215,18 +2382,13 @@ void updateScreen()
     121c:	42 e0       	ldi	r20, 0x02	; 2
     121e:	6e e0       	ldi	r22, 0x0E	; 14
     1220:	83 e3       	ldi	r24, 0x33	; 51
-							outputS(screen3[1], 1);
     1222:	96 e0       	ldi	r25, 0x06	; 6
     1224:	4e d2       	rcall	.+1180   	; 0x16c2 <numPrinter>
     1226:	61 e0       	ldi	r22, 0x01	; 1
     1228:	70 e0       	ldi	r23, 0x00	; 0
     122a:	83 e3       	ldi	r24, 0x33	; 51
     122c:	96 e0       	ldi	r25, 0x06	; 6
-							break;
     122e:	31 d2       	rcall	.+1122   	; 0x1692 <outputS>
-							
-							case 2:
-							currentPattern.midiTrackNote[currentTrack] = (currentPattern.midiTrackNote[currentTrack]) + 1;
     1230:	b5 c0       	rjmp	.+362    	; 0x139c <updateScreen+0x698>
     1232:	e0 91 1e 06 	lds	r30, 0x061E	; 0x80061e <currentTrack>
     1236:	f0 e0       	ldi	r31, 0x00	; 0
@@ -3234,7 +2396,6 @@ void updateScreen()
     123a:	fb 4f       	sbci	r31, 0xFB	; 251
     123c:	20 81       	ld	r18, Z
     123e:	2f 5f       	subi	r18, 0xFF	; 255
-							numPrinter(screen3[2], 14, 2, currentPattern.midiTrackNote[currentTrack]);
     1240:	20 83       	st	Z, r18
     1242:	30 e0       	ldi	r19, 0x00	; 0
     1244:	42 e0       	ldi	r20, 0x02	; 2
@@ -3242,40 +2403,20 @@ void updateScreen()
     1248:	87 e4       	ldi	r24, 0x47	; 71
     124a:	96 e0       	ldi	r25, 0x06	; 6
     124c:	3a d2       	rcall	.+1140   	; 0x16c2 <numPrinter>
-							outputS(screen3[2], 2);
     124e:	62 e0       	ldi	r22, 0x02	; 2
     1250:	70 e0       	ldi	r23, 0x00	; 0
     1252:	87 e4       	ldi	r24, 0x47	; 71
     1254:	96 e0       	ldi	r25, 0x06	; 6
     1256:	1d d2       	rcall	.+1082   	; 0x1692 <outputS>
     1258:	a1 c0       	rjmp	.+322    	; 0x139c <updateScreen+0x698>
-							break;
     125a:	80 91 6f 06 	lds	r24, 0x066F	; 0x80066f <screen3Index>
-							
-							
-						}
-					}else
-					{
-						screen3Index++;
     125e:	8f 5f       	subi	r24, 0xFF	; 255
-						if(screen3Index>2)
     1260:	83 30       	cpi	r24, 0x03	; 3
     1262:	18 f4       	brcc	.+6      	; 0x126a <updateScreen+0x566>
-							
-							
-						}
-					}else
-					{
-						screen3Index++;
     1264:	80 93 6f 06 	sts	0x066F, r24	; 0x80066f <screen3Index>
     1268:	03 c0       	rjmp	.+6      	; 0x1270 <updateScreen+0x56c>
-						if(screen3Index>2)
-						{
-							screen3Index = 2;
     126a:	82 e0       	ldi	r24, 0x02	; 2
     126c:	80 93 6f 06 	sts	0x066F, r24	; 0x80066f <screen3Index>
-						}
-						screen3[screen3Index][19] = '<';
     1270:	60 91 6f 06 	lds	r22, 0x066F	; 0x80066f <screen3Index>
     1274:	70 e0       	ldi	r23, 0x00	; 0
     1276:	c4 e1       	ldi	r28, 0x14	; 20
@@ -3288,7 +2429,6 @@ void updateScreen()
     1284:	99 4f       	sbci	r25, 0xF9	; 249
     1286:	2c e3       	ldi	r18, 0x3C	; 60
     1288:	fc 01       	movw	r30, r24
-						screen3[screen3Index-1][19] = ' ';
     128a:	23 8b       	std	Z+19, r18	; 0x13
     128c:	9b 01       	movw	r18, r22
     128e:	21 50       	subi	r18, 0x01	; 1
@@ -3301,10 +2441,8 @@ void updateScreen()
     129c:	e1 5e       	subi	r30, 0xE1	; 225
     129e:	f9 4f       	sbci	r31, 0xF9	; 249
     12a0:	20 e2       	ldi	r18, 0x20	; 32
-						outputS(screen3[screen3Index], screen3Index);
     12a2:	23 8b       	std	Z+19, r18	; 0x13
     12a4:	f6 d1       	rcall	.+1004   	; 0x1692 <outputS>
-						outputS(screen3[screen3Index-1], screen3Index-1);
     12a6:	60 91 6f 06 	lds	r22, 0x066F	; 0x80066f <screen3Index>
     12aa:	70 e0       	ldi	r23, 0x00	; 0
     12ac:	61 50       	subi	r22, 0x01	; 1
@@ -3317,36 +2455,20 @@ void updateScreen()
     12ba:	81 5e       	subi	r24, 0xE1	; 225
     12bc:	99 4f       	sbci	r25, 0xF9	; 249
     12be:	e9 d1       	rcall	.+978    	; 0x1692 <outputS>
-					}
-					
-					
-				}else
-				{
-					if(encoderBFlag)
     12c0:	6d c0       	rjmp	.+218    	; 0x139c <updateScreen+0x698>
     12c2:	80 91 ec 05 	lds	r24, 0x05EC	; 0x8005ec <encoderBFlag>
     12c6:	88 23       	and	r24, r24
-					{
-						switch(screen3Index)
     12c8:	a1 f1       	breq	.+104    	; 0x1332 <updateScreen+0x62e>
     12ca:	80 91 6f 06 	lds	r24, 0x066F	; 0x80066f <screen3Index>
     12ce:	81 30       	cpi	r24, 0x01	; 1
     12d0:	19 f0       	breq	.+6      	; 0x12d8 <updateScreen+0x5d4>
     12d2:	82 30       	cpi	r24, 0x02	; 2
     12d4:	d1 f0       	breq	.+52     	; 0x130a <updateScreen+0x606>
-						{
-							case 1:
-							midiChannel = midiChannel-1;
     12d6:	62 c0       	rjmp	.+196    	; 0x139c <updateScreen+0x698>
     12d8:	80 91 99 05 	lds	r24, 0x0599	; 0x800599 <midiChannel>
     12dc:	81 50       	subi	r24, 0x01	; 1
     12de:	18 f0       	brcs	.+6      	; 0x12e6 <updateScreen+0x5e2>
-							if(midiChannel==255)
-							{
-								midiChannel = 0;
     12e0:	80 93 99 05 	sts	0x0599, r24	; 0x800599 <midiChannel>
-							}
-							numPrinter(screen3[1], 14, 2, (midiChannel+1));
     12e4:	02 c0       	rjmp	.+4      	; 0x12ea <updateScreen+0x5e6>
     12e6:	10 92 99 05 	sts	0x0599, r1	; 0x800599 <midiChannel>
     12ea:	20 91 99 05 	lds	r18, 0x0599	; 0x800599 <midiChannel>
@@ -3356,18 +2478,13 @@ void updateScreen()
     12f4:	42 e0       	ldi	r20, 0x02	; 2
     12f6:	6e e0       	ldi	r22, 0x0E	; 14
     12f8:	83 e3       	ldi	r24, 0x33	; 51
-							outputS(screen3[1], 1);
     12fa:	96 e0       	ldi	r25, 0x06	; 6
     12fc:	e2 d1       	rcall	.+964    	; 0x16c2 <numPrinter>
     12fe:	61 e0       	ldi	r22, 0x01	; 1
     1300:	70 e0       	ldi	r23, 0x00	; 0
     1302:	83 e3       	ldi	r24, 0x33	; 51
     1304:	96 e0       	ldi	r25, 0x06	; 6
-							break;
     1306:	c5 d1       	rcall	.+906    	; 0x1692 <outputS>
-							
-							case 2:
-							currentPattern.midiTrackNote[currentTrack] = (currentPattern.midiTrackNote[currentTrack]) - 1;
     1308:	49 c0       	rjmp	.+146    	; 0x139c <updateScreen+0x698>
     130a:	e0 91 1e 06 	lds	r30, 0x061E	; 0x80061e <currentTrack>
     130e:	f0 e0       	ldi	r31, 0x00	; 0
@@ -3375,7 +2492,6 @@ void updateScreen()
     1312:	fb 4f       	sbci	r31, 0xFB	; 251
     1314:	20 81       	ld	r18, Z
     1316:	21 50       	subi	r18, 0x01	; 1
-							numPrinter(screen3[2], 14, 2, currentPattern.midiTrackNote[currentTrack]);
     1318:	20 83       	st	Z, r18
     131a:	30 e0       	ldi	r19, 0x00	; 0
     131c:	42 e0       	ldi	r20, 0x02	; 2
@@ -3383,40 +2499,22 @@ void updateScreen()
     1320:	87 e4       	ldi	r24, 0x47	; 71
     1322:	96 e0       	ldi	r25, 0x06	; 6
     1324:	ce d1       	rcall	.+924    	; 0x16c2 <numPrinter>
-							outputS(screen3[2], 2);
     1326:	62 e0       	ldi	r22, 0x02	; 2
     1328:	70 e0       	ldi	r23, 0x00	; 0
     132a:	87 e4       	ldi	r24, 0x47	; 71
     132c:	96 e0       	ldi	r25, 0x06	; 6
     132e:	b1 d1       	rcall	.+866    	; 0x1692 <outputS>
-							break;
     1330:	35 c0       	rjmp	.+106    	; 0x139c <updateScreen+0x698>
-							
-						}
-					}else{
-					screen3Index--;
     1332:	80 91 6f 06 	lds	r24, 0x066F	; 0x80066f <screen3Index>
-					if(screen3Index>250||screen3Index==0) //this should account for any negative numbers from overflow.
     1336:	9e ef       	ldi	r25, 0xFE	; 254
     1338:	98 0f       	add	r25, r24
     133a:	9a 3f       	cpi	r25, 0xFA	; 250
     133c:	20 f4       	brcc	.+8      	; 0x1346 <updateScreen+0x642>
-							outputS(screen3[2], 2);
-							break;
-							
-						}
-					}else{
-					screen3Index--;
     133e:	81 50       	subi	r24, 0x01	; 1
     1340:	80 93 6f 06 	sts	0x066F, r24	; 0x80066f <screen3Index>
     1344:	03 c0       	rjmp	.+6      	; 0x134c <updateScreen+0x648>
-					if(screen3Index>250||screen3Index==0) //this should account for any negative numbers from overflow.
-					{
-						screen3Index = 1;
     1346:	81 e0       	ldi	r24, 0x01	; 1
     1348:	80 93 6f 06 	sts	0x066F, r24	; 0x80066f <screen3Index>
-					}
-					screen3[screen3Index][19] = '<';
     134c:	60 91 6f 06 	lds	r22, 0x066F	; 0x80066f <screen3Index>
     1350:	70 e0       	ldi	r23, 0x00	; 0
     1352:	c4 e1       	ldi	r28, 0x14	; 20
@@ -3429,7 +2527,6 @@ void updateScreen()
     1360:	99 4f       	sbci	r25, 0xF9	; 249
     1362:	2c e3       	ldi	r18, 0x3C	; 60
     1364:	fc 01       	movw	r30, r24
-					screen3[screen3Index+1][19] = ' ';
     1366:	23 8b       	std	Z+19, r18	; 0x13
     1368:	9b 01       	movw	r18, r22
     136a:	2f 5f       	subi	r18, 0xFF	; 255
@@ -3442,10 +2539,8 @@ void updateScreen()
     1378:	e1 5e       	subi	r30, 0xE1	; 225
     137a:	f9 4f       	sbci	r31, 0xF9	; 249
     137c:	20 e2       	ldi	r18, 0x20	; 32
-					outputS(screen3[screen3Index], screen3Index);
     137e:	23 8b       	std	Z+19, r18	; 0x13
     1380:	88 d1       	rcall	.+784    	; 0x1692 <outputS>
-					outputS(screen3[screen3Index+1], screen3Index+1);
     1382:	60 91 6f 06 	lds	r22, 0x066F	; 0x80066f <screen3Index>
     1386:	70 e0       	ldi	r23, 0x00	; 0
     1388:	6f 5f       	subi	r22, 0xFF	; 255
@@ -3457,27 +2552,15 @@ void updateScreen()
     1394:	11 24       	eor	r1, r1
     1396:	81 5e       	subi	r24, 0xE1	; 225
     1398:	99 4f       	sbci	r25, 0xF9	; 249
-				
-			
-			break;
-					
-		}
-		prevEncoderBValue = encoderBValue;
     139a:	7b d1       	rcall	.+758    	; 0x1692 <outputS>
     139c:	80 91 72 06 	lds	r24, 0x0672	; 0x800672 <encoderBValue>
     13a0:	80 93 ed 05 	sts	0x05ED, r24	; 0x8005ed <prevEncoderBValue>
-	}
-	
-	//top encoder
-	if(prevEncoderAValue!=encoderAValue){
     13a4:	80 91 6d 03 	lds	r24, 0x036D	; 0x80036d <encoderAValue>
     13a8:	90 91 ca 04 	lds	r25, 0x04CA	; 0x8004ca <prevEncoderAValue>
     13ac:	98 17       	cp	r25, r24
     13ae:	09 f4       	brne	.+2      	; 0x13b2 <updateScreen+0x6ae>
-	encoderAValue = encoderAValue%4;
     13b0:	6b c0       	rjmp	.+214    	; 0x1488 <updateScreen+0x784>
     13b2:	83 70       	andi	r24, 0x03	; 3
-	switch (encoderAValue)
     13b4:	80 93 6d 03 	sts	0x036D, r24	; 0x80036d <encoderAValue>
     13b8:	81 30       	cpi	r24, 0x01	; 1
     13ba:	09 f1       	breq	.+66     	; 0x13fe <updateScreen+0x6fa>
@@ -3486,9 +2569,6 @@ void updateScreen()
     13c0:	09 f4       	brne	.+2      	; 0x13c4 <updateScreen+0x6c0>
     13c2:	3f c0       	rjmp	.+126    	; 0x1442 <updateScreen+0x73e>
     13c4:	83 30       	cpi	r24, 0x03	; 3
-	{
-		case 0:
-		numPrinter(screen0[2], 5, 3, currentPattern.patternBPM);
     13c6:	09 f4       	brne	.+2      	; 0x13ca <updateScreen+0x6c6>
     13c8:	4c c0       	rjmp	.+152    	; 0x1462 <updateScreen+0x75e>
     13ca:	5a c0       	rjmp	.+180    	; 0x1480 <updateScreen+0x77c>
@@ -3500,8 +2580,6 @@ void updateScreen()
     13da:	95 e0       	ldi	r25, 0x05	; 5
     13dc:	72 d1       	rcall	.+740    	; 0x16c2 <numPrinter>
     13de:	07 e4       	ldi	r16, 0x47	; 71
-		for(uint8_t i=0;i<4; i++ ){
-			outputS(screen0[i],i);
     13e0:	15 e0       	ldi	r17, 0x05	; 5
     13e2:	c0 e0       	ldi	r28, 0x00	; 0
     13e4:	d0 e0       	ldi	r29, 0x00	; 0
@@ -3509,25 +2587,11 @@ void updateScreen()
     13e8:	c8 01       	movw	r24, r16
     13ea:	53 d1       	rcall	.+678    	; 0x1692 <outputS>
     13ec:	21 96       	adiw	r28, 0x01	; 1
-	encoderAValue = encoderAValue%4;
-	switch (encoderAValue)
-	{
-		case 0:
-		numPrinter(screen0[2], 5, 3, currentPattern.patternBPM);
-		for(uint8_t i=0;i<4; i++ ){
     13ee:	0c 5e       	subi	r16, 0xEC	; 236
     13f0:	1f 4f       	sbci	r17, 0xFF	; 255
-			outputS(screen0[i],i);
-		}
-		screen0Index = 0;
     13f2:	c4 30       	cpi	r28, 0x04	; 4
     13f4:	d1 05       	cpc	r29, r1
-		
-		break;
     13f6:	b9 f7       	brne	.-18     	; 0x13e6 <updateScreen+0x6e2>
-		
-		case 1:
-		numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
     13f8:	10 92 71 06 	sts	0x0671, r1	; 0x800671 <screen0Index>
     13fc:	41 c0       	rjmp	.+130    	; 0x1480 <updateScreen+0x77c>
     13fe:	20 91 c8 04 	lds	r18, 0x04C8	; 0x8004c8 <currentPattern+0x15a>
@@ -3535,7 +2599,6 @@ void updateScreen()
     1404:	42 e0       	ldi	r20, 0x02	; 2
     1406:	66 e0       	ldi	r22, 0x06	; 6
     1408:	83 ef       	ldi	r24, 0xF3	; 243
-		numPrinter(screen1[3], 13, 2, (currentStep+1));
     140a:	94 e0       	ldi	r25, 0x04	; 4
     140c:	5a d1       	rcall	.+692    	; 0x16c2 <numPrinter>
     140e:	20 91 73 06 	lds	r18, 0x0673	; 0x800673 <currentStep>
@@ -3549,8 +2612,6 @@ void updateScreen()
     1420:	50 d1       	rcall	.+672    	; 0x16c2 <numPrinter>
     1422:	0b ec       	ldi	r16, 0xCB	; 203
     1424:	14 e0       	ldi	r17, 0x04	; 4
-		for(uint8_t i=0;i<4; i++ ){
- 		outputS(screen1[i],i);
     1426:	c0 e0       	ldi	r28, 0x00	; 0
     1428:	d0 e0       	ldi	r29, 0x00	; 0
     142a:	be 01       	movw	r22, r28
@@ -3558,37 +2619,15 @@ void updateScreen()
     142e:	31 d1       	rcall	.+610    	; 0x1692 <outputS>
     1430:	21 96       	adiw	r28, 0x01	; 1
     1432:	0c 5e       	subi	r16, 0xEC	; 236
-		break;
-		
-		case 1:
-		numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
-		numPrinter(screen1[3], 13, 2, (currentStep+1));
-		for(uint8_t i=0;i<4; i++ ){
     1434:	1f 4f       	sbci	r17, 0xFF	; 255
     1436:	c4 30       	cpi	r28, 0x04	; 4
     1438:	d1 05       	cpc	r29, r1
- 		outputS(screen1[i],i);
-		}
-		screen1Index = 0;
     143a:	b9 f7       	brne	.-18     	; 0x142a <updateScreen+0x726>
     143c:	10 92 9a 05 	sts	0x059A, r1	; 0x80059a <screen1Index>
- 		break;
     1440:	1f c0       	rjmp	.+62     	; 0x1480 <updateScreen+0x77c>
     1442:	0b e9       	ldi	r16, 0x9B	; 155
-	}
-	
-	//top encoder
-	if(prevEncoderAValue!=encoderAValue){
-	encoderAValue = encoderAValue%4;
-	switch (encoderAValue)
     1444:	15 e0       	ldi	r17, 0x05	; 5
     1446:	c0 e0       	ldi	r28, 0x00	; 0
-		screen1Index = 0;
- 		break;
-		 
-		case 2:
-		for(uint8_t i=0;i<4; i++ ){
-			outputS(screen2[i],i);
     1448:	d0 e0       	ldi	r29, 0x00	; 0
     144a:	be 01       	movw	r22, r28
     144c:	c8 01       	movw	r24, r16
@@ -3596,37 +2635,15 @@ void updateScreen()
     1450:	21 96       	adiw	r28, 0x01	; 1
     1452:	0c 5e       	subi	r16, 0xEC	; 236
     1454:	1f 4f       	sbci	r17, 0xFF	; 255
-		}
-		screen1Index = 0;
- 		break;
-		 
-		case 2:
-		for(uint8_t i=0;i<4; i++ ){
     1456:	c4 30       	cpi	r28, 0x04	; 4
     1458:	d1 05       	cpc	r29, r1
     145a:	b9 f7       	brne	.-18     	; 0x144a <updateScreen+0x746>
-			outputS(screen2[i],i);
-		}
-		screen2Index = 0;
     145c:	10 92 ee 05 	sts	0x05EE, r1	; 0x8005ee <screen2Index>
-		break;
     1460:	0f c0       	rjmp	.+30     	; 0x1480 <updateScreen+0x77c>
     1462:	0f e1       	ldi	r16, 0x1F	; 31
     1464:	16 e0       	ldi	r17, 0x06	; 6
-	}
-	
-	//top encoder
-	if(prevEncoderAValue!=encoderAValue){
-	encoderAValue = encoderAValue%4;
-	switch (encoderAValue)
     1466:	c0 e0       	ldi	r28, 0x00	; 0
     1468:	d0 e0       	ldi	r29, 0x00	; 0
-		screen2Index = 0;
-		break;
-		 
-		case 3:
-		for(uint8_t i=0;i<4; i++ ){
-			outputS(screen3[i],i);
     146a:	be 01       	movw	r22, r28
     146c:	c8 01       	movw	r24, r16
     146e:	11 d1       	rcall	.+546    	; 0x1692 <outputS>
@@ -3634,43 +2651,18 @@ void updateScreen()
     1472:	0c 5e       	subi	r16, 0xEC	; 236
     1474:	1f 4f       	sbci	r17, 0xFF	; 255
     1476:	c4 30       	cpi	r28, 0x04	; 4
-		}
-		screen2Index = 0;
-		break;
-		 
-		case 3:
-		for(uint8_t i=0;i<4; i++ ){
     1478:	d1 05       	cpc	r29, r1
     147a:	b9 f7       	brne	.-18     	; 0x146a <updateScreen+0x766>
     147c:	10 92 6f 06 	sts	0x066F, r1	; 0x80066f <screen3Index>
-			outputS(screen3[i],i);
-		}
-		screen3Index = 0;
     1480:	80 91 6d 03 	lds	r24, 0x036D	; 0x80036d <encoderAValue>
-		break;
-		 
-		 
-	}
-	prevEncoderAValue = encoderAValue;
     1484:	80 93 ca 04 	sts	0x04CA, r24	; 0x8004ca <prevEncoderAValue>
     1488:	df 91       	pop	r29
-	
-	}
-
-
-}
     148a:	cf 91       	pop	r28
     148c:	1f 91       	pop	r17
     148e:	0f 91       	pop	r16
     1490:	08 95       	ret
 
 00001492 <listenMidi>:
-uint8_t midiPCCheck = 0;
-uint8_t midiOffCheck = 0;
-
-
-void listenMidi()
-{
     1492:	cf 92       	push	r12
     1494:	df 92       	push	r13
     1496:	ef 92       	push	r14
@@ -3679,41 +2671,26 @@ void listenMidi()
     149c:	1f 93       	push	r17
     149e:	cf 93       	push	r28
     14a0:	df 93       	push	r29
-	midiNoteCheck = (0B10010000|midiChannel);
     14a2:	80 91 99 05 	lds	r24, 0x0599	; 0x800599 <midiChannel>
     14a6:	98 2f       	mov	r25, r24
     14a8:	90 69       	ori	r25, 0x90	; 144
     14aa:	90 93 63 03 	sts	0x0363, r25	; 0x800363 <midiNoteCheck>
-	midiCCCheck = (0B10110000|midiChannel);
     14ae:	98 2f       	mov	r25, r24
     14b0:	90 6b       	ori	r25, 0xB0	; 176
     14b2:	90 93 62 03 	sts	0x0362, r25	; 0x800362 <midiCCCheck>
-	midiPCCheck = (0B11000000|midiChannel);
     14b6:	98 2f       	mov	r25, r24
     14b8:	90 6c       	ori	r25, 0xC0	; 192
     14ba:	90 93 61 03 	sts	0x0361, r25	; 0x800361 <midiPCCheck>
-	midiOffCheck = (0B10000000|midiChannel);
     14be:	80 68       	ori	r24, 0x80	; 128
     14c0:	80 93 60 03 	sts	0x0360, r24	; 0x800360 <midiOffCheck>
-	
-	//right now, this is just for testing.
-	currentMidiMessage[0] = getChar();
     14c4:	55 d3       	rcall	.+1706   	; 0x1b70 <getChar>
     14c6:	80 93 64 03 	sts	0x0364, r24	; 0x800364 <currentMidiMessage>
-	//while(currentMidiMessage[0]==254)
-	//{
-	//	currentMidiMessage[0]=getChar(); //for now, get rid of midi clock signals
-	//}
-	if(currentMidiMessage[0]==midiNoteCheck)
     14ca:	90 91 63 03 	lds	r25, 0x0363	; 0x800363 <midiNoteCheck>
     14ce:	89 13       	cpse	r24, r25
-	{
-		currentMidiMessage[1] = getChar(); //this should be byte1 (note)
     14d0:	2d c0       	rjmp	.+90     	; 0x152c <listenMidi+0x9a>
     14d2:	4e d3       	rcall	.+1692   	; 0x1b70 <getChar>
     14d4:	c4 e6       	ldi	r28, 0x64	; 100
     14d6:	d3 e0       	ldi	r29, 0x03	; 3
-		currentMidiMessage[2] = getChar(); //this should be byte2 (velocity)
     14d8:	89 83       	std	Y+1, r24	; 0x01
     14da:	4a d3       	rcall	.+1684   	; 0x1b70 <getChar>
     14dc:	8a 83       	std	Y+2, r24	; 0x02
@@ -3727,12 +2704,6 @@ void listenMidi()
     14ec:	f4 e0       	ldi	r31, 0x04	; 4
     14ee:	df 2e       	mov	r13, r31
     14f0:	f0 2d       	mov	r31, r0
-		//outputS(printMidiNote, 3);
-		
-		for(int i=0; i<16; i++)
-		{
-			//I don't like this forloop, but It seems like the best way to deal with this struct at the moment.
-			if((currentPattern.midiTrackNote[i])==(currentMidiMessage[1]))
     14f2:	0f 2e       	mov	r0, r31
     14f4:	f4 e6       	ldi	r31, 0x64	; 100
     14f6:	ef 2e       	mov	r14, r31
@@ -3746,7 +2717,6 @@ void listenMidi()
     1506:	81 81       	ldd	r24, Z+1	; 0x01
     1508:	98 13       	cpse	r25, r24
     150a:	0c c0       	rjmp	.+24     	; 0x1524 <listenMidi+0x92>
-			trackControl(currentPattern.trackSampleLSB[i], currentPattern.trackSampleMSB[i], currentPattern.trackOutputRoute[i], currentPattern.trackPlayMode[i]);
     150c:	28 81       	ld	r18, Y
     150e:	30 e0       	ldi	r19, 0x00	; 0
     1510:	fe 01       	movw	r30, r28
@@ -3760,83 +2730,50 @@ void listenMidi()
     1520:	90 e0       	ldi	r25, 0x00	; 0
     1522:	3b d3       	rcall	.+1654   	; 0x1b9a <trackControl>
     1524:	21 96       	adiw	r28, 0x01	; 1
-	{
-		currentMidiMessage[1] = getChar(); //this should be byte1 (note)
-		currentMidiMessage[2] = getChar(); //this should be byte2 (velocity)
-		//outputS(printMidiNote, 3);
-		
-		for(int i=0; i<16; i++)
     1526:	cc 15       	cp	r28, r12
     1528:	dd 05       	cpc	r29, r13
     152a:	49 f7       	brne	.-46     	; 0x14fe <listenMidi+0x6c>
-			if((currentPattern.midiTrackNote[i])==(currentMidiMessage[1]))
-			trackControl(currentPattern.trackSampleLSB[i], currentPattern.trackSampleMSB[i], currentPattern.trackOutputRoute[i], currentPattern.trackPlayMode[i]);
-		}
-		
-	}
-	if(currentMidiMessage[0]==midiCCCheck)
     152c:	90 91 64 03 	lds	r25, 0x0364	; 0x800364 <currentMidiMessage>
     1530:	80 91 62 03 	lds	r24, 0x0362	; 0x800362 <midiCCCheck>
     1534:	98 13       	cpse	r25, r24
-	{
-		currentMidiMessage[1] = getChar(); //this should be byte1 (control)
     1536:	0b c0       	rjmp	.+22     	; 0x154e <listenMidi+0xbc>
     1538:	1b d3       	rcall	.+1590   	; 0x1b70 <getChar>
     153a:	c4 e6       	ldi	r28, 0x64	; 100
     153c:	d3 e0       	ldi	r29, 0x03	; 3
-		currentMidiMessage[2] = getChar(); //this should be byte2 (velocity)
     153e:	89 83       	std	Y+1, r24	; 0x01
     1540:	17 d3       	rcall	.+1582   	; 0x1b70 <getChar>
-		outputS(printMidiCC, 3);
     1542:	8a 83       	std	Y+2, r24	; 0x02
     1544:	63 e0       	ldi	r22, 0x03	; 3
     1546:	70 e0       	ldi	r23, 0x00	; 0
     1548:	8c e8       	ldi	r24, 0x8C	; 140
     154a:	92 e0       	ldi	r25, 0x02	; 2
-	
-	}
-	if(currentMidiMessage[0]==midiPCCheck)
     154c:	a2 d0       	rcall	.+324    	; 0x1692 <outputS>
     154e:	90 91 64 03 	lds	r25, 0x0364	; 0x800364 <currentMidiMessage>
     1552:	80 91 61 03 	lds	r24, 0x0361	; 0x800361 <midiPCCheck>
     1556:	98 13       	cpse	r25, r24
-	{
-		currentMidiMessage[1] = getChar(); //this should be a byte1 (progChageNumber)
     1558:	08 c0       	rjmp	.+16     	; 0x156a <listenMidi+0xd8>
     155a:	0a d3       	rcall	.+1556   	; 0x1b70 <getChar>
     155c:	80 93 65 03 	sts	0x0365, r24	; 0x800365 <currentMidiMessage+0x1>
-		outputS(printMidiPC, 3);
     1560:	63 e0       	ldi	r22, 0x03	; 3
     1562:	70 e0       	ldi	r23, 0x00	; 0
     1564:	88 e7       	ldi	r24, 0x78	; 120
     1566:	92 e0       	ldi	r25, 0x02	; 2
-		
-	}
-	if(currentMidiMessage[0]==midiOffCheck)
     1568:	94 d0       	rcall	.+296    	; 0x1692 <outputS>
     156a:	90 91 64 03 	lds	r25, 0x0364	; 0x800364 <currentMidiMessage>
     156e:	80 91 60 03 	lds	r24, 0x0360	; 0x800360 <midiOffCheck>
-	{
-		currentMidiMessage[1] = getChar(); //this should be byte1 (note)
     1572:	98 13       	cpse	r25, r24
     1574:	0b c0       	rjmp	.+22     	; 0x158c <listenMidi+0xfa>
     1576:	fc d2       	rcall	.+1528   	; 0x1b70 <getChar>
     1578:	c4 e6       	ldi	r28, 0x64	; 100
-		currentMidiMessage[2] = getChar(); //this should be byte2 (velocity)
     157a:	d3 e0       	ldi	r29, 0x03	; 3
     157c:	89 83       	std	Y+1, r24	; 0x01
     157e:	f8 d2       	rcall	.+1520   	; 0x1b70 <getChar>
-		outputS(blank, 3);
     1580:	8a 83       	std	Y+2, r24	; 0x02
     1582:	63 e0       	ldi	r22, 0x03	; 3
     1584:	70 e0       	ldi	r23, 0x00	; 0
     1586:	84 e6       	ldi	r24, 0x64	; 100
     1588:	92 e0       	ldi	r25, 0x02	; 2
     158a:	83 d0       	rcall	.+262    	; 0x1692 <outputS>
-	}
-
-
-
     158c:	df 91       	pop	r29
     158e:	cf 91       	pop	r28
     1590:	1f 91       	pop	r17
@@ -3848,12 +2785,6 @@ void listenMidi()
     159c:	08 95       	ret
 
 0000159e <enableCycle>:
-	//using unsigned int 8 bit values should protect this
-	//function from overflow.
-	
-	//also,this should just work.
-	//since we want to send an 8 bit value over an entire port.
-	PORTC = value;
     159e:	e5 e0       	ldi	r30, 0x05	; 5
     15a0:	f1 e0       	ldi	r31, 0x01	; 1
     15a2:	80 81       	ld	r24, Z
@@ -3869,83 +2800,35 @@ void listenMidi()
     15b6:	08 95       	ret
 
 000015b8 <command>:
-}
-
-void command(uint8_t c)
-{
-	//digitalWrite(DC, 0);
-	PORTJ &= 0B11111110; //set our DC pin low, to get ready to write data.
     15b8:	e5 e0       	ldi	r30, 0x05	; 5
     15ba:	f1 e0       	ldi	r31, 0x01	; 1
     15bc:	90 81       	ld	r25, Z
     15be:	9e 7f       	andi	r25, 0xFE	; 254
     15c0:	90 83       	st	Z, r25
-	//using unsigned int 8 bit values should protect this
-	//function from overflow.
-	
-	//also,this should just work.
-	//since we want to send an 8 bit value over an entire port.
-	PORTC = value;
     15c2:	88 b9       	out	0x08, r24	; 8
-{
-	//digitalWrite(DC, 0);
-	PORTJ &= 0B11111110; //set our DC pin low, to get ready to write data.
-	//we need to figure out where our DC pin is.
-	send8bit(c);
-	enableCycle();
     15c4:	ec cf       	rjmp	.-40     	; 0x159e <enableCycle>
     15c6:	08 95       	ret
 
 000015c8 <data>:
-}
-
-void data(uint8_t d)
-{
-	//digitalWrite(DC, 1);
-	PORTJ |=0B00000001; //set out DC Pin high, so it's ready to write data.
     15c8:	e5 e0       	ldi	r30, 0x05	; 5
     15ca:	f1 e0       	ldi	r31, 0x01	; 1
     15cc:	90 81       	ld	r25, Z
     15ce:	91 60       	ori	r25, 0x01	; 1
     15d0:	90 83       	st	Z, r25
-	//using unsigned int 8 bit values should protect this
-	//function from overflow.
-	
-	//also,this should just work.
-	//since we want to send an 8 bit value over an entire port.
-	PORTC = value;
     15d2:	88 b9       	out	0x08, r24	; 8
-void data(uint8_t d)
-{
-	//digitalWrite(DC, 1);
-	PORTJ |=0B00000001; //set out DC Pin high, so it's ready to write data.
-	send8bit(d);
-	enableCycle();
     15d4:	e4 cf       	rjmp	.-56     	; 0x159e <enableCycle>
     15d6:	08 95       	ret
 
 000015d8 <initScreen>:
-
-void initScreen()
-{
-	//this is where we will do all of the screen
-	//initialization.
-	DDRJ = 0x03; //pins 14 and 15, 14 is Enable (PortJ1), 15 is data/command (PortJ0)
     15d8:	83 e0       	ldi	r24, 0x03	; 3
     15da:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <__TEXT_REGION_LENGTH__+0x700104>
-	DDRC =0xFF; //all pins on the LCD Data Bus.
     15de:	8f ef       	ldi	r24, 0xFF	; 255
     15e0:	87 b9       	out	0x07, r24	; 7
-
-	
-	PORTJ &= 0B11111100;		//set both the DC line and E line of the display to 0. leave all other bits on the ports alone
     15e2:	e5 e0       	ldi	r30, 0x05	; 5
     15e4:	f1 e0       	ldi	r31, 0x01	; 1
     15e6:	80 81       	ld	r24, Z
     15e8:	8c 7f       	andi	r24, 0xFC	; 252
     15ea:	80 83       	st	Z, r24
-	
-	PORTC = 0x00;				// Initializes all Arduino pins for the data bus
     15ec:	18 b8       	out	0x08, r1	; 8
 	#else
 		//round up by default
@@ -3959,103 +2842,67 @@ void initScreen()
     15f4:	f1 f7       	brne	.-4      	; 0x15f2 <initScreen+0x1a>
     15f6:	00 c0       	rjmp	.+0      	; 0x15f8 <initScreen+0x20>
     15f8:	00 00       	nop
-	_delay_us(200);				// Waits 200 us for stabilization purpose
-	
-
-	uint8_t rows = 0x08;                    // Display mode: 2/4 lines
-
-	command(0x22 | rows); // Function set: extended command set (RE=1), lines #
     15fa:	8a e2       	ldi	r24, 0x2A	; 42
     15fc:	dd df       	rcall	.-70     	; 0x15b8 <command>
-	command(0x71);        // Function selection A:
     15fe:	81 e7       	ldi	r24, 0x71	; 113
     1600:	db df       	rcall	.-74     	; 0x15b8 <command>
-	data(0x5C);           //  enable internal Vdd regulator at 5V I/O mode (def. value) (0x00 for disable, 2.8V I/O)
     1602:	8c e5       	ldi	r24, 0x5C	; 92
     1604:	e1 df       	rcall	.-62     	; 0x15c8 <data>
-	command(0x20 | rows); // Function set: fundamental command set (RE=0) (exit from extended command set), lines #
     1606:	88 e2       	ldi	r24, 0x28	; 40
     1608:	d7 df       	rcall	.-82     	; 0x15b8 <command>
-	command(0x08);        // Display ON/OFF control: display off, cursor off, blink off (default values)
     160a:	88 e0       	ldi	r24, 0x08	; 8
     160c:	d5 df       	rcall	.-86     	; 0x15b8 <command>
-	command(0x22 | rows); // Function set: extended command set (RE=1), lines #
     160e:	8a e2       	ldi	r24, 0x2A	; 42
     1610:	d3 df       	rcall	.-90     	; 0x15b8 <command>
-	command(0x79);        // OLED characterization: OLED command set enabled (SD=1)
     1612:	89 e7       	ldi	r24, 0x79	; 121
     1614:	d1 df       	rcall	.-94     	; 0x15b8 <command>
-	command(0xD5);        // Set display clock divide ratio/oscillator frequency:
     1616:	85 ed       	ldi	r24, 0xD5	; 213
     1618:	cf df       	rcall	.-98     	; 0x15b8 <command>
-	command(0x70);        //  divide ratio=1, frequency=7 (default values)
     161a:	80 e7       	ldi	r24, 0x70	; 112
     161c:	cd df       	rcall	.-102    	; 0x15b8 <command>
-	command(0x78);        // OLED characterization: OLED command set disabled (SD=0) (exit from OLED command set)
     161e:	88 e7       	ldi	r24, 0x78	; 120
     1620:	cb df       	rcall	.-106    	; 0x15b8 <command>
-
-
-	command(0x09);     // Extended function set (RE=1): 5-dot font, B/W inverting disabled (def. val.), 3/4 lines
     1622:	89 e0       	ldi	r24, 0x09	; 9
     1624:	c9 df       	rcall	.-110    	; 0x15b8 <command>
-
-	command(0x06);        // Entry Mode set - COM/SEG direction: COM0->COM31, SEG99->SEG0 (BDC=1, BDS=0)
     1626:	86 e0       	ldi	r24, 0x06	; 6
     1628:	c7 df       	rcall	.-114    	; 0x15b8 <command>
-	command(0x72);        // Function selection B:
     162a:	82 e7       	ldi	r24, 0x72	; 114
     162c:	c5 df       	rcall	.-118    	; 0x15b8 <command>
-	data(0x0A);           //  ROM/CGRAM selection: ROM C, CGROM=250, CGRAM=6 (ROM=10, OPR=10)
     162e:	8a e0       	ldi	r24, 0x0A	; 10
     1630:	cb df       	rcall	.-106    	; 0x15c8 <data>
-	command(0x79);        // OLED characterization: OLED command set enabled (SD=1)
     1632:	89 e7       	ldi	r24, 0x79	; 121
     1634:	c1 df       	rcall	.-126    	; 0x15b8 <command>
-	command(0xDA);        // Set SEG pins hardware configuration:
     1636:	8a ed       	ldi	r24, 0xDA	; 218
     1638:	bf df       	rcall	.-130    	; 0x15b8 <command>
-	command(0x10);        //  alternative odd/even SEG pin, disable SEG left/right remap (default values)
     163a:	80 e1       	ldi	r24, 0x10	; 16
     163c:	bd df       	rcall	.-134    	; 0x15b8 <command>
-	command(0xDC);        // Function selection C:
     163e:	8c ed       	ldi	r24, 0xDC	; 220
     1640:	bb df       	rcall	.-138    	; 0x15b8 <command>
-	command(0x00);        //  internal VSL, GPIO input disable
     1642:	80 e0       	ldi	r24, 0x00	; 0
     1644:	b9 df       	rcall	.-142    	; 0x15b8 <command>
-	command(0x81);        // Set contrast control:
     1646:	81 e8       	ldi	r24, 0x81	; 129
     1648:	b7 df       	rcall	.-146    	; 0x15b8 <command>
     164a:	8f e7       	ldi	r24, 0x7F	; 127
-	command(0x7F);        //  contrast=127 (default value)
     164c:	b5 df       	rcall	.-150    	; 0x15b8 <command>
     164e:	89 ed       	ldi	r24, 0xD9	; 217
     1650:	b3 df       	rcall	.-154    	; 0x15b8 <command>
-	command(0xD9);        // Set phase length:
     1652:	81 ef       	ldi	r24, 0xF1	; 241
     1654:	b1 df       	rcall	.-158    	; 0x15b8 <command>
-	command(0xF1);        //  phase2=15, phase1=1 (default: 0x78)
     1656:	8b ed       	ldi	r24, 0xDB	; 219
     1658:	af df       	rcall	.-162    	; 0x15b8 <command>
     165a:	80 e4       	ldi	r24, 0x40	; 64
-	command(0xDB);        // Set VCOMH deselect level:
     165c:	ad df       	rcall	.-166    	; 0x15b8 <command>
     165e:	88 e7       	ldi	r24, 0x78	; 120
     1660:	ab df       	rcall	.-170    	; 0x15b8 <command>
-	command(0x40);        //  VCOMH deselect level=1 x Vcc (default: 0x20=0,77 x Vcc)
     1662:	88 e2       	ldi	r24, 0x28	; 40
     1664:	a9 df       	rcall	.-174    	; 0x15b8 <command>
     1666:	81 e0       	ldi	r24, 0x01	; 1
-	command(0x78);        // OLED characterization: OLED command set disabled (SD=0) (exit from OLED command set)
     1668:	a7 df       	rcall	.-178    	; 0x15b8 <command>
     166a:	8f e3       	ldi	r24, 0x3F	; 63
     166c:	9f e1       	ldi	r25, 0x1F	; 31
-	command(0x20 | rows); // Function set: fundamental command set (RE=0) (exit from extended command set), lines #
     166e:	01 97       	sbiw	r24, 0x01	; 1
     1670:	f1 f7       	brne	.-4      	; 0x166e <initScreen+0x96>
     1672:	00 c0       	rjmp	.+0      	; 0x1674 <initScreen+0x9c>
-	command(0x01);        // Clear display
     1674:	00 00       	nop
     1676:	80 e8       	ldi	r24, 0x80	; 128
     1678:	9f df       	rcall	.-194    	; 0x15b8 <command>
@@ -4071,13 +2918,9 @@ void initScreen()
     1680:	24 e3       	ldi	r18, 0x34	; 52
     1682:	8c e0       	ldi	r24, 0x0C	; 12
     1684:	91 50       	subi	r25, 0x01	; 1
-	_delay_ms(2);             // After a clear display, a minimum pause of 1-2 ms is required
-	
-	command(0x80);        // Set DDRAM address 0x00 in address counter (cursor home) (default value)
     1686:	20 40       	sbci	r18, 0x00	; 0
     1688:	80 40       	sbci	r24, 0x00	; 0
     168a:	e1 f7       	brne	.-8      	; 0x1684 <initScreen+0xac>
-	command(0x0C);        // Display ON/OFF control: display ON, cursor off, blink off
     168c:	00 c0       	rjmp	.+0      	; 0x168e <initScreen+0xb6>
     168e:	00 00       	nop
     1690:	08 95       	ret
@@ -4093,35 +2936,15 @@ void initScreen()
     16a0:	e0 56       	subi	r30, 0x60	; 96
     16a2:	fd 4f       	sbci	r31, 0xFD	; 253
     16a4:	80 81       	ld	r24, Z
-void outputS(char* lineIn, int row)
-{
-	uint8_t r = row;
-	uint8_t c = 0;
-	
-	command(new_line[r]);
     16a6:	88 df       	rcall	.-240    	; 0x15b8 <command>
     16a8:	e8 01       	movw	r28, r16
     16aa:	0c 5e       	subi	r16, 0xEC	; 236
     16ac:	1f 4f       	sbci	r17, 0xFF	; 255
-	//20, because our display is 20x4.
-	for(c=0; c<20; c++)
-	{
-		data(lineIn[c]);
     16ae:	89 91       	ld	r24, Y+
     16b0:	8b df       	rcall	.-234    	; 0x15c8 <data>
-	uint8_t r = row;
-	uint8_t c = 0;
-	
-	command(new_line[r]);
-	//20, because our display is 20x4.
-	for(c=0; c<20; c++)
     16b2:	c0 17       	cp	r28, r16
     16b4:	d1 07       	cpc	r29, r17
     16b6:	d9 f7       	brne	.-10     	; 0x16ae <outputS+0x1c>
-	{
-		data(lineIn[c]);
-	}
-}
     16b8:	df 91       	pop	r29
     16ba:	cf 91       	pop	r28
     16bc:	1f 91       	pop	r17
@@ -4129,18 +2952,9 @@ void outputS(char* lineIn, int row)
     16c0:	08 95       	ret
 
 000016c2 <numPrinter>:
-
-void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint16_t inputNumber)
-{
     16c2:	cf 93       	push	r28
     16c4:	df 93       	push	r29
     16c6:	f9 01       	movw	r30, r18
-	uint8_t tensPlace = 0;
-	uint8_t hunderedsPlace = 0;
-	uint8_t thousandsPlace = 0;
-	uint8_t tenThousandsPlace = 0;
-	
-	switch(numCharacters)
     16c8:	43 30       	cpi	r20, 0x03	; 3
     16ca:	09 f4       	brne	.+2      	; 0x16ce <numPrinter+0xc>
     16cc:	51 c0       	rjmp	.+162    	; 0x1770 <numPrinter+0xae>
@@ -4157,12 +2971,6 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     16e2:	09 f4       	brne	.+2      	; 0x16e6 <numPrinter+0x24>
     16e4:	fd c0       	rjmp	.+506    	; 0x18e0 <numPrinter+0x21e>
     16e6:	9b c1       	rjmp	.+822    	; 0x1a1e <numPrinter+0x35c>
-		case 0:
-		break;
-		
-		case 1:
-		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
-		charArray[startingPos] = onesPlace;
     16e8:	ec 01       	movw	r28, r24
     16ea:	c6 0f       	add	r28, r22
     16ec:	d1 1d       	adc	r29, r1
@@ -4190,13 +2998,7 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     1718:	f9 0b       	sbc	r31, r25
     171a:	e0 5d       	subi	r30, 0xD0	; 208
     171c:	e8 83       	st	Y, r30
-		break;
     171e:	7f c1       	rjmp	.+766    	; 0x1a1e <numPrinter+0x35c>
-		
-		case 2:
-		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
-		tensPlace = (inputNumber/10)+48;
-		charArray[(startingPos+1)] = onesPlace;
     1720:	ec 01       	movw	r28, r24
     1722:	c6 0f       	add	r28, r22
     1724:	d1 1d       	adc	r29, r1
@@ -4226,7 +3028,6 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     1754:	c9 01       	movw	r24, r18
     1756:	80 5d       	subi	r24, 0xD0	; 208
     1758:	89 83       	std	Y+1, r24	; 0x01
-		charArray[startingPos] = tensPlace;
     175a:	9f 01       	movw	r18, r30
     175c:	4c d4       	rcall	.+2200   	; 0x1ff6 <__umulhisi3>
     175e:	96 95       	lsr	r25
@@ -4238,14 +3039,7 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     176a:	80 5d       	subi	r24, 0xD0	; 208
     176c:	88 83       	st	Y, r24
     176e:	57 c1       	rjmp	.+686    	; 0x1a1e <numPrinter+0x35c>
-		break;
     1770:	ec 01       	movw	r28, r24
-		
-		case 3:
-		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
-		tensPlace = ((inputNumber%100)/10)+48;
-		hunderedsPlace = (inputNumber/100)+48;
-		charArray[(startingPos+2)] = onesPlace;
     1772:	c6 0f       	add	r28, r22
     1774:	d1 1d       	adc	r29, r1
     1776:	ad ec       	ldi	r26, 0xCD	; 205
@@ -4275,7 +3069,6 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     17a6:	80 5d       	subi	r24, 0xD0	; 208
     17a8:	8a 83       	std	Y+2, r24	; 0x02
     17aa:	af 01       	movw	r20, r30
-		charArray[(startingPos+1)] = tensPlace;
     17ac:	56 95       	lsr	r21
     17ae:	47 95       	ror	r20
     17b0:	56 95       	lsr	r21
@@ -4307,7 +3100,6 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     17e4:	87 95       	ror	r24
     17e6:	80 5d       	subi	r24, 0xD0	; 208
     17e8:	89 83       	std	Y+1, r24	; 0x01
-		charArray[startingPos] = hunderedsPlace;
     17ea:	9a 01       	movw	r18, r20
     17ec:	ab e7       	ldi	r26, 0x7B	; 123
     17ee:	b4 e1       	ldi	r27, 0x14	; 20
@@ -4316,14 +3108,7 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     17f4:	87 95       	ror	r24
     17f6:	80 5d       	subi	r24, 0xD0	; 208
     17f8:	88 83       	st	Y, r24
-		break;
     17fa:	11 c1       	rjmp	.+546    	; 0x1a1e <numPrinter+0x35c>
-		case 4:
-		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
-		tensPlace = ((inputNumber%100)/10)+48;
-		hunderedsPlace = ((inputNumber%1000)/100)+48;
-		thousandsPlace = (inputNumber/1000)+48;
-		charArray[(startingPos+3)] = onesPlace;
     17fc:	ec 01       	movw	r28, r24
     17fe:	c6 0f       	add	r28, r22
     1800:	d1 1d       	adc	r29, r1
@@ -4353,7 +3138,6 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     1830:	c9 01       	movw	r24, r18
     1832:	80 5d       	subi	r24, 0xD0	; 208
     1834:	8b 83       	std	Y+3, r24	; 0x03
-		charArray[(startingPos+2)] = tensPlace;
     1836:	9f 01       	movw	r18, r30
     1838:	36 95       	lsr	r19
     183a:	27 95       	ror	r18
@@ -4386,7 +3170,6 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     1870:	80 5d       	subi	r24, 0xD0	; 208
     1872:	8a 83       	std	Y+2, r24	; 0x02
     1874:	af 01       	movw	r20, r30
-		charArray[(startingPos+1)] = hunderedsPlace;
     1876:	56 95       	lsr	r21
     1878:	47 95       	ror	r20
     187a:	56 95       	lsr	r21
@@ -4427,7 +3210,6 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     18c0:	87 95       	ror	r24
     18c2:	80 5d       	subi	r24, 0xD0	; 208
     18c4:	89 83       	std	Y+1, r24	; 0x01
-		charArray[startingPos] = thousandsPlace;
     18c6:	9a 01       	movw	r18, r20
     18c8:	a5 ec       	ldi	r26, 0xC5	; 197
     18ca:	b0 e2       	ldi	r27, 0x20	; 32
@@ -4440,14 +3222,7 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     18d8:	89 27       	eor	r24, r25
     18da:	80 5d       	subi	r24, 0xD0	; 208
     18dc:	88 83       	st	Y, r24
-		break;
     18de:	9f c0       	rjmp	.+318    	; 0x1a1e <numPrinter+0x35c>
-		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
-		tensPlace = ((inputNumber%100)/10)+48;
-		hunderedsPlace = ((inputNumber%1000)/100)+48;
-		thousandsPlace = ((inputNumber%10000)/1000)+48;
-		tenThousandsPlace = (inputNumber/10000)+48;
-		charArray[(startingPos+4)] = onesPlace;
     18e0:	ec 01       	movw	r28, r24
     18e2:	c6 0f       	add	r28, r22
     18e4:	d1 1d       	adc	r29, r1
@@ -4477,7 +3252,6 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     1914:	c9 01       	movw	r24, r18
     1916:	80 5d       	subi	r24, 0xD0	; 208
     1918:	8c 83       	std	Y+4, r24	; 0x04
-		charArray[(startingPos+3)] = tensPlace;
     191a:	9f 01       	movw	r18, r30
     191c:	36 95       	lsr	r19
     191e:	27 95       	ror	r18
@@ -4509,7 +3283,6 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     1952:	87 95       	ror	r24
     1954:	80 5d       	subi	r24, 0xD0	; 208
     1956:	8b 83       	std	Y+3, r24	; 0x03
-		charArray[(startingPos+2)] = hunderedsPlace;
     1958:	9f 01       	movw	r18, r30
     195a:	36 95       	lsr	r19
     195c:	27 95       	ror	r18
@@ -4550,7 +3323,6 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     19a2:	87 95       	ror	r24
     19a4:	80 5d       	subi	r24, 0xD0	; 208
     19a6:	8a 83       	std	Y+2, r24	; 0x02
-		charArray[(startingPos+1)] = thousandsPlace;
     19a8:	af 01       	movw	r20, r30
     19aa:	52 95       	swap	r21
     19ac:	42 95       	swap	r20
@@ -4598,7 +3370,6 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     1a00:	89 27       	eor	r24, r25
     1a02:	80 5d       	subi	r24, 0xD0	; 208
     1a04:	89 83       	std	Y+1, r24	; 0x01
-		charArray[startingPos] = tenThousandsPlace;
     1a06:	9a 01       	movw	r18, r20
     1a08:	a7 e4       	ldi	r26, 0x47	; 71
     1a0a:	b3 e0       	ldi	r27, 0x03	; 3
@@ -4612,21 +3383,10 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
     1a1a:	80 5d       	subi	r24, 0xD0	; 208
     1a1c:	88 83       	st	Y, r24
     1a1e:	df 91       	pop	r29
-		break;
-		
-	}
-
-
     1a20:	cf 91       	pop	r28
     1a22:	08 95       	ret
 
 00001a24 <__vector_27>:
-
-uint8_t rxReadPosition = 0;
-uint8_t rxWritePosition = 0;
-
-ISR (USART0_TX_vect)
-{
     1a24:	1f 92       	push	r1
     1a26:	0f 92       	push	r0
     1a28:	0f b6       	in	r0, 0x3f	; 63
@@ -4640,7 +3400,6 @@ ISR (USART0_TX_vect)
     1a38:	9f 93       	push	r25
     1a3a:	ef 93       	push	r30
     1a3c:	ff 93       	push	r31
-	if(serialReadPos != serialWritePos)
     1a3e:	80 91 6b 03 	lds	r24, 0x036B	; 0x80036b <serialReadPos>
     1a42:	90 91 6c 03 	lds	r25, 0x036C	; 0x80036c <serialReadPos+0x1>
     1a46:	20 91 69 03 	lds	r18, 0x0369	; 0x800369 <serialWritePos>
@@ -4648,40 +3407,22 @@ ISR (USART0_TX_vect)
     1a4e:	82 17       	cp	r24, r18
     1a50:	93 07       	cpc	r25, r19
     1a52:	b9 f0       	breq	.+46     	; 0x1a82 <__vector_27+0x5e>
-	{
-		UDR0 = serial0Buffer[serialReadPos];
     1a54:	fc 01       	movw	r30, r24
     1a56:	ec 58       	subi	r30, 0x8C	; 140
     1a58:	f9 4f       	sbci	r31, 0xF9	; 249
     1a5a:	80 81       	ld	r24, Z
     1a5c:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7000c6>
-		serialReadPos++;
     1a60:	80 91 6b 03 	lds	r24, 0x036B	; 0x80036b <serialReadPos>
     1a64:	90 91 6c 03 	lds	r25, 0x036C	; 0x80036c <serialReadPos+0x1>
     1a68:	01 96       	adiw	r24, 0x01	; 1
-		
-		if(serialReadPos >= TX_BUFFER_SIZE)
     1a6a:	80 38       	cpi	r24, 0x80	; 128
     1a6c:	91 05       	cpc	r25, r1
     1a6e:	2c f4       	brge	.+10     	; 0x1a7a <__vector_27+0x56>
-ISR (USART0_TX_vect)
-{
-	if(serialReadPos != serialWritePos)
-	{
-		UDR0 = serial0Buffer[serialReadPos];
-		serialReadPos++;
     1a70:	90 93 6c 03 	sts	0x036C, r25	; 0x80036c <serialReadPos+0x1>
     1a74:	80 93 6b 03 	sts	0x036B, r24	; 0x80036b <serialReadPos>
     1a78:	04 c0       	rjmp	.+8      	; 0x1a82 <__vector_27+0x5e>
-		
-		if(serialReadPos >= TX_BUFFER_SIZE)
-		{
-			serialReadPos=0; //this seems wrong, I think we should be setting this to 0.
     1a7a:	10 92 6c 03 	sts	0x036C, r1	; 0x80036c <serialReadPos+0x1>
     1a7e:	10 92 6b 03 	sts	0x036B, r1	; 0x80036b <serialReadPos>
-		}
-	}
-}
     1a82:	ff 91       	pop	r31
     1a84:	ef 91       	pop	r30
     1a86:	9f 91       	pop	r25
@@ -4697,9 +3438,6 @@ ISR (USART0_TX_vect)
     1a9a:	18 95       	reti
 
 00001a9c <__vector_36>:
-
-ISR (USART1_RX_vect)
-{
     1a9c:	1f 92       	push	r1
     1a9e:	0f 92       	push	r0
     1aa0:	0f b6       	in	r0, 0x3f	; 63
@@ -4711,7 +3449,6 @@ ISR (USART1_RX_vect)
     1aac:	9f 93       	push	r25
     1aae:	ef 93       	push	r30
     1ab0:	ff 93       	push	r31
-		serial1Buffer[rxWritePosition] = UDR1;
     1ab2:	80 91 67 03 	lds	r24, 0x0367	; 0x800367 <rxWritePosition>
     1ab6:	90 91 ce 00 	lds	r25, 0x00CE	; 0x8000ce <__TEXT_REGION_LENGTH__+0x7000ce>
     1aba:	e8 2f       	mov	r30, r24
@@ -4719,28 +3456,11 @@ ISR (USART1_RX_vect)
     1abe:	ec 50       	subi	r30, 0x0C	; 12
     1ac0:	f9 4f       	sbci	r31, 0xF9	; 249
     1ac2:	90 83       	st	Z, r25
-		rxWritePosition++;
     1ac4:	8f 5f       	subi	r24, 0xFF	; 255
-	
-		if(rxWritePosition>= RX_BUFFER_SIZE)
     1ac6:	1a f0       	brmi	.+6      	; 0x1ace <__vector_36+0x32>
-}
-
-ISR (USART1_RX_vect)
-{
-		serial1Buffer[rxWritePosition] = UDR1;
-		rxWritePosition++;
     1ac8:	80 93 67 03 	sts	0x0367, r24	; 0x800367 <rxWritePosition>
     1acc:	02 c0       	rjmp	.+4      	; 0x1ad2 <__vector_36+0x36>
-	
-		if(rxWritePosition>= RX_BUFFER_SIZE)
-		{
-			rxWritePosition = 0; //this could cause some issues.
     1ace:	10 92 67 03 	sts	0x0367, r1	; 0x800367 <rxWritePosition>
-		}
-
-
-}
     1ad2:	ff 91       	pop	r31
     1ad4:	ef 91       	pop	r30
     1ad6:	9f 91       	pop	r25
@@ -4754,45 +3474,25 @@ ISR (USART1_RX_vect)
     1ae6:	18 95       	reti
 
 00001ae8 <appendSerial0>:
-
-void appendSerial0(char c)
-{
-	serial0Buffer[serialWritePos] = c;
     1ae8:	20 91 69 03 	lds	r18, 0x0369	; 0x800369 <serialWritePos>
     1aec:	30 91 6a 03 	lds	r19, 0x036A	; 0x80036a <serialWritePos+0x1>
     1af0:	f9 01       	movw	r30, r18
     1af2:	ec 58       	subi	r30, 0x8C	; 140
     1af4:	f9 4f       	sbci	r31, 0xF9	; 249
     1af6:	80 83       	st	Z, r24
-	serialWritePos++;
     1af8:	2f 5f       	subi	r18, 0xFF	; 255
     1afa:	3f 4f       	sbci	r19, 0xFF	; 255
-	if(serialWritePos >= TX_BUFFER_SIZE)
     1afc:	20 38       	cpi	r18, 0x80	; 128
     1afe:	31 05       	cpc	r19, r1
     1b00:	2c f4       	brge	.+10     	; 0x1b0c <appendSerial0+0x24>
-}
-
-void appendSerial0(char c)
-{
-	serial0Buffer[serialWritePos] = c;
-	serialWritePos++;
     1b02:	30 93 6a 03 	sts	0x036A, r19	; 0x80036a <serialWritePos+0x1>
     1b06:	20 93 69 03 	sts	0x0369, r18	; 0x800369 <serialWritePos>
     1b0a:	08 95       	ret
-	if(serialWritePos >= TX_BUFFER_SIZE)
-	{
-		serialWritePos = 0;
     1b0c:	10 92 6a 03 	sts	0x036A, r1	; 0x80036a <serialWritePos+0x1>
     1b10:	10 92 69 03 	sts	0x0369, r1	; 0x800369 <serialWritePos>
     1b14:	08 95       	ret
 
 00001b16 <serialWrite0>:
-	}
-}
-
-void serialWrite0(char c[])
-{
     1b16:	0f 93       	push	r16
     1b18:	1f 93       	push	r17
     1b1a:	cf 93       	push	r28
@@ -4801,33 +3501,14 @@ void serialWrite0(char c[])
     1b20:	8c 01       	movw	r16, r24
     1b22:	06 5f       	subi	r16, 0xF6	; 246
     1b24:	1f 4f       	sbci	r17, 0xFF	; 255
-	for (uint8_t i = 0; i<10; i++) //this may need to be 11
-	{
-		appendSerial0(c[i]);
     1b26:	89 91       	ld	r24, Y+
     1b28:	df df       	rcall	.-66     	; 0x1ae8 <appendSerial0>
-	}
-}
-
-void serialWrite0(char c[])
-{
-	for (uint8_t i = 0; i<10; i++) //this may need to be 11
     1b2a:	c0 17       	cp	r28, r16
     1b2c:	d1 07       	cpc	r29, r17
     1b2e:	d9 f7       	brne	.-10     	; 0x1b26 <serialWrite0+0x10>
-	{
-		appendSerial0(c[i]);
-		
-	}
-	
-	if(UCSR0A & (1 << UDRE0))
     1b30:	80 91 c0 00 	lds	r24, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7000c0>
     1b34:	85 fd       	sbrc	r24, 5
-	{
-		UDR0 = 0;
     1b36:	10 92 c6 00 	sts	0x00C6, r1	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7000c6>
-	}
-}
     1b3a:	df 91       	pop	r29
     1b3c:	cf 91       	pop	r28
     1b3e:	1f 91       	pop	r17
@@ -4835,95 +3516,41 @@ void serialWrite0(char c[])
     1b42:	08 95       	ret
 
 00001b44 <serialInit0>:
-
-void serialInit0()
-{
-UBRR0H = (BRCTsunami >> 8);
     1b44:	10 92 c5 00 	sts	0x00C5, r1	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7000c5>
-UBRR0L = BRCTsunami;
     1b48:	80 e1       	ldi	r24, 0x10	; 16
     1b4a:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7000c4>
-
-UBRR1H = (BRCMidi >> 8);
     1b4e:	10 92 cd 00 	sts	0x00CD, r1	; 0x8000cd <__TEXT_REGION_LENGTH__+0x7000cd>
-UBRR1L = BRCMidi;
     1b52:	8f e1       	ldi	r24, 0x1F	; 31
     1b54:	80 93 cc 00 	sts	0x00CC, r24	; 0x8000cc <__TEXT_REGION_LENGTH__+0x7000cc>
-
-UCSR0B = (1 << TXEN0)  | (1 << TXCIE0);
     1b58:	88 e4       	ldi	r24, 0x48	; 72
     1b5a:	80 93 c1 00 	sts	0x00C1, r24	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7000c1>
-UCSR0C = (1 << UCSZ01) | (1 << UCSZ00); //8 bit chars will be sent
     1b5e:	86 e0       	ldi	r24, 0x06	; 6
     1b60:	80 93 c2 00 	sts	0x00C2, r24	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7000c2>
-
-
-UCSR1B = (1 << RXEN1)  | (1 << RXCIE0);
     1b64:	90 e9       	ldi	r25, 0x90	; 144
     1b66:	90 93 c9 00 	sts	0x00C9, r25	; 0x8000c9 <__TEXT_REGION_LENGTH__+0x7000c9>
-UCSR1C = (1 << UCSZ11) | (1 << UCSZ10); //8 bit chars will be sent
     1b6a:	80 93 ca 00 	sts	0x00CA, r24	; 0x8000ca <__TEXT_REGION_LENGTH__+0x7000ca>
     1b6e:	08 95       	ret
 
 00001b70 <getChar>:
-
-char getChar()
-{
-	char returnMe = '\0';
-	
-	if(rxReadPosition != rxWritePosition)
     1b70:	90 91 68 03 	lds	r25, 0x0368	; 0x800368 <rxReadPosition>
     1b74:	80 91 67 03 	lds	r24, 0x0367	; 0x800367 <rxWritePosition>
     1b78:	98 17       	cp	r25, r24
     1b7a:	69 f0       	breq	.+26     	; 0x1b96 <getChar+0x26>
-	{
-		returnMe = serial1Buffer[rxReadPosition];
     1b7c:	e9 2f       	mov	r30, r25
     1b7e:	f0 e0       	ldi	r31, 0x00	; 0
     1b80:	ec 50       	subi	r30, 0x0C	; 12
     1b82:	f9 4f       	sbci	r31, 0xF9	; 249
     1b84:	80 81       	ld	r24, Z
-		
-		rxReadPosition++;
     1b86:	9f 5f       	subi	r25, 0xFF	; 255
-		
-		if(rxReadPosition >= RX_BUFFER_SIZE)
     1b88:	1a f0       	brmi	.+6      	; 0x1b90 <getChar+0x20>
-	
-	if(rxReadPosition != rxWritePosition)
-	{
-		returnMe = serial1Buffer[rxReadPosition];
-		
-		rxReadPosition++;
     1b8a:	90 93 68 03 	sts	0x0368, r25	; 0x800368 <rxReadPosition>
     1b8e:	08 95       	ret
-		
-		if(rxReadPosition >= RX_BUFFER_SIZE)
-		{
-			rxReadPosition = 0;
     1b90:	10 92 68 03 	sts	0x0368, r1	; 0x800368 <rxReadPosition>
     1b94:	08 95       	ret
-
-}
-
-char getChar()
-{
-	char returnMe = '\0';
     1b96:	80 e0       	ldi	r24, 0x00	; 0
-		}
-	
-	}
-	return returnMe;
-	
     1b98:	08 95       	ret
 
 00001b9a <trackControl>:
-void resumeAll()
-{
-	char resumePlay[5] = {0xf0, 0xaa, 0x05, 0x0b, 0x55};
-	serialWrite0(resumePlay);
-	
-}
     1b9a:	cf 93       	push	r28
     1b9c:	df 93       	push	r29
     1b9e:	cd b7       	in	r28, 0x3d	; 61
@@ -5038,9 +3665,6 @@ void resumeAll()
     1c70:	08 95       	ret
 
 00001c72 <outputSampleRate>:
-
-void outputSampleRate(uint8_t outputSelect, uint8_t offsetLSB, uint8_t offsetMSB)
-{
     1c72:	cf 93       	push	r28
     1c74:	df 93       	push	r29
     1c76:	cd b7       	in	r28, 0x3d	; 61
@@ -5051,7 +3675,6 @@ void outputSampleRate(uint8_t outputSelect, uint8_t offsetLSB, uint8_t offsetMSB
     1c80:	de bf       	out	0x3e, r29	; 62
     1c82:	0f be       	out	0x3f, r0	; 63
     1c84:	cd bf       	out	0x3d, r28	; 61
-	char pitchChange[8] = {0xf0, 0xaa, 0x08, 0x0c, outputSelect, offsetLSB, offsetMSB, 0x55};
     1c86:	90 ef       	ldi	r25, 0xF0	; 240
     1c88:	99 83       	std	Y+1, r25	; 0x01
     1c8a:	9a ea       	ldi	r25, 0xAA	; 170
@@ -5065,11 +3688,9 @@ void outputSampleRate(uint8_t outputSelect, uint8_t offsetLSB, uint8_t offsetMSB
     1c9a:	4f 83       	std	Y+7, r20	; 0x07
     1c9c:	85 e5       	ldi	r24, 0x55	; 85
     1c9e:	88 87       	std	Y+8, r24	; 0x08
-	serialWrite0(pitchChange);
     1ca0:	ce 01       	movw	r24, r28
     1ca2:	01 96       	adiw	r24, 0x01	; 1
     1ca4:	38 df       	rcall	.-400    	; 0x1b16 <serialWrite0>
-}
     1ca6:	28 96       	adiw	r28, 0x08	; 8
     1ca8:	0f b6       	in	r0, 0x3f	; 63
     1caa:	f8 94       	cli

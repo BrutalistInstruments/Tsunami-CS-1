@@ -51,6 +51,7 @@ buttonsCurrentCycle
 prevEncoderAValue   0x1               ButtonLib.o
 screen1             0x50              ButtonLib.o
 knobBuffer          0x2c              ButtonLib.o
+buttons_down        0x1               DebounceLib.o
 serial0Buffer       0x80              serialLib.o
 screen0             0x50              ButtonLib.o
 currentTrigButtons  0x2               ButtonLib.o
@@ -84,6 +85,22 @@ Discarded input sections
  .bss           0x00000000        0x0 ButtonLib.o
  .data.testEncoderButton
                 0x00000000       0x14 ButtonLib.o
+ .text          0x00000000        0x0 DebounceLib.o
+ .data          0x00000000        0x0 DebounceLib.o
+ .bss           0x00000000        0x0 DebounceLib.o
+ .text.button_down
+                0x00000000       0x18 DebounceLib.o
+ .debug_info    0x00000000      0x133 DebounceLib.o
+ .debug_abbrev  0x00000000       0xfa DebounceLib.o
+ .debug_loc     0x00000000       0x69 DebounceLib.o
+ .debug_aranges
+                0x00000000       0x20 DebounceLib.o
+ .debug_ranges  0x00000000       0x10 DebounceLib.o
+ .debug_line    0x00000000      0x13b DebounceLib.o
+ .debug_str     0x00000000      0x1d0 DebounceLib.o
+ .comment       0x00000000       0x31 DebounceLib.o
+ .debug_frame   0x00000000       0x24 DebounceLib.o
+ COMMON         0x00000000        0x1 DebounceLib.o
  .text          0x00000000        0x0 EncoderLib.o
  .data          0x00000000        0x0 EncoderLib.o
  .bss           0x00000000        0x0 EncoderLib.o
@@ -293,6 +310,7 @@ Linker script and memory map
 Address of section .data set to 0x800200
 LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6/crtatmega2560.o
 LOAD ButtonLib.o
+LOAD DebounceLib.o
 LOAD EncoderLib.o
 LOAD globalVariables.o
 LOAD knobLib.o
@@ -993,30 +1011,30 @@ END GROUP
  .debug_frame   0x000003b4       0xd0 serialLib.o
  .debug_frame   0x00000484      0x184 tsunamiLib.o
 
-.debug_str      0x00000000      0xfcd
+.debug_str      0x00000000     0x101a
  *(.debug_str)
  .debug_str     0x00000000      0x3e6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6/crtatmega2560.o
- .debug_str     0x000003e6      0x46d ButtonLib.o
-                                0x4ae (size before relaxing)
- .debug_str     0x00000853       0x5c EncoderLib.o
+ .debug_str     0x000003e6      0x46a ButtonLib.o
+                                0x4ab (size before relaxing)
+ .debug_str     0x00000850       0xac EncoderLib.o
                                 0x440 (size before relaxing)
- .debug_str     0x000008af       0x6e globalVariables.o
+ .debug_str     0x000008fc       0x6e globalVariables.o
                                 0x452 (size before relaxing)
- .debug_str     0x0000091d      0x1da knobLib.o
+ .debug_str     0x0000096a      0x1da knobLib.o
                                 0x5d9 (size before relaxing)
- .debug_str     0x00000af7       0x4b LEDLib.o
+ .debug_str     0x00000b44       0x4b LEDLib.o
                                 0x42f (size before relaxing)
- .debug_str     0x00000b42       0x49 main.o
-                                0x4a8 (size before relaxing)
- .debug_str     0x00000b8b       0x3a menu.o
+ .debug_str     0x00000b8f       0x49 main.o
+                                0x4a5 (size before relaxing)
+ .debug_str     0x00000bd8       0x3a menu.o
                                 0x455 (size before relaxing)
- .debug_str     0x00000bc5       0x89 MidiLib.o
+ .debug_str     0x00000c12       0x89 MidiLib.o
                                 0x48d (size before relaxing)
- .debug_str     0x00000c4e      0x16a OLEDLib.o
+ .debug_str     0x00000c9b      0x16a OLEDLib.o
                                 0x2c1 (size before relaxing)
- .debug_str     0x00000db8       0xa5 serialLib.o
+ .debug_str     0x00000e05       0xa5 serialLib.o
                                 0x239 (size before relaxing)
- .debug_str     0x00000e5d      0x170 tsunamiLib.o
+ .debug_str     0x00000eaa      0x170 tsunamiLib.o
                                 0x34f (size before relaxing)
 
 .debug_loc      0x00000000     0x229c
