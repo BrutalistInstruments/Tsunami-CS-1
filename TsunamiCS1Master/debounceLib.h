@@ -11,7 +11,7 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <util/atomic.h>
+#include <util/atomic.h>s
 
 #define BUTTON_PIN PINB
 #define BUTTON_PORT PORTB
