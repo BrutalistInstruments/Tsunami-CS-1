@@ -10,6 +10,7 @@
 #include "tsunamiLib.h"
 #include "OLEDLib.h"
 #include <avr/io.h>
+#include "DebounceLib.h"
 
 uint8_t buttonsCurrentCycle;
 uint16_t lastFullBits = 0;
@@ -17,7 +18,7 @@ uint8_t currentTrig;
 
 char testEncoderButton[20] = "EncoderButtonPressed";
 
-
+//uint8_t prevButtonVal = 0;
 
 void initButtons()
 {
@@ -129,13 +130,12 @@ void listenGPButtons() // are the encoder buttons here also?
 
 	if(button_down(1 << PB5))
 	{ //top encoder button
-	//	outputS(testEncoderButton, 3);
 	encoderAFlag = ~encoderAFlag;
 		
 	}
-	{//botton encoder button
-		
-		//outputS(testEncoderButton, 3);
+	
+	if(button_down(1<<PB6))
+	{//bottom encoder button
 		encoderBFlag = ~encoderBFlag;
 		
 	}
