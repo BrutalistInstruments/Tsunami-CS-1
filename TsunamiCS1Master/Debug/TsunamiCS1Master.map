@@ -83,8 +83,6 @@ Discarded input sections
  .text          0x00000000        0x0 ButtonLib.o
  .data          0x00000000        0x0 ButtonLib.o
  .bss           0x00000000        0x0 ButtonLib.o
- .data.testEncoderButton
-                0x00000000       0x14 ButtonLib.o
  .text          0x00000000        0x0 DebounceLib.o
  .data          0x00000000        0x0 DebounceLib.o
  .bss           0x00000000        0x0 DebounceLib.o
@@ -530,65 +528,65 @@ END GROUP
                 0x00000124                __vector_42
                 0x00000126                . = ALIGN (0x2)
  *(.text.*)
- .text.initButtons
-                0x00000126        0xe ButtonLib.o
-                0x00000126                initButtons
- .text.listenTrigButtons
-                0x00000134      0x224 ButtonLib.o
-                0x00000134                listenTrigButtons
- .text.listenGPButtons
-                0x00000358       0x26 ButtonLib.o
-                0x00000358                listenGPButtons
- .text.button_down
-                0x0000037e       0x18 DebounceLib.o
-                0x0000037e                button_down
- .text.initEncoders
-                0x00000396        0x8 EncoderLib.o
-                0x00000396                initEncoders
- .text.pollEncoder0
-                0x0000039e       0x82 EncoderLib.o
-                0x0000039e                pollEncoder0
- .text.pollEncoder1
-                0x00000420       0x82 EncoderLib.o
-                0x00000420                pollEncoder1
- .text.listenEncoders
-                0x000004a2        0xe EncoderLib.o
-                0x000004a2                listenEncoders
- .text.initArrays
-                0x000004b0       0x78 globalVariables.o
-                0x000004b0                initArrays
- .text.initBank
-                0x00000528      0x18c globalVariables.o
-                0x00000528                initBank
- .text.startADCConversion
-                0x000006b4       0x16 knobLib.o
-                0x000006b4                startADCConversion
- .text.initADC  0x000006ca       0x28 knobLib.o
-                0x000006ca                initADC
- .text.selectKnob
-                0x000006f2       0xaa knobLib.o
-                0x000006f2                selectKnob
- .text.updateKnob
-                0x0000079c       0x14 knobLib.o
-                0x0000079c                updateKnob
- .text.interperetKnob
-                0x000007b0      0x4d6 knobLib.o
-                0x000007b0                interperetKnob
- .text.listenKnobs
-                0x00000c86       0x1a knobLib.o
-                0x00000c86                listenKnobs
- .text.initLEDs
-                0x00000ca0        0x6 LEDLib.o
-                0x00000ca0                initLEDs
- .text.parseLEDs
-                0x00000ca6       0x20 LEDLib.o
-                0x00000ca6                parseLEDs
- .text.updateLEDs
-                0x00000cc6       0x4e LEDLib.o
-                0x00000cc6                updateLEDs
  .text.__vector_23
-                0x00000d14       0x62 main.o
-                0x00000d14                __vector_23
+                0x00000126       0x62 ButtonLib.o
+                0x00000126                __vector_23
+ .text.initButtons
+                0x00000188        0xe ButtonLib.o
+                0x00000188                initButtons
+ .text.listenTrigButtons
+                0x00000196      0x224 ButtonLib.o
+                0x00000196                listenTrigButtons
+ .text.listenGPButtons
+                0x000003ba       0x26 ButtonLib.o
+                0x000003ba                listenGPButtons
+ .text.button_down
+                0x000003e0       0x18 DebounceLib.o
+                0x000003e0                button_down
+ .text.initEncoders
+                0x000003f8        0x8 EncoderLib.o
+                0x000003f8                initEncoders
+ .text.pollEncoder0
+                0x00000400       0x82 EncoderLib.o
+                0x00000400                pollEncoder0
+ .text.pollEncoder1
+                0x00000482       0x82 EncoderLib.o
+                0x00000482                pollEncoder1
+ .text.listenEncoders
+                0x00000504        0xe EncoderLib.o
+                0x00000504                listenEncoders
+ .text.initArrays
+                0x00000512       0x78 globalVariables.o
+                0x00000512                initArrays
+ .text.initBank
+                0x0000058a      0x18c globalVariables.o
+                0x0000058a                initBank
+ .text.startADCConversion
+                0x00000716       0x16 knobLib.o
+                0x00000716                startADCConversion
+ .text.initADC  0x0000072c       0x28 knobLib.o
+                0x0000072c                initADC
+ .text.selectKnob
+                0x00000754       0xaa knobLib.o
+                0x00000754                selectKnob
+ .text.updateKnob
+                0x000007fe       0x14 knobLib.o
+                0x000007fe                updateKnob
+ .text.interperetKnob
+                0x00000812      0x4d6 knobLib.o
+                0x00000812                interperetKnob
+ .text.listenKnobs
+                0x00000ce8       0x1a knobLib.o
+                0x00000ce8                listenKnobs
+ .text.initLEDs
+                0x00000d02        0x6 LEDLib.o
+                0x00000d02                initLEDs
+ .text.parseLEDs
+                0x00000d08       0x20 LEDLib.o
+                0x00000d08                parseLEDs
+ .text.updateLEDs
+                0x00000d28       0x4e LEDLib.o
+                0x00000d28                updateLEDs
  .text.main     0x00000d76       0x3a main.o
                 0x00000d76                main
  .text.initMenu
@@ -732,25 +730,25 @@ END GROUP
                 0x00800200                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
+ .data.vcount_high.1705
+                0x00800200        0x1 ButtonLib.o
+ .data.vcount_low.1704
+                0x00800201        0x1 ButtonLib.o
  .data.envelopeTimePrint
-                0x00800200       0x14 knobLib.o
-                0x00800200                envelopeTimePrint
+                0x00800202       0x14 knobLib.o
+                0x00800202                envelopeTimePrint
  .data.envelopeLevelPrint
-                0x00800214       0x14 knobLib.o
-                0x00800214                envelopeLevelPrint
+                0x00800216       0x14 knobLib.o
+                0x00800216                envelopeLevelPrint
  .data.trackVolumePrint
-                0x00800228       0x14 knobLib.o
-                0x00800228                trackVolumePrint
+                0x0080022a       0x14 knobLib.o
+                0x0080022a                trackVolumePrint
  .data.outVolumePrint
-                0x0080023c       0x14 knobLib.o
-                0x0080023c                outVolumePrint
+                0x0080023e       0x14 knobLib.o
+                0x0080023e                outVolumePrint
  .data.pitchPrint
-                0x00800250       0x14 knobLib.o
-                0x00800250                pitchPrint
- .data.vcount_high.1720
-                0x00800264        0x1 main.o
- .data.vcount_low.1719
-                0x00800265        0x1 main.o
+                0x00800252       0x14 knobLib.o
+                0x00800252                pitchPrint
  .data.blank    0x00800266       0x14 MidiLib.o
                 0x00800266                blank
  .data.printMidiPC
@@ -778,17 +776,17 @@ END GROUP
                 0x00800370                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
+ .bss.button_state.1706
+                0x00800370        0x1 ButtonLib.o
  .bss.lastFullBits
-                0x00800370        0x2 ButtonLib.o
-                0x00800370                lastFullBits
- .bss.storeB    0x00800372        0x2 EncoderLib.o
- .bss.storeA    0x00800374        0x2 EncoderLib.o
+                0x00800371        0x2 ButtonLib.o
+                0x00800371                lastFullBits
+ .bss.storeB    0x00800373        0x2 EncoderLib.o
+ .bss.storeA    0x00800375        0x2 EncoderLib.o
  .bss.prevNextCodeB
-                0x00800376        0x1 EncoderLib.o
- .bss.prevNextCodeA
                 0x00800377        0x1 EncoderLib.o
- .bss.button_state.1721
-                0x00800378        0x1 main.o
+ .bss.prevNextCodeA
+                0x00800378        0x1 EncoderLib.o
  .bss.midiOffCheck
                 0x00800379        0x1 MidiLib.o
                 0x00800379                midiOffCheck
@@ -936,19 +934,19 @@ END GROUP
 .debug_aranges  0x00000000      0x2a8
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x30 ButtonLib.o
+                0x00000000       0x38 ButtonLib.o
  .debug_aranges
-                0x00000030       0x20 DebounceLib.o
+                0x00000038       0x20 DebounceLib.o
  .debug_aranges
-                0x00000050       0x38 EncoderLib.o
+                0x00000058       0x38 EncoderLib.o
  .debug_aranges
-                0x00000088       0x28 globalVariables.o
+                0x00000090       0x28 globalVariables.o
  .debug_aranges
-                0x000000b0       0x48 knobLib.o
+                0x000000b8       0x48 knobLib.o
  .debug_aranges
-                0x000000f8       0x30 LEDLib.o
+                0x00000100       0x30 LEDLib.o
  .debug_aranges
-                0x00000128       0x28 main.o
+                0x00000130       0x20 main.o
  .debug_aranges
                 0x00000150       0x30 menu.o
  .debug_aranges
@@ -963,48 +961,48 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x5230
+.debug_info     0x00000000     0x520e
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0xbbc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6/crtatmega2560.o
- .debug_info    0x00000bbc      0x699 ButtonLib.o
- .debug_info    0x00001255      0x133 DebounceLib.o
- .debug_info    0x00001388      0x4db EncoderLib.o
- .debug_info    0x00001863      0x7fb globalVariables.o
- .debug_info    0x0000205e      0x885 knobLib.o
- .debug_info    0x000028e3      0x461 LEDLib.o
- .debug_info    0x00002d44      0x5ea main.o
- .debug_info    0x0000332e      0xc40 menu.o
- .debug_info    0x00003f6e      0x586 MidiLib.o
- .debug_info    0x000044f4      0x67c OLEDLib.o
- .debug_info    0x00004b70      0x1d9 serialLib.o
- .debug_info    0x00004d49      0x4e7 tsunamiLib.o
+ .debug_info    0x00000bbc      0x70f ButtonLib.o
+ .debug_info    0x000012cb      0x133 DebounceLib.o
+ .debug_info    0x000013fe      0x4db EncoderLib.o
+ .debug_info    0x000018d9      0x7fb globalVariables.o
+ .debug_info    0x000020d4      0x885 knobLib.o
+ .debug_info    0x00002959      0x461 LEDLib.o
+ .debug_info    0x00002dba      0x552 main.o
+ .debug_info    0x0000330c      0xc40 menu.o
+ .debug_info    0x00003f4c      0x586 MidiLib.o
+ .debug_info    0x000044d2      0x67c OLEDLib.o
+ .debug_info    0x00004b4e      0x1d9 serialLib.o
+ .debug_info    0x00004d27      0x4e7 tsunamiLib.o
 
-.debug_abbrev   0x00000000     0x1952
+.debug_abbrev   0x00000000     0x1949
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0xb1a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6/crtatmega2560.o
- .debug_abbrev  0x00000b1a      0x147 ButtonLib.o
- .debug_abbrev  0x00000c61       0xfa DebounceLib.o
- .debug_abbrev  0x00000d5b      0x114 EncoderLib.o
- .debug_abbrev  0x00000e6f      0x111 globalVariables.o
- .debug_abbrev  0x00000f80      0x194 knobLib.o
- .debug_abbrev  0x00001114      0x103 LEDLib.o
- .debug_abbrev  0x00001217      0x12e main.o
- .debug_abbrev  0x00001345      0x13d menu.o
- .debug_abbrev  0x00001482       0xed MidiLib.o
- .debug_abbrev  0x0000156f      0x1ee OLEDLib.o
- .debug_abbrev  0x0000175d      0x131 serialLib.o
- .debug_abbrev  0x0000188e       0xc4 tsunamiLib.o
+ .debug_abbrev  0x00000b1a      0x19e ButtonLib.o
+ .debug_abbrev  0x00000cb8       0xfa DebounceLib.o
+ .debug_abbrev  0x00000db2      0x114 EncoderLib.o
+ .debug_abbrev  0x00000ec6      0x111 globalVariables.o
+ .debug_abbrev  0x00000fd7      0x194 knobLib.o
+ .debug_abbrev  0x0000116b      0x103 LEDLib.o
+ .debug_abbrev  0x0000126e       0xce main.o
+ .debug_abbrev  0x0000133c      0x13d menu.o
+ .debug_abbrev  0x00001479       0xed MidiLib.o
+ .debug_abbrev  0x00001566      0x1ee OLEDLib.o
+ .debug_abbrev  0x00001754      0x131 serialLib.o
+ .debug_abbrev  0x00001885       0xc4 tsunamiLib.o
 
 .debug_line     0x00000000     0x1e92
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x1f9 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6/crtatmega2560.o
- .debug_line    0x000001f9      0x23a ButtonLib.o
- .debug_line    0x00000433      0x13b DebounceLib.o
- .debug_line    0x0000056e      0x189 EncoderLib.o
- .debug_line    0x000006f7      0x213 globalVariables.o
- .debug_line    0x0000090a      0x43d knobLib.o
- .debug_line    0x00000d47      0x14a LEDLib.o
- .debug_line    0x00000e91      0x224 main.o
+ .debug_line    0x000001f9      0x272 ButtonLib.o
+ .debug_line    0x0000046b      0x13b DebounceLib.o
+ .debug_line    0x000005a6      0x189 EncoderLib.o
+ .debug_line    0x0000072f      0x213 globalVariables.o
+ .debug_line    0x00000942      0x43d knobLib.o
+ .debug_line    0x00000d7f      0x14a LEDLib.o
+ .debug_line    0x00000ec9      0x1ec main.o
  .debug_line    0x000010b5      0x53e menu.o
  .debug_line    0x000015f3      0x16d MidiLib.o
  .debug_line    0x00001760      0x333 OLEDLib.o
@@ -1013,56 +1011,55 @@ END GROUP
 
 .debug_frame    0x00000000      0x65c
  *(.debug_frame)
- .debug_frame   0x00000000       0xa0 ButtonLib.o
- .debug_frame   0x000000a0       0x24 DebounceLib.o
- .debug_frame   0x000000c4       0x54 EncoderLib.o
- .debug_frame   0x00000118       0x54 globalVariables.o
- .debug_frame   0x0000016c       0xa8 knobLib.o
- .debug_frame   0x00000214       0x44 LEDLib.o
- .debug_frame   0x00000258       0x54 main.o
+ .debug_frame   0x00000000       0xd0 ButtonLib.o
+ .debug_frame   0x000000d0       0x24 DebounceLib.o
+ .debug_frame   0x000000f4       0x54 EncoderLib.o
+ .debug_frame   0x00000148       0x54 globalVariables.o
+ .debug_frame   0x0000019c       0xa8 knobLib.o
+ .debug_frame   0x00000244       0x44 LEDLib.o
+ .debug_frame   0x00000288       0x24 main.o
  .debug_frame   0x000002ac       0x6c menu.o
  .debug_frame   0x00000318       0x4c MidiLib.o
  .debug_frame   0x00000364       0xa4 OLEDLib.o
  .debug_frame   0x00000408       0xd0 serialLib.o
  .debug_frame   0x000004d8      0x184 tsunamiLib.o
 
-.debug_str      0x00000000     0x10fc
+.debug_str      0x00000000     0x10ea
  *(.debug_str)
  .debug_str     0x00000000      0x3e6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6/crtatmega2560.o
- .debug_str     0x000003e6      0x483 ButtonLib.o
-                                0x4c4 (size before relaxing)
- .debug_str     0x00000869       0x48 DebounceLib.o
-                                0x1d0 (size before relaxing)
- .debug_str     0x000008b1       0x96 EncoderLib.o
-                                0x47e (size before relaxing)
- .debug_str     0x00000947       0xbe globalVariables.o
-                                0x452 (size before relaxing)
- .debug_str     0x00000a05      0x1da knobLib.o
-                                0x5d9 (size before relaxing)
- .debug_str     0x00000bdf       0x4b LEDLib.o
-                                0x42f (size before relaxing)
- .debug_str     0x00000c2a       0x90 main.o
+ .debug_str     0x000003e6      0x4b8 ButtonLib.o
                                 0x4f9 (size before relaxing)
- .debug_str     0x00000cba       0x3a menu.o
+ .debug_str     0x0000089e       0x48 DebounceLib.o
+                                0x1d0 (size before relaxing)
+ .debug_str     0x000008e6       0x96 EncoderLib.o
+                                0x47e (size before relaxing)
+ .debug_str     0x0000097c       0xbe globalVariables.o
+                                0x452 (size before relaxing)
+ .debug_str     0x00000a3a      0x1da knobLib.o
+                                0x5d9 (size before relaxing)
+ .debug_str     0x00000c14       0x4b LEDLib.o
+                                0x42f (size before relaxing)
+ .debug_str     0x00000c5f       0x49 main.o
+                                0x4b2 (size before relaxing)
+ .debug_str     0x00000ca8       0x3a menu.o
                                 0x455 (size before relaxing)
- .debug_str     0x00000cf4       0x89 MidiLib.o
+ .debug_str     0x00000ce2       0x89 MidiLib.o
                                 0x48d (size before relaxing)
- .debug_str     0x00000d7d      0x16a OLEDLib.o
+ .debug_str     0x00000d6b      0x16a OLEDLib.o
                                 0x2c1 (size before relaxing)
- .debug_str     0x00000ee7       0xa5 serialLib.o
+ .debug_str     0x00000ed5       0xa5 serialLib.o
                                 0x239 (size before relaxing)
- .debug_str     0x00000f8c      0x170 tsunamiLib.o
+ .debug_str     0x00000f7a      0x170 tsunamiLib.o
                                 0x34f (size before relaxing)
 
 .debug_loc      0x00000000     0x23a7
  *(.debug_loc)
- .debug_loc     0x00000000      0x17e ButtonLib.o
- .debug_loc     0x0000017e       0x69 DebounceLib.o
- .debug_loc     0x000001e7       0x50 EncoderLib.o
- .debug_loc     0x00000237      0x1c1 globalVariables.o
- .debug_loc     0x000003f8      0x888 knobLib.o
- .debug_loc     0x00000c80       0x69 LEDLib.o
- .debug_loc     0x00000ce9       0x9e main.o
+ .debug_loc     0x00000000      0x21c ButtonLib.o
+ .debug_loc     0x0000021c       0x69 DebounceLib.o
+ .debug_loc     0x00000285       0x50 EncoderLib.o
+ .debug_loc     0x000002d5      0x1c1 globalVariables.o
+ .debug_loc     0x00000496      0x888 knobLib.o
+ .debug_loc     0x00000d1e       0x69 LEDLib.o
  .debug_loc     0x00000d87      0x4c7 menu.o
  .debug_loc     0x0000124e       0xca MidiLib.o
  .debug_loc     0x00001318      0x82e OLEDLib.o
@@ -1089,13 +1086,13 @@ END GROUP
 
 .debug_ranges   0x00000000      0x200
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x38 ButtonLib.o
- .debug_ranges  0x00000038       0x10 DebounceLib.o
- .debug_ranges  0x00000048       0x28 EncoderLib.o
- .debug_ranges  0x00000070       0x18 globalVariables.o
- .debug_ranges  0x00000088       0x38 knobLib.o
- .debug_ranges  0x000000c0       0x20 LEDLib.o
- .debug_ranges  0x000000e0       0x18 main.o
+ .debug_ranges  0x00000000       0x40 ButtonLib.o
+ .debug_ranges  0x00000040       0x10 DebounceLib.o
+ .debug_ranges  0x00000050       0x28 EncoderLib.o
+ .debug_ranges  0x00000078       0x18 globalVariables.o
+ .debug_ranges  0x00000090       0x38 knobLib.o
+ .debug_ranges  0x000000c8       0x20 LEDLib.o
+ .debug_ranges  0x000000e8       0x10 main.o
  .debug_ranges  0x000000f8       0x20 menu.o
  .debug_ranges  0x00000118       0x10 MidiLib.o
  .debug_ranges  0x00000128       0x40 OLEDLib.o

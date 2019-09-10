@@ -15,10 +15,7 @@
 #include <avr/interrupt.h>
 //test, can I push from a different PC?
 
-ISR(TIMER0_OVF_vect)
-{
-	debounce();
-}
+
 
 int main(void)
 {

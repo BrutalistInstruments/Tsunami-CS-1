@@ -16,9 +16,10 @@ uint8_t buttonsCurrentCycle;
 uint16_t lastFullBits = 0;
 uint8_t currentTrig;
 
-char testEncoderButton[20] = "EncoderButtonPressed";
-
-//uint8_t prevButtonVal = 0;
+ISR(TIMER0_OVF_vect)
+{
+	debounce();
+}
 
 void initButtons()
 {
@@ -139,8 +140,4 @@ void listenGPButtons() // are the encoder buttons here also?
 		encoderBFlag = ~encoderBFlag;
 		
 	}
-	
-
-
-
 }
