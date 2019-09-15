@@ -144,6 +144,12 @@
     <Compile Include="ButtonLib.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="DebounceLib.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="DebounceLib.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="EncoderLib.c">
       <SubType>compile</SubType>
     </Compile>

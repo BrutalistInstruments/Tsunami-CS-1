@@ -11,8 +11,7 @@ What's here:
 #### Firmware
 | Known Bug| Proposed Solution |
 | ------ | ------ |
-| Encoder reading issues | Interupt enable on encoderA, need to make hardware revision for encoderB|
-| Encoder switch bouncing | debouncing decoder switch, or falling edge detection |
+| Encoder reading issues | Need to tighten up encoder lookup table|
 | Midi in dropping bytes | use arduino midi library |
 
 ## To-Implement
@@ -34,6 +33,7 @@ What's here:
 |----|----|
 |LowPass Filter on audio Outputs|Re-Design of IO Board|
 |Encoder Pin Interupts|Encoders need to be changed so that each have 1 interupt pin, instead of EncoderA having 2.|
+|Resistors on the 2 lines of the SPI bus connecting them to VCC|Rev5 of CS-PCB|
 
 ## Features Complete
 #### Firmware
@@ -48,3 +48,4 @@ What's here:
 |Trigger LEDs on Preformance Mode|
 |Main struct, ready for storage|
 |Midi notes per track assinable per pattern|
+|Encoder push button menu functionallity|

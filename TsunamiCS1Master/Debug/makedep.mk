@@ -4,6 +4,8 @@
 
 ButtonLib.c
 
+DebounceLib.c
+
 EncoderLib.c
 
 globalVariables.c
