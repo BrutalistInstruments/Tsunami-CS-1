@@ -99,7 +99,7 @@ void listenTrigButtons()
 				outputS(screen2[3], 3);
 				
 				
-				trackControl(currentPattern.trackSampleLSB[bc], currentPattern.trackSampleMSB[bc], currentPattern.trackOutputRoute[bc], currentPattern.trackOutputRoute[bc]);
+				//trackControl(currentPattern.trackSampleLSB[bc], currentPattern.trackSampleMSB[bc], currentPattern.trackOutputRoute[bc], currentPattern.trackOutputRoute[bc]);
 				break;
 				
 				case 3:; 
