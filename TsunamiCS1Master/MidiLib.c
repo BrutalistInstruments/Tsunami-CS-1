@@ -20,7 +20,9 @@ uint8_t midiNoteCheck = 0;
 uint8_t midiCCCheck = 0;
 uint8_t midiPCCheck = 0;
 uint8_t midiOffCheck = 0;
-
+uint8_t midiState = 0;
+uint8_t noteDown = 0;
+uint8_t CurrentmidiNote = 0;
 
 void listenMidi()
 {
@@ -29,12 +31,61 @@ void listenMidi()
 	midiPCCheck = (0B11000000|midiChannel);
 	midiOffCheck = (0B10000000|midiChannel);
 	
-	//right now, this is just for testing.
 	currentMidiMessage[0] = getChar();
-	//while(currentMidiMessage[0]==254)
-	//{
-	//	currentMidiMessage[0]=getChar(); //for now, get rid of midi clock signals
-	//}
+	switch(midiState)
+	{
+		case 0:
+		//check for note turning on
+		if(currentMidiMessage[0]==midiNoteCheck)
+		{
+		noteDown = 1;
+		midiState = 1;
+		}
+		//check for note turning off
+		if(currentMidiMessage[0]==midiOffCheck)
+		{
+			noteDown = 0;
+			midiState = 1;
+		}
+		//no break in example code
+		//break;
+		
+		case 1:
+		if(currentMidiMessage[0]<128)
+		{
+			CurrentmidiNote = currentMidiMessage[0];
+			midiState = 2;
+		}
+		else
+		{
+			midiState = 0;
+		}
+		break;
+		
+		case 2:
+		if((currentMidiMessage[0] < 128) && (noteDown!=0))
+		{
+			for(int i = 0; i<15; i++)
+			{
+				//this should only play one note, and we're just trying to find the note.
+				if((currentPattern.midiTrackNote[i])==CurrentmidiNote)
+				{
+					trackControl(currentPattern.trackSampleLSB[i], currentPattern.trackSampleMSB[i], currentPattern.trackOutputRoute[i], currentPattern.trackPlayMode[i]);
+					midiState = 0;
+					break;
+					
+				}
+			}
+		}
+		midiState = 0;
+		break;
+	}
+		
+
+	}
+	
+	
+	/*
 	if(currentMidiMessage[0]==midiNoteCheck)
 	{
 		currentMidiMessage[1] = getChar(); //this should be byte1 (note)
@@ -68,7 +119,7 @@ void listenMidi()
 		currentMidiMessage[2] = getChar(); //this should be byte2 (velocity)
 		outputS(blank, 3);
 	}
+	*/
 
 
 
-}

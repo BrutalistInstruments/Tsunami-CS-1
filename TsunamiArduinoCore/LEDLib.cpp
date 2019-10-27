@@ -7,14 +7,16 @@ Latch: PG2
 
 bits to write: 21
 1 8bit and 2 16 bits shifted in should work alright.
- 
- 
- */ 
+
+ */
 
 #include <avr/io.h>
 #include "globalVariables.h"
 
 uint16_t holdTrig = 0;
+extern uint8_t encoderAValue;
+extern uint16_t currentTrigButtons;
+extern Pattern currentPattern;
 
 void initLEDs()
 {
@@ -42,27 +44,26 @@ void parseLEDs(uint16_t LEDInput)
 	PORTG |= (1 << PG2); //latch pin high
 }
 
-void updateLEDs()
+void updateLEDs(uint8_t ledMenuState, Pattern ledCurrentPattern, uint16_t ledCurrentTrigButtons)
 {
-	switch(encoderAValue)
+	uint8_t shiftedState = ledMenuState >> 4; //this will get rid of EncoderB
+	switch(shiftedState)
 	{
 		case 0:
-		parseLEDs(currentTrigButtons);
+		parseLEDs(ledCurrentTrigButtons);
 		break;
-		
+
 		case 1:
-		parseLEDs(currentPattern.trackSequence[currentStep]);
+		parseLEDs(ledCurrentPattern.trackSequence[currentStep]);
 		break;
-		
+
 		case 2:
-		parseLEDs(currentTrigButtons);
+		parseLEDs(ledCurrentTrigButtons);
 		break;
-		
+
 		case 3:
-		parseLEDs(currentTrigButtons);
+		parseLEDs(ledCurrentTrigButtons);
 		break;
 	}
 
 }
-
-

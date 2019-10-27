@@ -3,80 +3,59 @@
  *
  * Created: 8/13/2019 5:30:21 PM
  *  Author: Hal
- */ 
+ */
 
-
-//this is where our main structs and global variables will live, so that all other libraries can see them.
 #include <avr/io.h>
 
 #ifndef GLOBALVARIABLES_H_
 #define GLOBALVARIABLES_H_
 
 typedef struct Pattern
-{//default levels
-	uint8_t outputLevelMSB[8];
- 	uint8_t outputLevelLSB[8];
- 	uint8_t outputPitch[8];
- 	uint8_t trackOutputRoute[16];
- 	uint8_t trackMainVolumeMSB[16];
- 	uint8_t trackMainVolumeLSB[16];
- 	uint8_t trackFadeGainMSB[16];
- 	uint8_t trackFadeGainLSB[16];
- 	uint8_t trackFadeTimeMSB[16];
- 	uint8_t trackFadeTimeLSB[16];
- 	uint8_t trackPlayMode[16];
- 	uint8_t trackSampleMSB[16];
- 	uint8_t trackSampleLSB[16];
- 	uint8_t voiceLockFlag[16];
- 	uint16_t trackSequence[64];
-	uint8_t midiTrackNote[16];
-	uint16_t patternBPM;
-	uint8_t numSteps;
-	
-} Pattern;
+{
+	uint8_t outputLevelMSB[8]; //8 bytes
+ 	uint8_t outputLevelLSB[8]; //8 bytes
+ 	uint8_t outputPitch[8]; // 8 bytes
+ 	uint8_t trackOutputRoute[16]; // 16 bytes
+ 	uint8_t trackMainVolumeMSB[16]; //16 bytes
+ 	uint8_t trackMainVolumeLSB[16]; //16 bytes
+ 	uint8_t trackFadeGainMSB[16]; //16 bytes
+ 	uint8_t trackFadeGainLSB[16]; //16 bytes
+ 	uint8_t trackFadeTimeMSB[16]; //16 bytes
+ 	uint8_t trackFadeTimeLSB[16]; //16 bytes
+ 	uint8_t trackPlayMode[16]; //16 bytes
+ 	uint8_t trackSampleMSB[16]; //16 bytes
+ 	uint8_t trackSampleLSB[16]; //16 bytes
+ 	uint8_t voiceLockFlag[16]; //16 bytes
+ 	uint16_t trackSequence[64]; //128 bytes - this will be a seperate page
+	uint8_t midiTrackNote[16]; //16 bytes
+	uint16_t patternBPM; //2 bytes
+	uint8_t numSteps; //1 byte
 
-uint8_t knobBuffer[44];
-uint8_t checkBuffer[44];
-uint8_t knobBufferCounter;
-Pattern currentPattern;
-uint8_t encoderAValue;
-uint8_t encoderBValue;
-uint8_t prevEncoderAValue;
-uint8_t prevEncoderBValue;
-uint16_t currentTrigButtons;
-uint8_t currentGPButtons;
-uint8_t midiChannel;
-uint8_t currentPatternNumber;
-uint8_t currentStep;
-uint8_t currentTrack;
-uint8_t encoderAFlag;
-uint8_t encoderBFlag;
+} Pattern; //total bytes - 128 for the sequence, 219 bytes for all other data.
+//so 3 pages in total, 1 for sequencer data, 2 for all other data (248 bytes, room for expansion
 
-//screen 0
-char screen0[4][20];
-// = {"Performance Mode    ","Pattern:            ","BPM: xxx            ","Stop                ","Play                "  };
-uint8_t screen0Index;
+typedef struct Screen
+{
 
-//screen 1:
-char screen1[4][20];
-// = {"Sequence Edit       ","Pattern:            ","Steps:              ","Step number:        "}; //this will eventually be 5 once we implement naming of samples.
-uint8_t screen1Index;
-
-//screen 2:
-char screen2[4][20]; 
-//= {"Track Settings      ","Track:              ","Play Mode           ","OutRoute            "};
-uint8_t screen2Index;
-
-//screen 3:
-char screen3[4][20];
-// = {"Global Settings     ","Midi Channel: xx    ", "Midi trigger Notes  ","(put triggered note)"};
-uint8_t screen3Index;
+	unsigned char screen0[4][21];
+	unsigned char screen1[4][21];
+	unsigned char screen2[4][21];
+	unsigned char screen3[4][21];
+	uint8_t screen0Index;
+	uint8_t screen1Index;
+	uint8_t screen2Index;
+	uint8_t screen3Index;
 
 
-void initBank();
-void initArrays(char myArray[4][20], uint8_t lengthOfString, int stringNumber, char* myString);
+} Screen;
 
+extern uint16_t currentTrigButtons;
+extern uint8_t currentGPButtons;
 
+extern uint8_t currentPatternNumber;
+extern uint8_t currentStep;
+extern uint8_t currentTrack;
 
-
+void initBank(Pattern currentInitPattern);
+void initArrays(unsigned char myArray[4][21], uint8_t lengthOfString, int stringNumber, char* myString);
 #endif /* GLOBALVARIABLES_H_ */

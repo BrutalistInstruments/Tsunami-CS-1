@@ -8,8 +8,8 @@
 #ifndef SERIALLIB_H_
 #define SERIALLIB_H_
 
-void appendSerial0();
-void serialWrite0();
+void appendSerial0(char c);
+void serialWrite0(char c[]);
 void serialInit0();
 char getChar();
 
