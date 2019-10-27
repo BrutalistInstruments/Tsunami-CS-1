@@ -1,7 +1,7 @@
 # Tsunami CS-1 Readme
 
 The Tsunami CS-1 is an open Source Audio Sample Player, based on the [Tsunami Wav Trigger by RobertSonics](https://robertsonics.com/tsunami/) and the Atmega 2560/Arduino Mega development board. 
-Check out the Build Progress and With pictures and Video over at https://www.instagram.com/halford_c/
+Check out the build progress with pictures and video over at https://www.instagram.com/halford_c/
 
 ### Features:
  Tactile Control over Tsunami Wave Trigger:
