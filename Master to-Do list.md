@@ -1,3 +1,4 @@
+
 # CS1-Tsunami Sampler 
 ####  Master Buglist and Implementation progress
 This document exist to keep record of the status of features and bugs in the firmware, hardware, and enclosure of the CS1Tsunami. This is mainly to help us keep track of what needs doing. Also, We're trying to get good at markdown.
@@ -11,28 +12,20 @@ What's here:
 #### Firmware
 | Known Bug| Proposed Solution |
 | ------ | ------ |
-| Encoder reading issues | Need to tighten up encoder lookup table|
-| Midi in dropping bytes | use arduino midi library |
 
 ## To-Implement
 #### Firmware
 | Feature |Depenencies|
 | ------- |-------|
 |Midi-Out|Midi-In functioning correctly|
-|I2C Library|- - -|
-|Bank Storage|I2C Library|
-|GP-Button Functionallity|GP section of Button Library|
-|Sequencer|Variable Timer interupts|
-|Variable BPM Sequencing|Sequencer|
 |Logarithmic Knob Reading|Knob Library|
 |GP-Button LEDs|LED output Library|
-|Envelop Knob Functionallity|Knob Library|
+|Envelop Knob Functionality|Knob Library|
 
 #### Hardware
 |Feature|Dependencies|
 |----|----|
-|LowPass Filter on audio Outputs|Re-Design of IO Board|
-|Encoder Pin Interupts|Encoders need to be changed so that each have 1 interupt pin, instead of EncoderA having 2.|
+|Encoder Pin Interrupts|Encoders need to be changed so that each have 1 interrupt pin, instead of EncoderA having 2.|
 |Resistors on the 2 lines of the SPI bus connecting them to VCC|Rev5 of CS-PCB|
 |Move Tsunami power and serial pin Headers|
 
@@ -46,7 +39,13 @@ What's here:
 |Reading knobs, storing knob values|
 |Functioning Menu|
 |Midi In|
-|Trigger LEDs on Preformance Mode|
+|Trigger LEDs on Performance Mode|
 |Main struct, ready for storage|
-|Midi notes per track assinable per pattern|
-|Encoder push button menu functionallity|
+|Midi notes per track assignable per pattern|
+|Encoder push button menu functionality|
+|GP - Buttons are functioning correctly, ready for more features |
+|Sequencer is now implemented and fully functional|
+|Bank storage on through I2C eeprom is fully functional, but needs to be optimized.|
+|Audio and Midi ground on IO board have been separated, eliminating digital noise|
+|Midi in is not fully functional, using a home-made midi library|
+|Encoders are now on interrupt pins in new hardware revision, but need to be re-coded for such use. |
