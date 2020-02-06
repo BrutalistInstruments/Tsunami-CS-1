@@ -135,7 +135,7 @@ void updateKnob(uint8_t select)
 //globals needed here:
 //-current pattern
 //
-void interperetKnob(uint8_t select, Pattern currentKnobPattern, uint8_t knobMenuState, Screen knobScreen)
+void interperetKnob(uint8_t select, Pattern currentKnobPattern, uint8_t knobMenuState, Screen knobScreen, uint8_t bottomSwitchFlag)
 {//this function will compare outputs, and write to our struct.
 //I don't think we need this operation.
 	select = select%44;
@@ -147,63 +147,68 @@ void interperetKnob(uint8_t select, Pattern currentKnobPattern, uint8_t knobMenu
 
 	if (select<40)
 	{
-		uint8_t positionSelect = select%8;
+		uint8_t positionSelectOuts = select%8;
+		uint8_t positionSelectTracks = select%8;
+		if(bottomSwitchFlag==1)
+		{
+			positionSelectTracks = positionSelectTracks + 8;
+		}
 		uint8_t bankSwitch = select/8;
 		switch (bankSwitch)
 		{
 
 			case 0:
 			{
-			int16_t currentOutVoulume = ((currentPattern.outputLevelMSB[positionSelect]<<8)|(currentPattern.outputLevelLSB[positionSelect]));
+			int16_t currentOutVoulume = ((currentPattern.outputLevelMSB[positionSelectOuts]<<8)|(currentPattern.outputLevelLSB[positionSelectOuts]));
 			//this should be a regular integer between -70 and +10
 			int16_t negCheckValue = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
 			if(currentOutVoulume!=negCheckValue)
 			{
-				currentPattern.outputLevelLSB[positionSelect] = (negCheckValue);
+				currentPattern.outputLevelLSB[positionSelectOuts] = (negCheckValue);
 				if(negCheckValue>(-1))
 				{
-					currentPattern.outputLevelMSB[positionSelect] = 0;
+					currentPattern.outputLevelMSB[positionSelectOuts] = 0;
 					//just hard coding this for now until we make a function.
 					outVolumePrint[14] = 48;
-					outVolumePrint[16] = (currentPattern.outputLevelLSB[positionSelect]%10)+48;
-					outVolumePrint[15] = ((currentPattern.outputLevelLSB[positionSelect]%100)/10)+48;
+					outVolumePrint[16] = (currentPattern.outputLevelLSB[positionSelectOuts]%10)+48;
+					outVolumePrint[15] = ((currentPattern.outputLevelLSB[positionSelectOuts]%100)/10)+48;
 				}else
 				{
-					currentPattern.outputLevelMSB[positionSelect] = 255;
+					currentPattern.outputLevelMSB[positionSelectOuts] = 255;
 					outVolumePrint[14] = '-';
-					outVolumePrint[15] = ((((currentPattern.outputLevelLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
-					outVolumePrint[16] = (((currentPattern.outputLevelLSB[positionSelect]^255)+1)%10)+48;
+					outVolumePrint[15] = ((((currentPattern.outputLevelLSB[positionSelectOuts]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
+					outVolumePrint[16] = (((currentPattern.outputLevelLSB[positionSelectOuts]^255)+1)%10)+48;
 				}
 				//then output to screen.
-				outVolumePrint[10] = positionSelect + 49;
+				outVolumePrint[10] = positionSelectOuts + 49;
 				outputS(outVolumePrint, 3);
-				setOutputVolume(currentPattern.outputLevelLSB[positionSelect], currentPattern.outputLevelMSB[positionSelect], positionSelect);
+				setOutputVolume(currentPattern.outputLevelLSB[positionSelectOuts], currentPattern.outputLevelMSB[positionSelectOuts], positionSelectOuts);
 			}
 		}
 			break;
 
  			case 1:
 			{
- 			if(currentPattern.outputPitch[positionSelect]!=(checkBuffer[select]^128))
+ 			if(currentPattern.outputPitch[positionSelectOuts]!=(checkBuffer[select]^128))
  			{
 				//why are we even checking the menu here? I think this is unnecessary
- 				(currentPattern.outputPitch[positionSelect]) = (checkBuffer[select]^128);
+ 				(currentPattern.outputPitch[positionSelectOuts]) = (checkBuffer[select]^128);
 				//uint8_t encoderAValue = knobMenuState>>4;
 				 //if(encoderAValue == 0)
 				// {
-					 pitchPrint[5] = (positionSelect+49);
-					 if(currentPattern.outputPitch[positionSelect]>>7)
+					 pitchPrint[5] = (positionSelectOuts+49);
+					 if(currentPattern.outputPitch[positionSelectOuts]>>7)
 					 {
 						 //again, hard coding.
 						 pitchPrint[7] = '-';
-						 numPrinter(pitchPrint, 8, 3, (currentPattern.outputPitch[positionSelect]^255));
+						 numPrinter(pitchPrint, 8, 3, (currentPattern.outputPitch[positionSelectOuts]^255));
 
 					 }else{
 						 pitchPrint[7] = '+';
-					 numPrinter(pitchPrint,8,3,currentPattern.outputPitch[positionSelect]);}
+					 numPrinter(pitchPrint,8,3,currentPattern.outputPitch[positionSelectOuts]);}
 					 outputS(pitchPrint, 3);
 				 //}
-				 outputSampleRate(positionSelect, 0, currentPattern.outputPitch[positionSelect]);
+				 outputSampleRate(positionSelectOuts, 0, currentPattern.outputPitch[positionSelectOuts]);
 
  			}
 }
@@ -211,27 +216,27 @@ void interperetKnob(uint8_t select, Pattern currentKnobPattern, uint8_t knobMenu
 
  			case 2:
 			{
-			int16_t currentEnvelopeVolume = ((currentPattern.trackFadeGainMSB[positionSelect]<<8)|(currentPattern.trackFadeGainLSB[positionSelect]));
+			int16_t currentEnvelopeVolume = ((currentPattern.trackFadeGainMSB[positionSelectTracks]<<8)|(currentPattern.trackFadeGainLSB[positionSelectTracks]));
 			int16_t negCheckValueEnvelope = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
 			if(currentEnvelopeVolume!=negCheckValueEnvelope)
 			{
-				currentPattern.trackFadeGainLSB[positionSelect] = (negCheckValueEnvelope);
+				currentPattern.trackFadeGainLSB[positionSelectTracks] = (negCheckValueEnvelope);
 				if(negCheckValueEnvelope>(-1))
 				{
-					currentPattern.trackFadeGainMSB[positionSelect] = 0;
+					currentPattern.trackFadeGainMSB[positionSelectTracks] = 0;
 					//just hard coding this for now until we make a function.
 					envelopeLevelPrint[15] = 48;
-					envelopeLevelPrint[17] = (currentPattern.trackFadeGainLSB[positionSelect]%10)+48;
-					envelopeLevelPrint[16] = ((currentPattern.trackFadeGainLSB[positionSelect]%100)/10)+48;
+					envelopeLevelPrint[17] = (currentPattern.trackFadeGainLSB[positionSelectTracks]%10)+48;
+					envelopeLevelPrint[16] = ((currentPattern.trackFadeGainLSB[positionSelectTracks]%100)/10)+48;
 				}else
 				{
-					currentPattern.trackFadeGainMSB[positionSelect] = 255;
+					currentPattern.trackFadeGainMSB[positionSelectTracks] = 255;
 					envelopeLevelPrint[15] = '-';
-					envelopeLevelPrint[16] = ((((currentPattern.trackFadeGainLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
-					envelopeLevelPrint[17] = (((currentPattern.trackFadeGainLSB[positionSelect]^255)+1)%10)+48;
+					envelopeLevelPrint[16] = ((((currentPattern.trackFadeGainLSB[positionSelectTracks]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
+					envelopeLevelPrint[17] = (((currentPattern.trackFadeGainLSB[positionSelectTracks]^255)+1)%10)+48;
 				}
 				//then output to screen.
-				envelopeLevelPrint[13] = positionSelect + 49;
+				envelopeLevelPrint[13] = positionSelectTracks + 49;
 				outputS(envelopeLevelPrint, 3);
 				//nothing to "set", since envelopes are triggered after a sound is playing.
 			}
@@ -240,11 +245,11 @@ void interperetKnob(uint8_t select, Pattern currentKnobPattern, uint8_t knobMenu
 
  			case 3:
 			{
- 			if(currentPattern.trackFadeTimeMSB[positionSelect]!=checkBuffer[select])
+ 			if(currentPattern.trackFadeTimeMSB[positionSelectTracks]!=checkBuffer[select])
  			{
- 				(currentPattern.trackFadeTimeMSB[positionSelect]) = checkBuffer[select];
-				 numPrinter(envelopeTimePrint,14,4,currentPattern.trackFadeTimeMSB[positionSelect]);
-				 envelopeTimePrint[12] = positionSelect+49;
+ 				(currentPattern.trackFadeTimeMSB[positionSelectTracks]) = checkBuffer[select];
+				 numPrinter(envelopeTimePrint,14,4,currentPattern.trackFadeTimeMSB[positionSelectTracks]);
+				 envelopeTimePrint[12] = positionSelectTracks+49;
 				 outputS(envelopeTimePrint, 3);
  			}
 		}
@@ -252,30 +257,30 @@ void interperetKnob(uint8_t select, Pattern currentKnobPattern, uint8_t knobMenu
 
  			case 4:
 			{
- 			int16_t currentTrackVolume = ((currentPattern.trackMainVolumeMSB[positionSelect]<<8)|(currentPattern.trackMainVolumeLSB[positionSelect]));
+ 			int16_t currentTrackVolume = ((currentPattern.trackMainVolumeMSB[positionSelectTracks]<<8)|(currentPattern.trackMainVolumeLSB[positionSelectTracks]));
  			int16_t negCheckValueTrack = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
  			if(currentTrackVolume!=negCheckValueTrack)
  			{
-	 			currentPattern.trackMainVolumeLSB[positionSelect] = (negCheckValueTrack);
+	 			currentPattern.trackMainVolumeLSB[positionSelectTracks] = (negCheckValueTrack);
 	 			if(negCheckValueTrack>(-1))
 	 			{
-		 			currentPattern.trackMainVolumeMSB[positionSelect] = 0;
+		 			currentPattern.trackMainVolumeMSB[positionSelectTracks] = 0;
 		 			//just hard coding this for now until we make a function.
 		 			trackVolumePrint[15] = 48;
-		 			trackVolumePrint[17] = (currentPattern.trackMainVolumeLSB[positionSelect]%10)+48;
-		 			trackVolumePrint[16] = ((currentPattern.trackMainVolumeLSB[positionSelect]%100)/10)+48;
+		 			trackVolumePrint[17] = (currentPattern.trackMainVolumeLSB[positionSelectTracks]%10)+48;
+		 			trackVolumePrint[16] = ((currentPattern.trackMainVolumeLSB[positionSelectTracks]%100)/10)+48;
 	 			}else
 	 			{
-		 			currentPattern.trackMainVolumeMSB[positionSelect] = 255;
+		 			currentPattern.trackMainVolumeMSB[positionSelectTracks] = 255;
 		 			trackVolumePrint[15] = '-';
-		 			trackVolumePrint[16] = ((((currentPattern.trackMainVolumeLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
-		 			trackVolumePrint[17] = (((currentPattern.trackMainVolumeLSB[positionSelect]^255)+1)%10)+48;
+		 			trackVolumePrint[16] = ((((currentPattern.trackMainVolumeLSB[positionSelectTracks]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
+		 			trackVolumePrint[17] = (((currentPattern.trackMainVolumeLSB[positionSelectTracks]^255)+1)%10)+48;
 	 			}
 	 			//then output to screen.
-	 			trackVolumePrint[11] = positionSelect + 49;
+	 			trackVolumePrint[11] = positionSelectTracks + 49;
 	 			outputS(trackVolumePrint, 3);
-	 			setTrackVolume(currentPattern.trackSampleLSB[positionSelect], currentPattern.trackSampleMSB[positionSelect],
-				 currentPattern.trackMainVolumeLSB[positionSelect], currentPattern.trackMainVolumeMSB[positionSelect]);
+	 			setTrackVolume(currentPattern.trackSampleLSB[positionSelectTracks], currentPattern.trackSampleMSB[positionSelectTracks],
+				 currentPattern.trackMainVolumeLSB[positionSelectTracks], currentPattern.trackMainVolumeMSB[positionSelectTracks]);
  			}
 		}
  			break;
@@ -326,13 +331,13 @@ void interperetKnob(uint8_t select, Pattern currentKnobPattern, uint8_t knobMenu
 }
 
 //does not need global variables
-void listenKnobs(Pattern currentKnobPattern, uint8_t knobMenuState, Screen knobScreen)
+void listenKnobs(Pattern currentKnobPattern, uint8_t knobMenuState, Screen knobScreen, uint8_t buttonSwitchFlag)
 {
 	for(uint8_t loopCounter = 0; loopCounter<44; loopCounter++)
 	{
 		selectKnob(loopCounter);
 		updateKnob(loopCounter);
-		interperetKnob(loopCounter, currentKnobPattern, knobMenuState, knobScreen);
+		interperetKnob(loopCounter, currentKnobPattern, knobMenuState, knobScreen, buttonSwitchFlag);
 	}
 
 

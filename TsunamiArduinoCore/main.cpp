@@ -9,51 +9,49 @@
 #include "tsunamiLib.h"
 #include "LEDLib.h"
 #include "encoderLib.h"
-#include <Midi.h>
-//#include "eepromLib.h" to implement
+#include "sequencerLib.h"
+#include "twiLib.h"
+#include "midiLib.h"
 
-//MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, midi0);
 
 //globals
 uint8_t midiChannel;
 Pattern currentPattern;
 Screen screenBank;
 uint8_t menuState=0; //Bits - 7 encoderA Flag, 6-4 EncoderAState, 3: EncoderBFlag, 2-0: encoderBState
-uint8_t currentStep=0;
+uint8_t currentStep=0; //current Step is 0 indexed. ex: a 16 step sequece is array location 0 to 15.
 uint16_t currentTrigButtons=0;
 uint8_t currentPatternNumber = 0;
 uint8_t currentTrack;
+uint8_t playState=0; //0 for stop, 1 for play. maybe we implement 2 for pause later or something for pausing a sequence?
+uint8_t factoryReset=0; // set this to 1 if you would like to fill the eeprom with Fatory data, and erase all user data.
+uint8_t buttonSwitchFlag = 0;
 
-MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, midi0);
-// //I'm not sure if we can put this in a library or not, but I'll just get it working here to start.
-void handleNoteOn(uint8_t inChannel, uint8_t inNote, uint8_t inVelocity)
- {
-   for (int i=0; i<16; i++)
-   {
-     if(inNote==currentPattern.midiTrackNote[i])
-     {
-       //trackControl(char trackNumberLSB, char trackNumberMSB, char outputNumber, char trackCommand)
-       trackControl(currentPattern.trackSampleLSB[i], currentPattern.trackSampleMSB[i], currentPattern.trackOutputRoute[i], currentPattern.trackPlayMode[i]);
-     }
-   }
-
- }
 
 void setup() {
   //update sequence
   midiChannel = 0; //for now, need to change this from load memory
-	initBank(currentPattern);
+	//initBank(&currentPattern);
 	initScreen(); //gets OLED ready for data
 	initButtons();
 	initLEDs();
 	initEncoders();
-	initMenu(screenBank, currentPattern, currentPatternNumber); //fills screenBank with menu strings
 	initADC();
 	serialInit0();
-  midi0.begin(midiChannel+1);
-  midi0.setHandleNoteOn(handleNoteOn);
-//  initEeprom(); //to be implemented
+  initMidi();
 
+  initSequencer();
+twi_init();
+if(factoryReset==1)
+{
+  //do factory reset here.
+  factoryResetEeprom(currentPattern);
+  factoryReset = 0;
+  //we need to write this in a specific place in the eeprom, and check it in the if statement.
+}
+currentPattern = eepromLoadPattern(1);
+
+initMenu(screenBank, currentPattern, currentPatternNumber); //fills screenBank with menu strings
 
   TCCR2B = 1<<CS22;//using 64 from prescaler
   TIMSK2 = 1<<TOIE2;
@@ -66,12 +64,12 @@ void setup() {
 }
 
 void loop() {
-      listenTrigButtons(menuState, currentPattern, &currentTrigButtons, screenBank, &currentTrack);
-  		listenGPButtons(&menuState);
-  		updateLEDs(menuState, currentPattern, currentTrigButtons);
-  		listenEncoders(&menuState);
-  		listenKnobs(currentPattern, menuState, screenBank);
-  		//updateSequence(); //to be implemented
+      listenTrigButtons(menuState, &currentPattern, &currentTrigButtons, screenBank, &currentTrack, currentStep);
+  		listenGPButtons(&menuState, &playState, &buttonSwitchFlag);
+      updateLEDs(menuState, currentPattern, currentTrigButtons, currentStep);
+      listenEncoders(&menuState, &currentStep);
+  		listenKnobs(currentPattern, menuState, screenBank, buttonSwitchFlag);
+  		updateSequencer(currentPattern, playState);
   		updateScreen(&menuState, screenBank);
-      midi0.read();
+      midiRead(midiChannel, currentPattern);
 }

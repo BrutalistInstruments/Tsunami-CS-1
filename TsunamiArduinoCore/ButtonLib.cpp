@@ -10,14 +10,17 @@
 #include "OLEDLib.h"
 #include <avr/io.h>
 #include "DebounceLib.h"
+#include "twiLib.h"
 //#include "eepromLib.h" //to implement
 
 uint8_t buttonsCurrentCycle;
 uint16_t lastFullBits = 0;
 uint8_t currentTrig;
+extern uint8_t currentStep;
 extern uint8_t currentGPButtons;
 extern Screen screenBank;
 extern Pattern currentPattern;
+//extern Pattern currentPattern; # I don't think we need this anymore, since we are passing the pattern in as a pointer now.
 
 ISR(TIMER2_OVF_vect)
 {
@@ -42,7 +45,7 @@ void initButtons()
 //current pattern
 //currentTrig buttons?
 //need to check on pointer stuff here.
-void listenTrigButtons(uint8_t buttonMenuState, Pattern buttonCurrentPattern, uint16_t *buttonsCurrentTrig, Screen buttonScreen, uint8_t *buttonCurrentTrack)
+void listenTrigButtons(uint8_t buttonMenuState, Pattern *buttonCurrentPattern, uint16_t *buttonsCurrentTrig, Screen buttonScreen, uint8_t *buttonCurrentTrack, uint8_t currentStep)
 {
 	buttonsCurrentCycle = (PINL^255); //^ = bitwise XOR operation.
 	(*buttonsCurrentTrig) = (buttonsCurrentCycle << 8) | (PINA^255);
@@ -64,41 +67,42 @@ void listenTrigButtons(uint8_t buttonMenuState, Pattern buttonCurrentPattern, ui
 				//for "perfrmance mode", we should just use the default case, and only have code for the cases where things are outside of that use case.
 				case 0: //performance mode
 				//we trigger a sound here based on the location of bc
-				trackControl(buttonCurrentPattern.trackSampleLSB[bc], buttonCurrentPattern.trackSampleMSB[bc], buttonCurrentPattern.trackOutputRoute[bc], buttonCurrentPattern.trackOutputRoute[bc]);
+				trackControl((*buttonCurrentPattern).trackSampleLSB[bc], (*buttonCurrentPattern).trackSampleMSB[bc], (*buttonCurrentPattern).trackOutputRoute[bc], (*buttonCurrentPattern).trackPlayMode[bc]);
 				break;
 
 				case 1:
-				buttonCurrentPattern.trackSequence[currentStep] ^=currentTrigButtons;
+				(*buttonCurrentPattern).trackSequence[currentStep] ^=currentTrigButtons;
 				//turn on step number, or turn off step number.
 				//step sequencer mode.
+				//why is this not lighting out LEDs?
 				break;
 
 				case 2: ;
 				//select track for sample assignment
-				uint16_t currentSample = (buttonCurrentPattern.trackSampleMSB[bc]<<8)|(buttonCurrentPattern.trackSampleLSB[bc]);
+				uint16_t currentSample = ((*buttonCurrentPattern).trackSampleMSB[bc]<<8)|((*buttonCurrentPattern).trackSampleLSB[bc]);
 				*buttonCurrentTrack = bc;
 				//we need to make "spoof" screens to avoid globals here.
 				numPrinter(screenBank.screen2[1], 7, 2, (bc+1));
 				numPrinter(screenBank.screen2[1], 10, 4, currentSample);
 				outputS(screenBank.screen2[1], 1);
-				trackControl(buttonCurrentPattern.trackSampleLSB[bc], buttonCurrentPattern.trackSampleMSB[bc], buttonCurrentPattern.trackOutputRoute[bc], buttonCurrentPattern.trackOutputRoute[bc]);
+				trackControl((*buttonCurrentPattern).trackSampleLSB[bc], (*buttonCurrentPattern).trackSampleMSB[bc], (*buttonCurrentPattern).trackOutputRoute[bc], (*buttonCurrentPattern).trackPlayMode[bc]);
 
 
 
-				switch (buttonCurrentPattern.trackPlayMode[bc])
+				switch ((*buttonCurrentPattern).trackPlayMode[bc])
 				{
 					case 0:
-					screenBank.screen2[2][10] = 'P';
-					screenBank.screen2[2][11] = 'o';
-					screenBank.screen2[2][12] = 'l';
-					screenBank.screen2[2][13] = 'y';
-					break;
-
-					case 1:
 					screenBank.screen2[2][10] = 'S';
 					screenBank.screen2[2][11] = 'o';
 					screenBank.screen2[2][12] = 'l';
 					screenBank.screen2[2][13] = 'o';
+					break;
+
+					case 1:
+					screenBank.screen2[2][10] = 'P';
+					screenBank.screen2[2][11] = 'o';
+					screenBank.screen2[2][12] = 'l';
+					screenBank.screen2[2][13] = 'y';
 					break;
 
 					//these additional cases will be for loops and other stuff. have not decided on how to deal with them yet.
@@ -109,7 +113,7 @@ void listenTrigButtons(uint8_t buttonMenuState, Pattern buttonCurrentPattern, ui
 					break;
 				}
 				outputS(screenBank.screen2[2], 2);
-				numPrinter(screenBank.screen2[3], 10, 2, (buttonCurrentPattern.trackOutputRoute[bc]+1));
+				numPrinter(screenBank.screen2[3], 10, 2, ((*buttonCurrentPattern).trackOutputRoute[bc]+1));
 				outputS(screenBank.screen2[3], 3);
 
 
@@ -142,7 +146,7 @@ void listenTrigButtons(uint8_t buttonMenuState, Pattern buttonCurrentPattern, ui
 
 }
 
-void listenGPButtons(uint8_t *gpMenuState) //may need to be a pointer
+void listenGPButtons(uint8_t *gpMenuState, uint8_t *playState, uint8_t *buttonSwitchFlag) //may need to be a pointer
 {
 
 	if(button_down(1 << PB5))
@@ -151,20 +155,46 @@ void listenGPButtons(uint8_t *gpMenuState) //may need to be a pointer
 		//so no need to do any state changes atm
 		//writePattern(currentPattern, currentPatternNumber); //to implement
 
+		eepromSavePattern(currentPattern, currentPatternNumber);
 
 	}
 
 	uint8_t encoderSwitchMask = 0b00001000;
 	if(button_down(1<<PB6))
-	{//bottom encoder button
-	uint8_t encoderBCheck = *gpMenuState&encoderSwitchMask;
-	if(encoderBCheck)
-	{
-		*gpMenuState &=0b11110111;//turn off the encoderBFlag
+		{//bottom encoder button
+			uint8_t encoderBCheck = *gpMenuState&encoderSwitchMask;
+			if(encoderBCheck)
+			{
+				*gpMenuState &=0b11110111;//turn off the encoderBFlag
 
-	}else
+			}else
+			{
+				*gpMenuState |=0b00001000; //turn on the encoderBFlag bit
+			}
+		}
+	uint8_t playButtonMask = 0b0000001; //we could probably make a define for both of these masks.
+	uint8_t playStateCheck = (*playState) & playButtonMask;
+	if(button_down(1<<PB4))
 	{
-		*gpMenuState |=0b00001000; //turn on the encoderBFlag bit
-	}
+		if(playStateCheck)
+		{
+			*playState=0; //playstate is on, turn it off
+		}else
+		{
+			*playState=1;
+		}
+
+	} //not sure which button this is
+	uint8_t trackButtonMask = 0b00000001;
+	uint8_t trackStateCheck = (*buttonSwitchFlag) & trackButtonMask;
+	if(button_down(1<<PB0))
+	{
+		if(trackStateCheck)
+		{
+			*buttonSwitchFlag = 0;
+		}else
+		{
+			*buttonSwitchFlag = 1;
+		}
 	}
 }

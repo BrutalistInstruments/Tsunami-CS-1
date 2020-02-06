@@ -12,11 +12,13 @@ bits to write: 21
 
 #include <avr/io.h>
 #include "globalVariables.h"
+#include "OLEDLib.h" //for debugging purposes only
 
 uint16_t holdTrig = 0;
 extern uint8_t encoderAValue;
 extern uint16_t currentTrigButtons;
 extern Pattern currentPattern;
+extern uint8_t currentStep;
 
 void initLEDs()
 {
@@ -44,7 +46,7 @@ void parseLEDs(uint16_t LEDInput)
 	PORTG |= (1 << PG2); //latch pin high
 }
 
-void updateLEDs(uint8_t ledMenuState, Pattern ledCurrentPattern, uint16_t ledCurrentTrigButtons)
+void updateLEDs(uint8_t ledMenuState, Pattern ledCurrentPattern, uint16_t ledCurrentTrigButtons, uint8_t currentStep)
 {
 	uint8_t shiftedState = ledMenuState >> 4; //this will get rid of EncoderB
 	switch(shiftedState)
@@ -55,6 +57,7 @@ void updateLEDs(uint8_t ledMenuState, Pattern ledCurrentPattern, uint16_t ledCur
 
 		case 1:
 		parseLEDs(ledCurrentPattern.trackSequence[currentStep]);
+		//leds are not lighting, what's the deal here?
 		break;
 
 		case 2:

@@ -4,6 +4,7 @@
 #include <Encoder.h>
 #include "globalVariables.h"
 #include "OLEDLib.h"
+#include "twiLib.h"
 //#include "eepromLib.h" //to implement
 
 Encoder encoderA(9,8);
@@ -15,7 +16,6 @@ int32_t encoderBVal;
 extern Pattern currentPattern;
 extern uint8_t currentPatternNumber;
 extern Screen screenBank;
-extern uint8_t currentStep;
 extern uint8_t currentTrack;
 char patternNumPrint[21] = "Pattern:            ";
 
@@ -26,7 +26,7 @@ void initEncoders()
   prevEncoderB = 0;
 }
 
-void listenEncoders(uint8_t *encoderMenuState)
+void listenEncoders(uint8_t *encoderMenuState, uint8_t *currentStep)
 {
   //so, we kindof only care about encoder B, if button is flagged.
 encoderAVal = (((encoderA.read())/4)%4);
@@ -52,7 +52,8 @@ prevEncoderA = encoderAVal;
         numPrinter(screenBank.screen0[1], 9, 3, currentPatternNumber);
         numPrinter(screenBank.screen1[1], 9, 3, currentPatternNumber);
         outputS(screenBank.screen0[1], 1);
-        //readPattern(currentPattern, currentPatternNumber); //to be implemented
+        currentPattern = eepromLoadPattern(currentPatternNumber);
+//this logic really needs to be worked out.
 
       }else if (patternChange<0)
       {
@@ -60,6 +61,9 @@ prevEncoderA = encoderAVal;
         numPrinter(screenBank.screen0[1], 9, 3, currentPatternNumber);
         numPrinter(screenBank.screen1[1], 9, 3, currentPatternNumber);
         outputS(screenBank.screen0[1], 1);
+        //this is where we load the new pattern from the eeprom.
+        currentPattern = eepromLoadPattern(currentPatternNumber);
+
       }
 
 prevEncoderB = encoderBVal;
@@ -123,15 +127,15 @@ prevEncoderB = encoderBVal;
       int patternChange = prevEncoderB-encoderBVal;
       if(patternChange>0)
       {
-        currentPatternNumber=currentPatternNumber-1;
-        numPrinter(screenBank.screen0[1], 9, 3, currentPatternNumber);
-        numPrinter(screenBank.screen1[1], 9, 3, currentPatternNumber);
+        currentPatternNumber=currentPatternNumber-1; //so, we have an indexing issue, where because of overflow, pattern 256 shows up as pattern 0.
+        numPrinter(screenBank.screen0[1], 9, 3, (currentPatternNumber+1)); //always display wit +1
+        numPrinter(screenBank.screen1[1], 9, 3, (currentPatternNumber+1)); //always display +1
         outputS(screenBank.screen1[1], 1);
       }else if (patternChange<0)
       {
         currentPatternNumber=currentPatternNumber+1;
-        numPrinter(screenBank.screen0[1], 9, 3, currentPatternNumber);
-        numPrinter(screenBank.screen1[1], 9, 3, currentPatternNumber);
+        numPrinter(screenBank.screen0[1], 9, 3, (currentPatternNumber+1));
+        numPrinter(screenBank.screen1[1], 9, 3, (currentPatternNumber+1));
         outputS(screenBank.screen1[1], 1);
       }
       prevEncoderB = encoderBVal;
@@ -168,16 +172,16 @@ prevEncoderB = encoderBVal;
       int stepChange = prevEncoderB-encoderBVal;
       if(stepChange>0)
       {
-        if(currentStep>1){
-        currentStep=currentStep-1;
-        numPrinter(screenBank.screen1[3], 13, 2, currentStep);
+        if(*currentStep>0){
+        *currentStep=*currentStep-1;
+        numPrinter(screenBank.screen1[3], 13, 2, *currentStep+1);
         outputS(screenBank.screen1[3], 3);
       }
     }else if (stepChange<0)
       {
-        if(currentStep<currentPattern.numSteps){
-        currentStep=currentStep+1;
-        numPrinter(screenBank.screen1[3], 13, 2, currentStep);
+        if(*currentStep<currentPattern.numSteps-1){
+        *currentStep=*currentStep+1;
+        numPrinter(screenBank.screen1[3], 13, 2, *currentStep+1);
         outputS(screenBank.screen1[3], 3);
       }
       }
@@ -275,16 +279,18 @@ prevEncoderB = encoderBVal;
       int outputChange = prevEncoderB-encoderBVal;
       if(outputChange>0)
       {
-        if(currentPattern.trackOutputRoute[currentTrack]>1){
-        currentPattern.trackOutputRoute[currentTrack] = currentPattern.trackOutputRoute[currentTrack] - 1;
-        numPrinter(screenBank.screen2[3], 10, 2, currentPattern.trackOutputRoute[currentTrack]);
+        if(currentPattern.trackOutputRoute[currentTrack]>0){
+          uint8_t newRoute = (currentPattern.trackOutputRoute[currentTrack]) - 1;
+        currentPattern.trackOutputRoute[currentTrack] = newRoute;
+        numPrinter(screenBank.screen2[3], 10, 2, currentPattern.trackOutputRoute[currentTrack]+1);
         outputS(screenBank.screen2[3], 3);
       }
     }else if(outputChange<0)
       {
-          if(currentPattern.trackOutputRoute[currentTrack]<8){
-          currentPattern.trackOutputRoute[currentTrack] = currentPattern.trackOutputRoute[currentTrack] + 1;
-          numPrinter(screenBank.screen2[3], 10, 2, currentPattern.trackOutputRoute[currentTrack]);
+          if(currentPattern.trackOutputRoute[currentTrack]<7){
+            uint8_t newRoute = (currentPattern.trackOutputRoute[currentTrack]) + 1;
+          currentPattern.trackOutputRoute[currentTrack] = newRoute;
+          numPrinter(screenBank.screen2[3], 10, 2, currentPattern.trackOutputRoute[currentTrack]+1);
           outputS(screenBank.screen2[3], 3);
         }
       }

@@ -26,10 +26,10 @@ typedef struct Pattern
  	uint8_t trackSampleMSB[16]; //16 bytes
  	uint8_t trackSampleLSB[16]; //16 bytes
  	uint8_t voiceLockFlag[16]; //16 bytes
- 	uint16_t trackSequence[64]; //128 bytes - this will be a seperate page
 	uint8_t midiTrackNote[16]; //16 bytes
 	uint16_t patternBPM; //2 bytes
 	uint8_t numSteps; //1 byte
+	uint16_t trackSequence[64]; //128 bytes - this will be a seperate page
 
 } Pattern; //total bytes - 128 for the sequence, 219 bytes for all other data.
 //so 3 pages in total, 1 for sequencer data, 2 for all other data (248 bytes, room for expansion
@@ -46,8 +46,9 @@ typedef struct Screen
 	uint8_t screen2Index;
 	uint8_t screen3Index;
 
-
 } Screen;
+
+//do we need these externs here anymore?
 
 extern uint16_t currentTrigButtons;
 extern uint8_t currentGPButtons;
@@ -56,6 +57,6 @@ extern uint8_t currentPatternNumber;
 extern uint8_t currentStep;
 extern uint8_t currentTrack;
 
-void initBank(Pattern currentInitPattern);
+void initBank(Pattern *currentInitPattern);
 void initArrays(unsigned char myArray[4][21], uint8_t lengthOfString, int stringNumber, char* myString);
 #endif /* GLOBALVARIABLES_H_ */

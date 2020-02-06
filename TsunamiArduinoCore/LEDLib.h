@@ -11,7 +11,7 @@
 
 void parseLEDs(uint16_t LEDInput);
 void initLEDs();
-void updateLEDs(uint8_t ledMenuState, Pattern ledCurrentPattern, uint16_t ledCurrenttrigButtons);
+void updateLEDs(uint8_t ledMenuState, Pattern ledCurrentPattern, uint16_t ledCurrenttrigButtons, uint8_t curentStep);
 
 
 

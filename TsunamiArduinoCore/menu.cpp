@@ -56,10 +56,9 @@ initArrays(screenBank.screen3,15,0,"Global Settings");
 numPrinter(screenBank.screen0[2],5,3, currentPattern.patternBPM);
 numPrinter(screenBank.screen3[1],14,2, (midiChannel+1));
 numPrinter(screenBank.screen0[1], 9, 3, initPatternNumber+1);
-numPrinter(screenBank.screen1[1], 9, 3, initPatternNumber+1);
+numPrinter(screenBank.screen1[1], 9, 3, initPatternNumber+1); //pattern index is 0 through 255, but when displayed
 numPrinter(screenBank.screen1[2], 7, 2, currentPattern.numSteps);
 numPrinter(screenBank.screen1[3], 13, 2, (currentStep+1));
-//why is this here twice?
 
 
 
