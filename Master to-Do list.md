@@ -19,7 +19,6 @@ What's here:
 | ------- |-------|
 |Midi-Out|Midi-In functioning correctly|
 |Logarithmic Knob Reading|Knob Library|
-|GP-Button LEDs|LED output Library|
 |Envelop Knob Functionality|Knob Library|
 
 #### Hardware
@@ -49,3 +48,4 @@ What's here:
 |Audio and Midi ground on IO board have been separated, eliminating digital noise|
 |Midi in is not fully functional, using a home-made midi library|
 |Encoders are now on interrupt pins in new hardware revision, but need to be re-coded for such use. |
+|GP-Button LEDs|LED output Library|
