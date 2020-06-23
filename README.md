@@ -6,7 +6,7 @@ Check out the build progress with pictures and video over at https://www.instagr
 
 ### Features:
  Tactile Control over Tsunami Wave Trigger:
-- 255 Banks of 16  wav samples
+- 255 Banks of 16  wav samples (up to 4096 individual .wav files indexed)
 - 8 Individual Assignable Outputs
 - Per output volume control
 - Per output pitch control (1 octave up and down)
