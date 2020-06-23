@@ -66,7 +66,7 @@ while(1) {
 	listenGPButtons(currentPattern, &currentGlobals);
 	updateLEDs(currentPattern, currentGlobals);
 	listenEncoders(&currentPattern, &currentGlobals);
-	listenKnobs(&currentPattern, &screenBank, &currentGlobals);
+	listenKnobs(&currentPattern, &currentGlobals);
 	updateSequencer(currentPattern, currentGlobals);
 	updateScreen(&screenBank, &currentPattern, &currentGlobals);
 	midiRead(currentPattern, currentGlobals);

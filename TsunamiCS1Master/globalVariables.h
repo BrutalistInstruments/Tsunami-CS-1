@@ -91,15 +91,15 @@ typedef struct Pattern
 typedef struct Screen
 {
 
-	unsigned char screen0[4][21];
-	unsigned char screen1[4][21];
-	unsigned char screen2[4][21];
-	unsigned char screen3[4][21];
+	unsigned char screen0[9][21]; //since each screen can hold 3 bit menu states, there are 9 values that each menu can have. 
+	unsigned char screen1[9][21]; //not every array needs to be initialized, but it is important for our initArray method that they be uniform. 
+	unsigned char screen2[9][21];
+	unsigned char screen3[9][21];
 	uint8_t screen0Index;
 	uint8_t screen1Index;
 	uint8_t screen2Index;
 	uint8_t screen3Index;
-	unsigned char knobScreen[6][21]; 
+	unsigned char knobScreen[9][21]; 
 	
 
 } Screen;
@@ -132,8 +132,8 @@ typedef struct Globals
 	
 }Globals;
 
+void initArrays(unsigned char myArray[9][21], int stringNumber, char* myString);
 void initBank(Pattern *currentInitPattern);
-void initArrays(unsigned char myArray[4][21], uint8_t lengthOfString, int stringNumber, char* myString);
 void initGlobals(Globals *currentGlobals, uint8_t factoryReset);
 
 #endif /* GLOBALVARIABLES_H_ */

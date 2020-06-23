@@ -118,7 +118,7 @@ void initializeKnob(Globals *currentGlobals)
 	}
 }
 
-void interperetKnob(uint8_t select, Pattern *currentKnobPattern, Screen *knobScreen, Globals *currentGlobals)
+void interperetKnob(uint8_t select, Pattern *currentKnobPattern, Globals *currentGlobals)
 {//this function will compare outputs, and write to our struct.
 	select = select%44;
 	
@@ -259,10 +259,6 @@ void interperetKnob(uint8_t select, Pattern *currentKnobPattern, Screen *knobScr
 				//maybe some defines?				
  				currentKnobPattern->patternBPM = currentGlobals->filteredKnobBuffer[select];
 				currentGlobals->lastFilteredKnobBuffer[select] = currentGlobals->filteredKnobBuffer[select];
-				if(currentGlobals->menuState==0){
-					numPrinter(knobScreen->screen0[2], 5, 3, currentKnobPattern->patternBPM);
-					outputS(knobScreen->screen0[2], 2);
-				}
  			}
  			break;
 // 			
@@ -278,13 +274,13 @@ void interperetKnob(uint8_t select, Pattern *currentKnobPattern, Screen *knobScr
 
 }
 
-void listenKnobs(Pattern *currentKnobPattern, Screen *currentScreen, Globals *currentGlobals)
+void listenKnobs(Pattern *currentKnobPattern, Globals *currentGlobals)
 {
 	for(uint8_t loopCounter = 0; loopCounter<44; loopCounter++)
 	{
 		selectKnob(loopCounter);
 		updateKnob(loopCounter, currentGlobals);
-		interperetKnob(loopCounter,currentKnobPattern, currentScreen, currentGlobals);
+		interperetKnob(loopCounter,currentKnobPattern, currentGlobals);
 	}
 }
 

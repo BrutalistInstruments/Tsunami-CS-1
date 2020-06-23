@@ -7,10 +7,12 @@
 
 #include <avr/io.h>
 #include "globalVariables.h"
+#include <string.h>
 
 //takes an array less than 20 and fills it with blank characters
-void initArrays(unsigned char myArray[4][21], uint8_t lengthOfString, int stringNumber, char* myString)
+void initArrays(unsigned char myArray[9][21], int stringNumber, char* myString)
 {
+	uint8_t lengthOfString = strlen(myString);
 	uint8_t charLeft = 20 - lengthOfString;
 	uint8_t currentIndex = 0;
 	for(currentIndex; currentIndex<lengthOfString; currentIndex++)

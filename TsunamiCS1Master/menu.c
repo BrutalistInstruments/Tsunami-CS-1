@@ -20,36 +20,37 @@ void initMenu(Screen *initTheScreen, Pattern currentPattern, Globals currentGlob
 
 //screen0
 // = {"Performance Mode    ","Pattern:            ","BPM: xxx            ","Stop                "}
-initArrays(initTheScreen->screen0,8,1,"Pattern:");
-initArrays(initTheScreen->screen0,4,2,"BPM:");
-initArrays(initTheScreen->screen0,4,3,"Stop");
-initArrays(initTheScreen->screen0,16,0,"Performance Mode");
+initArrays(initTheScreen->screen0,1,"Pattern:");
+initArrays(initTheScreen->screen0,2,"BPM:");
+initArrays(initTheScreen->screen0,3,"Stop");
+initArrays(initTheScreen->screen0,0,"Performance Mode");
 //screen1
 // = {"Sequence Edit       ","Pattern:            ","Steps:              ","Step number:        "}; //this will eventually be 5 once we implement naming of samples.
-initArrays(initTheScreen->screen1,8,1,"Pattern:");
-initArrays(initTheScreen->screen1,6,2,"Steps:");
-initArrays(initTheScreen->screen1,12,3,"Step number:");
-initArrays(initTheScreen->screen1,13,0,"Sequence Edit");
+initArrays(initTheScreen->screen1,1,"Pattern:");
+initArrays(initTheScreen->screen1,2,"Steps:");
+initArrays(initTheScreen->screen1,3,"Step number:");
+initArrays(initTheScreen->screen1,0,"Sequence Edit");
 //screen2
 //= {"Track Settings      ","Track:              ","Play Mode           ","OutRoute            "};
-initArrays(initTheScreen->screen2,6,1,"Track:");
-initArrays(initTheScreen->screen2,9,2,"PlayMode:");
-initArrays(initTheScreen->screen2,9,3,"OutRoute:");
-initArrays(initTheScreen->screen2,14,0,"Track Settings");
+initArrays(initTheScreen->screen2,1,"Track:");
+initArrays(initTheScreen->screen2,2,"PlayMode:");
+initArrays(initTheScreen->screen2,3,"OutRoute:");
+initArrays(initTheScreen->screen2,0,"Track Settings");
 //screen3
 // = {"Global Settings     ","Midi Channel: xx    ", "Midi trig:  "};
-initArrays(initTheScreen->screen3,13,1,"Midi Channel:");
-initArrays(initTheScreen->screen3,18,2,"Midi trig   :       ");
-initArrays(initTheScreen->screen3,20,3,"                     ");
-initArrays(initTheScreen->screen3,15,0,"Global Settings");
+initArrays(initTheScreen->screen3,1,"Midi Channel:");
+initArrays(initTheScreen->screen3,2,"Midi trig   :       ");
+initArrays(initTheScreen->screen3,3,"                     ");
+initArrays(initTheScreen->screen3,0,"Global Settings");
 
 //init all of the knob arrays:
 
-initArrays(initTheScreen->knobScreen,19,0,"OutVolume x : xxxdb");//string 0 is outVolume
-initArrays(initTheScreen->knobScreen,11,1,"Pitch : xxx");//string 1 is pitch
-initArrays(initTheScreen->knobScreen,20,2,"AttackTime  : xxx MS"); //string 2 is Envelope gain
-initArrays(initTheScreen->knobScreen,20,3,"ReleaseTimexx:xxxxMS"); //string 3 is Envelop Time
-initArrays(initTheScreen->knobScreen,20,4,"TrackVolume xx:xxxdb"); //string 4 is track Level.
+initArrays(initTheScreen->knobScreen,0,"OutVolume x : xxxdb");//string 0 is outVolume
+initArrays(initTheScreen->knobScreen,1,"Pitch : xxx");//string 1 is pitch
+initArrays(initTheScreen->knobScreen,2,"AttackTime  : xxx MS"); //string 2 is Envelope gain
+initArrays(initTheScreen->knobScreen,3,"ReleaseTimexx:xxxxMS"); //string 3 is Envelop Time
+initArrays(initTheScreen->knobScreen,4,"TrackVolume xx:xxxdb"); //string 4 is track Level.
+//initArrays(initTheScreen->knobScreen,5,"BPM: ");
 //we might want to put in one of these for BPM, but I'm not sure. 
 
 numPrinter(initTheScreen->screen0[2],5,3, currentPattern.patternBPM);
@@ -320,9 +321,9 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 		//Not sure why, will look into it later. For now, it works, and testing for this will be on the to-do list. 
 		
 		uint8_t positionSelect = currentGlobals->knobStatus&0x0F; //this is the bottom 4 bits, for the track location
-		if((((currentGlobals->buttonSwitchFlag)&0x01)==1)&&(positionSelect>15))
+		if(positionSelect>15)
 		{
-			positionSelect = positionSelect + 8;
+			outputS("OVER 15",0);
 		}
 
 		switch((currentGlobals->knobStatus)>>4)
@@ -380,6 +381,14 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 			}
 				 numPrinter(menuScreen->knobScreen[4],12,2,positionSelect+1);
 				 outputS(menuScreen->knobScreen[4], 3);
+			break;
+			
+			case 5:
+			numPrinter(menuScreen->screen0[2],5,3,currentPattern->patternBPM);
+			if(currentGlobals->menuState==PreformanceModeInit)
+			{
+				outputS(menuScreen->screen0[2],2);
+			}
 			break;
 		}
 		currentGlobals->valueChangeFlag = currentGlobals->valueChangeFlag&(0xFF&(0<<knobChange));			

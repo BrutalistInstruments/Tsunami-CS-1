@@ -11,14 +11,12 @@ main.d main.o: .././main.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\version.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\fuse.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h \
- .././OLEDLib.h .././ButtonLib.h .././EncoderLib.h .././menu.h \
- .././knobLib.h .././globalVariables.h .././serialLib.h .././LEDLib.h \
- .././MidiLib.h .././debounceLib.h \
+ .././OLEDLib.h .././serialLib.h .././globalVariables.h .././knobLib.h \
+ .././ButtonLib.h .././DebounceLib.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\atomic.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h
+ .././menu.h .././tsunamiLib.h .././LEDLib.h .././encoderLib.h \
+ .././sequencerLib.h .././twiLib.h .././midiLib.h
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -46,30 +44,30 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 .././OLEDLib.h:
 
-.././ButtonLib.h:
-
-.././EncoderLib.h:
-
-.././menu.h:
-
-.././knobLib.h:
+.././serialLib.h:
 
 .././globalVariables.h:
 
-.././serialLib.h:
+.././knobLib.h:
 
-.././LEDLib.h:
+.././ButtonLib.h:
 
-.././MidiLib.h:
-
-.././debounceLib.h:
+.././DebounceLib.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\atomic.h:
 
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h:
+.././menu.h:
 
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h:
+.././tsunamiLib.h:
 
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h:
+.././LEDLib.h:
+
+.././encoderLib.h:
+
+.././sequencerLib.h:
+
+.././twiLib.h:
+
+.././midiLib.h:

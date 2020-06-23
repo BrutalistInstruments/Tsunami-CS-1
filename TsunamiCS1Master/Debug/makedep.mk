@@ -22,7 +22,11 @@ MidiLib.c
 
 OLEDLib.c
 
+sequencerLib.c
+
 serialLib.c
 
 tsunamiLib.c
+
+twiLib.c
 
