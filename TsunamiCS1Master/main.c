@@ -16,8 +16,6 @@
 
 int main(){
 
-//globals
-//uint8_t midiChannel=0;
 Pattern currentPattern;
 Screen screenBank;
 Globals currentGlobals;
