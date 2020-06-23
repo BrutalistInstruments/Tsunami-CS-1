@@ -19,7 +19,7 @@ What's here:
 #### Firmware
 | Feature |Depenencies|
 | ------- |-------|
-|SustainStage and Release state|Version 0.97|
+|Sustain stage and Release stage|Version 0.97|
 |Factory Reset in Global Menu|Version 1.0|
 |Midi-Out|Version 1.1|
 |Logarithmic Knob Reading|Verion 1.2|
