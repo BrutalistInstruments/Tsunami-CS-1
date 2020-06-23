@@ -3,20 +3,23 @@
  *
  * Created: 7/31/2019 4:31:55 PM
  *  Author: Hal
- */ 
+ */
 
 #include "globalVariables.h"
-#include "EncoderLib.h"
 #include "tsunamiLib.h"
 #include "OLEDLib.h"
 #include <avr/io.h>
 #include "DebounceLib.h"
+#include "twiLib.h"
 
+//These are declared here instead of in the functions they are used to save clock cycles. 
+//we only initialized them once, and hold in memory, instead of allocating every time one of these functions are called. 
+//(at least I think that's how C works)
 uint8_t buttonsCurrentCycle;
 uint16_t lastFullBits = 0;
 uint8_t currentTrig;
 
-ISR(TIMER0_OVF_vect)
+ISR(TIMER2_OVF_vect)
 {
 	debounce();
 }
@@ -30,114 +33,122 @@ void initButtons()
 
 	//GPButtons and Encoder buttons
 	PORTB = 0B01111111;
-	
+
 }
 
-
-void listenTrigButtons()
+void listenTrigButtons(Pattern *buttonCurrentPattern, Globals *currentGlobals)
 {
 	buttonsCurrentCycle = (PINL^255); //^ = bitwise XOR operation.
-	currentTrigButtons = (buttonsCurrentCycle << 8) | (PINA^255);
-	if(currentTrigButtons!=lastFullBits) //we do read the buttons every cycle, but we don't need to update everything base on the buttons if they haven't changed.
+	(currentGlobals->currentTrigButtons) = (buttonsCurrentCycle << 8) | (PINA^255);
+	if(currentGlobals->currentTrigButtons!=lastFullBits) //we do read the buttons every cycle, but we don't need to update everything base on the buttons if they haven't changed.
 	{
-		lastFullBits = currentTrigButtons;
-		uint16_t fullBitsParse = currentTrigButtons;
+		lastFullBits = currentGlobals->currentTrigButtons;
+		uint16_t fullBitsParse = currentGlobals->currentTrigButtons;
 		//play sounds, if that is the switch case on the encoder
-	//updateLEDs
-	for(uint8_t bc = 0; bc<16; bc++)//bc for buttonCounter
-	{
-		currentTrig = (fullBitsParse&1);
-		if(currentTrig)
+		//updateLEDs
+		for(uint8_t bc = 0; bc<16; bc++)//bc for buttonCounter
 		{
-			switch (encoderAValue)
+			currentTrig = (fullBitsParse&1);
+			if(currentTrig)
 			{
-				
-				//for "perfrmance mode", we should just use the default case, and only have code for the cases where things are outside of that use case.
-				case 0: //performance mode
-				//we trigger a sound here based on the location of bc
-				trackControl(currentPattern.trackSampleLSB[bc], currentPattern.trackSampleMSB[bc], currentPattern.trackOutputRoute[bc], currentPattern.trackOutputRoute[bc]);
-				break;
-				
-				case 1:
-				currentPattern.trackSequence[currentStep] ^=currentTrigButtons;
-				//turn on step number, or turn off step number.
-				//step sequencer mode.
-				break;
-				
-				case 2: ;
-				//select track for sample assignment
-				uint16_t currentSample = (currentPattern.trackSampleMSB[bc]<<8)|(currentPattern.trackSampleLSB[bc]);
-				currentTrack = bc;
-				numPrinter(screen2[1], 7, 2, (bc+1));
-				numPrinter(screen2[1], 10, 4, currentSample);
-				outputS(screen2[1], 1);
-				switch (currentPattern.trackPlayMode[bc])
+				uint8_t encoderAstate = currentGlobals->menuState >> 4;
+				switch (encoderAstate)
 				{
-					case 0:
-					screen2[2][10] = 'P';
-					screen2[2][11] = 'o';
-					screen2[2][12] = 'l';
-					screen2[2][13] = 'y';
+	
+					//for "performance mode", we should just use the default case, and only have code for the cases where things are outside of that use case.
+					case 0: //performance mode
+					//we trigger a sound here based on the location of bc
+					playTrack(buttonCurrentPattern, currentGlobals,bc);
+					//trackControl(buttonCurrentPattern->trackSampleLSB[bc], buttonCurrentPattern->trackSampleMSB[bc], buttonCurrentPattern->trackOutputRoute[bc], buttonCurrentPattern->trackPlayMode[bc]);
+					// void trackControl(char trackNumberLSB, char trackNumberMSB, char outputNumber, char trackCommand);
 					break;
-					
+
 					case 1:
-					screen2[2][10] = 'S';
-					screen2[2][11] = 'o';
-					screen2[2][12] = 'l';
-					screen2[2][13] = 'o';
+					buttonCurrentPattern->trackSequence[currentGlobals->currentStep] ^=currentGlobals->currentTrigButtons;
+					//turn on step number, or turn off step number.
+					//step sequencer mode.
 					break;
-					
-					//these additional cases will be for loops and other stuff. have not decided on how to deal with them yet.
+
+					//we want this functionality for both case 2 and case 3
 					case 2:
+					case 3:;
+					//select track for sample assignment
+					//uint16_t currentSample = (buttonCurrentPattern->trackSampleMSB[bc]<<8)|(buttonCurrentPattern->trackSampleLSB[bc]);
+					currentGlobals->currentTrack = bc;
+					currentGlobals->valueChangeFlag |=(1<<triggerChange);
+					trackControl(buttonCurrentPattern->trackSampleLSB[bc], buttonCurrentPattern->trackSampleMSB[bc], buttonCurrentPattern->trackOutputRoute[bc], buttonCurrentPattern->trackPlayMode[bc]);
 					break;
-					
-					case 3:
+
+				
+
+					break;
+
+					default:
+					//this should be the same as case 0;
 					break;
 				}
-				outputS(screen2[2], 2);
-				numPrinter(screen2[3], 10, 2, (currentPattern.trackOutputRoute[bc]+1));
-				outputS(screen2[3], 3);
-				
-				
-				trackControl(currentPattern.trackSampleLSB[bc], currentPattern.trackSampleMSB[bc], currentPattern.trackOutputRoute[bc], currentPattern.trackOutputRoute[bc]);
-				break;
-				
-				case 3:; 
-				//should these be assignable per pattern? maybe should take them out of global settings, or change that
-				uint16_t currentMidiNote = currentPattern.midiTrackNote[bc];
-				currentTrack = bc;
-				numPrinter(screen3[2], 11, 2, currentTrack);
-				numPrinter(screen3[2], 14, 2, currentMidiNote);
-				outputS(screen3[2], 2);
-				break;
-				
-				default:
-				//this should be the same as case 0;
-				break;
 			}
-		
-		
+			fullBitsParse = fullBitsParse>>1;
 		}
-		
-		fullBitsParse = fullBitsParse>>1;
 	}
-	}
-
-
 }
 
-void listenGPButtons() // are the encoder buttons here also?
+void listenGPButtons(Pattern currentPattern, Globals *currentGlobals) //may need to be a pointer
 {
 
 	if(button_down(1 << PB5))
 	{ //top encoder button
-	encoderAFlag = ~encoderAFlag;
+		if(currentGlobals->menuState>>4==3)
+		{
+			globalWrite(currentGlobals);
+		}else
+		{
+			eepromSavePattern(currentPattern, currentGlobals->currentPatternNumber);
+		}
 		
 	}
-	
+
+	uint8_t encoderSwitchMask = 0b00001000;
 	if(button_down(1<<PB6))
-	{//bottom encoder button
-		encoderBFlag = ~encoderBFlag;
-		
+		{//bottom encoder button
+			uint8_t encoderBCheck = currentGlobals->menuState&encoderSwitchMask;
+			if(encoderBCheck)
+			{
+				currentGlobals->menuState &=0b11110111;//turn off the encoderBFlag
+
+			}else
+			{
+				currentGlobals->menuState |=0b00001000; //turn on the encoderBFlag bit
+			}
+		}
+	uint8_t playButtonMask = 0b0000001; //we could probably make a define for both of these masks.
+	uint8_t playStateCheck = currentGlobals->playState & playButtonMask;
+	if(button_down(1<<PB4))
+	{
+		if(playStateCheck)
+		{
+			currentGlobals->playState=0; //playstate is on, turn it off
+			currentGlobals->currentGPButtons &=(~0x20); //turn the first bit
+			
+		}else
+		{
+			currentGlobals->playState=1;
+			currentGlobals->currentGPButtons |= 0x20; //turn on the first bit
+		}
+
+	} //not sure which button this is
+	uint8_t trackButtonMask = 0b00000001;
+	uint8_t trackStateCheck = (currentGlobals->buttonSwitchFlag) & trackButtonMask;
+	if(button_down(1<<PB0))
+	{
+		if(trackStateCheck)
+		{
+			currentGlobals->buttonSwitchFlag = 0;
+			currentGlobals->currentGPButtons &=(~0x02);
+		}else
+		{
+			currentGlobals->buttonSwitchFlag = 1;
+			currentGlobals->currentGPButtons |=0x02;
+		}
 	}
 }

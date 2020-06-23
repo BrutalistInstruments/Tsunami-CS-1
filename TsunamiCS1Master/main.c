@@ -1,56 +1,78 @@
-#define F_CPU 16000000UL
-
 #include <avr/io.h>
 #include "OLEDLib.h"
-#include "ButtonLib.h"
-#include "EncoderLib.h"
-#include "menu.h"
-#include "knobLib.h"
-#include "globalVariables.h"
 #include "serialLib.h"
+#include "globalVariables.h"
+#include "knobLib.h"
+#include "ButtonLib.h"
+#include "DebounceLib.h"
+#include "menu.h"
+#include "tsunamiLib.h"
 #include "LEDLib.h"
-#include "MidiLib.h"
-#include "debounceLib.h"
-#include <util/delay.h>
-#include <avr/interrupt.h>
-//test, can I push from a different PC?
+#include "encoderLib.h"
+#include "sequencerLib.h"
+#include "twiLib.h"
+#include "midiLib.h"
 
 
+int main(){
 
-int main(void)
-{
-	midiChannel = 0; //for now, need to change this from load memory
-	initBank();
+//globals
+//uint8_t midiChannel=0;
+Pattern currentPattern;
+Screen screenBank;
+Globals currentGlobals;
+uint8_t factoryReset=0; // set this to 1 if you would like to fill the eeprom with Factory data, and erase all user data.
+	
 	initScreen();
+	initGlobals(&currentGlobals, factoryReset);  
 	initButtons();
 	initLEDs();
 	initEncoders();
-	initMenu();
 	initADC();
 	serialInit0();
-	TCCR0B = 1<<CS02;
-	TIMSK0 = 1<<TOIE0;
+	initMidi();
+	//initEnvelopes();
+	initSequencer();
+	twi_init();
+	initBank(&currentPattern);
 	
-	
-	sei();
-	 //this will be necessary on first startup, but maybe not in the actual program? maybe just something handy to have.
-	//loadMemory(); //we need to load in the first struct in locarion 0 of our eeprom.
-	while (1)
+	//this should be a global function. 
+	if(factoryReset==1)
 	{
-		listenTrigButtons();
-		listenMidi();
-		listenGPButtons();
-		listenMidi();
-		updateLEDs();
-		listenMidi();
-		listenEncoders();
-		listenMidi();
-		listenKnobs();
-		listenMidi();
-		//updateSequence();
-		updateScreen();
-		listenMidi();
-		
+		//do factory reset here.
+		factoryResetEeprom(currentPattern);
+		globalWrite(&currentGlobals);
+	}
+
+	eepromLoadPattern(&currentPattern,currentGlobals.currentPatternNumber);
+	for(uint16_t i = 0; i<440; i++ ) //we need to load the FilterKnobbuffer into a stable state 
+	{
+		uint8_t loadSelect = i%44;
+		selectKnob(loadSelect);
+		updateKnob(loadSelect, &currentGlobals);
+	}
+	initializeKnob(&currentGlobals); //then copy it to the lastFilteredKnobBuffer. 
+	globalLoad(&currentGlobals, factoryReset);
+	initMenu(&screenBank, currentPattern, currentGlobals); //fills screenBank with menu strings
+
+	//what were these for? Some timer interrupt somewhere?
+	TCCR2B = 1<<CS22;//using 64 from pre-scaler
+	TIMSK2 = 1<<TOIE2;
+
+	sei();	
+
+while(1) {
+	
+	
+	listenTrigButtons(&currentPattern, &currentGlobals);
+	listenGPButtons(currentPattern, &currentGlobals);
+	updateLEDs(currentPattern, currentGlobals);
+	listenEncoders(&currentPattern, &currentGlobals);
+	listenKnobs(&currentPattern, &screenBank, &currentGlobals);
+	updateSequencer(currentPattern, currentGlobals);
+	updateScreen(&screenBank, &currentPattern, &currentGlobals);
+	midiRead(currentPattern, currentGlobals);
+	//releaseCheck(releaseCounter, &releaseTracker, releaseCounterArray[16],currentPattern);
+
 	}
 }
-

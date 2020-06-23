@@ -3,7 +3,7 @@
  *
  * Created: 6/26/2019 5:47:50 PM
  *  Author: Hal
- */ 
+ */
 #define F_CPU 16000000UL
 #include <util/delay.h>
 #include <avr/io.h>
@@ -13,15 +13,15 @@ uint8_t new_line[4] = {0x80, 0xA0, 0xC0, 0xE0};
 //enable cycle is functioning properly.
 void enableCycle()
 {
-	
+
 	//required for timing on LCD Screen
 	//the only delay in this library.
-	
 
-	PORTJ |= 0B00000010;
+
+	PORTH |= 0B00100000;
 	_delay_us(1);
-	PORTJ &= 0B11111101;
-	
+	PORTH &= 0B11011111;
+
 }
 
 void send8bit(uint8_t value)
@@ -29,7 +29,7 @@ void send8bit(uint8_t value)
 	//set all pins on port C to output pins.
 	//using unsigned int 8 bit values should protect this
 	//function from overflow.
-	
+
 	//also,this should just work.
 	//since we want to send an 8 bit value over an entire port.
 	PORTC = value;
@@ -38,7 +38,7 @@ void send8bit(uint8_t value)
 void command(uint8_t c)
 {
 	//digitalWrite(DC, 0);
-	PORTJ &= 0B11111110; //set our DC pin low, to get ready to write data.
+	PORTH &= 0B10111111; //set our DC pin low, to get ready to write data.
 	//we need to figure out where our DC pin is.
 	send8bit(c);
 	enableCycle();
@@ -48,7 +48,7 @@ void command(uint8_t c)
 void data(uint8_t d)
 {
 	//digitalWrite(DC, 1);
-	PORTJ |=0B00000001; //set out DC Pin high, so it's ready to write data.
+	PORTH |=0B01000000; //set out DC Pin high, so it's ready to write data.
 	send8bit(d);
 	enableCycle();
 }
@@ -57,15 +57,15 @@ void initScreen()
 {
 	//this is where we will do all of the screen
 	//initialization.
-	DDRJ = 0x03; //pins 14 and 15, 14 is Enable (PortJ1), 15 is data/command (PortJ0)
+	DDRH = 0x60; //pins 14 and 15, 14 is Enable (PortJ1), 15 is data/command (PortJ0)
 	DDRC =0xFF; //all pins on the LCD Data Bus.
 
-	
-	PORTJ &= 0B11111100;		//set both the DC line and E line of the display to 0. leave all other bits on the ports alone
-	
+
+	PORTH &= 0B10011111;		//set both the DC line and E line of the display to 0. leave all other bits on the ports alone
+
 	PORTC = 0x00;				// Initializes all Arduino pins for the data bus
 	_delay_us(200);				// Waits 200 us for stabilization purpose
-	
+
 
 	uint8_t rows = 0x08;                    // Display mode: 2/4 lines
 
@@ -101,18 +101,18 @@ void initScreen()
 	command(0x20 | rows); // Function set: fundamental command set (RE=0) (exit from extended command set), lines #
 	command(0x01);        // Clear display
 	_delay_ms(2);             // After a clear display, a minimum pause of 1-2 ms is required
-	
+
 	command(0x80);        // Set DDRAM address 0x00 in address counter (cursor home) (default value)
 	command(0x0C);        // Display ON/OFF control: display ON, cursor off, blink off
 	_delay_ms(250);           // Waits 250 ms for stabilization purpose after display on
-	
+
 }
 
 void outputS(char* lineIn, int row)
 {
 	uint8_t r = row;
 	uint8_t c = 0;
-	
+
 	command(new_line[r]);
 	//20, because our display is 20x4.
 	for(c=0; c<20; c++)
@@ -129,24 +129,24 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
 	uint8_t hunderedsPlace = 0;
 	uint8_t thousandsPlace = 0;
 	uint8_t tenThousandsPlace = 0;
-	
+
 	switch(numCharacters)
 	{
 		case 0:
 		break;
-		
+
 		case 1:
 		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
 		charArray[startingPos] = onesPlace;
 		break;
-		
+
 		case 2:
 		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
 		tensPlace = (inputNumber/10)+48;
 		charArray[(startingPos+1)] = onesPlace;
 		charArray[startingPos] = tensPlace;
 		break;
-		
+
 		case 3:
 		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
 		tensPlace = ((inputNumber%100)/10)+48;
@@ -155,7 +155,7 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
 		charArray[(startingPos+1)] = tensPlace;
 		charArray[startingPos] = hunderedsPlace;
 		break;
-		
+
 		case 4:
 		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
 		tensPlace = ((inputNumber%100)/10)+48;
@@ -166,7 +166,7 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
 		charArray[(startingPos+1)] = hunderedsPlace;
 		charArray[startingPos] = thousandsPlace;
 		break;
-		
+
 		case 5:
 		onesPlace = (inputNumber%10)+48; //this should be a value between 1 and 10.
 		tensPlace = ((inputNumber%100)/10)+48;
@@ -179,12 +179,96 @@ void numPrinter(char* charArray,uint8_t startingPos, uint8_t numCharacters, uint
 		charArray[(startingPos+1)] = thousandsPlace;
 		charArray[startingPos] = tenThousandsPlace;
 		break;
-		
+
 		//if your number is higher than 16 bit, sorry, no can do.
 		default:
 		break;
-		
+
 	}
 
 
+}
+
+void midiNotePrinter(char* charArray, uint8_t startingPosition, uint8_t noteNumber)
+{
+	//will take up 3 character spaces. 
+	char printLetter = 0;
+	char printNumber = 0;
+	char printSharp = 0;
+	uint8_t valueSwitch = 0;
+	//numbers will always go from B to C, and have 12 distinct values. 
+	//we can get our number from this with division. 
+	//midi note C0 starts at 12. So, we'll need to do some math there. 
+	printNumber = (noteNumber/12)+47; 
+	
+	//theres a weird wrap around with note numbers here. Since there isn't really an easy math patern we can take advantage of. 
+	valueSwitch = noteNumber%12; //this should give us a value between 0 and 11. 
+	switch(valueSwitch)
+	{
+		
+		case 0:
+		printLetter = 'C';
+		printSharp = ' ';
+		break;
+				
+		case 1:
+		printLetter = 'C';
+		printSharp = '#';
+		break;
+		
+		case 2:
+		printLetter = 'D';
+		printSharp = ' ';
+		break;
+		
+		case 3:
+		printLetter = 'D';
+		printSharp = '#';
+		break;
+		
+		case 4:
+		printLetter = 'E';
+		printSharp = ' ';
+		break;
+		
+		case 5:
+		printLetter = 'F';
+		printSharp = ' ';
+		break;
+		
+		case 6:
+		printLetter = 'F';
+		printSharp = '#';
+		break;
+		
+		case 7:
+		printLetter = 'G';
+		printSharp = ' ';
+		break;
+		
+		case 8:
+		printLetter = 'G';
+		printSharp = '#';
+		break;
+		
+		case 9:
+		printLetter = 'A';
+		printSharp = ' ';
+		break;
+		
+		case 10:
+		printLetter = 'A';
+		printSharp = '#';
+		break;
+		
+		case 11:
+		printLetter = 'B';
+		printSharp = ' ';
+		break;
+		
+	}
+	charArray[startingPosition] = printLetter;
+	charArray[startingPosition+1]= printSharp;
+	charArray[startingPosition+2]= printNumber;
+	
 }

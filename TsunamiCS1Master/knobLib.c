@@ -20,29 +20,30 @@
 #include "OLEDLib.h"
 #include "tsunamiLib.h"
 #include "MidiLib.h"
-
 #include "globalVariables.h"
-int checkValue = 0;
-char pitchPrint[20] = "Pitch = xxx         ";
-char etimePrint[20] = "Time = xxx          ";
-char elevelPrint[20] = "Level = xxx         ";
-char outVolumePrint[20] = "OutVolume x = xxxdb ";
-char trackVolumePrint[20] = "TrackVolumex = xxxdb";
-char envelopeLevelPrint[20] = "EnvelopeGainxx:xxxdb";
-char envelopeTimePrint[20] = "EnvelopeTimex:xxxxMS";
+#include "knobLib.h"
+
+
+uint8_t NegativeOffset = 71;
+float volumeDivisor = 3.135;
+
+//uint8_t checkValue = 0;
+//uint8_t knobBuffer[44];
+//uint8_t checkBuffer[44];
+uint8_t knobBufferCounter;
+
+
 
 uint8_t startADCConversion()
 {
-	
 	ADCSRA |= (1 << ADSC); //this moves the read instruction bit to the ADC Register.
 	while (ADCSRA & (1 << ADSC));
-	return ADCH; //this is the top 8 bits of the 10 bit ADC Read.
-	
+	return ADCH; //this is the top 8 bits of the 10 bit ADC Read.	
 }
 
 void initADC()
 {
-	DDRE = 0B00111000; //init pins E5, 4, and 3 as select pins on the external mux.
+	DDRF |= 0B00000111; //init pins F2, 1, and 0 as select pins on the external mux.
 	
 	ADMUX = (1 << ADLAR);//we're using the AREF pin to reduce analog noise, and only grabbing 8 bits from the ADC
 	ADCSRA = (1 <<  ADEN) | (1 <<ADPS2) | (1 << ADPS1) | (1 << ADPS0);
@@ -60,34 +61,17 @@ void selectKnob(uint8_t select)
 	{
 		ADCSRB = (1 << MUX5);
 		uint8_t muxSelect = select%8; //this should produce a number between 1 and 7.
-		uint8_t tempMuxSelect = muxSelect;
+		//uint8_t tempMuxSelect = muxSelect;
 
 	//we need to set the internal multiplxer
 		uint8_t internalMuxSelect = select/8;
 		
 		ADMUX = internalMuxSelect|(1 << ADLAR);   
 		startADCConversion();//this should throw away our first read after the mux changover.
-		//we might need to worry about the delay, but that's fine.
 		
-		//we put our select0 and select2 pins in the opposite ports, so we need to do some math to fix that.
-		//easy stupid fix:
-		switch (tempMuxSelect)
-		{
-			case 1: muxSelect = 4;
-			break;
-			
-			case 3:	muxSelect = 6;
-			break;
-			
-			case 4: muxSelect = 1;
-			break;
-			
-			case 6: muxSelect = 3;
-			break;
-		}
 
-	//then the external multiplexer
-		PORTE = (muxSelect << 3);
+		//then the external multiplexer
+		PORTF = muxSelect;
 	
 	}else
 	{ //we only have to change the ADC Register, since these knobs are wired directly into our microcontroller.
@@ -119,147 +103,129 @@ void selectKnob(uint8_t select)
 	
 }
 
-void updateKnob(uint8_t select)
+void updateKnob(uint8_t select, Globals *currentGlobals)
 {
-
-	knobBuffer[select] = startADCConversion(); 
+	//IIR filter.
+	currentGlobals->rawKnobBuffer[select] = startADCConversion(); //raw reads
+		currentGlobals->filteredKnobBuffer[select] = 
+		currentGlobals->filteredKnobBuffer[select] + ((currentGlobals->rawKnobBuffer[select]-currentGlobals->filteredKnobBuffer[select])/2); //reads with math done to them
+}
+void initializeKnob(Globals *currentGlobals)
+{
+	//we do this after we fill the knob buffer at startup. 
+	for(int i = 0; i<44; i++){
+	currentGlobals->lastFilteredKnobBuffer[i] = currentGlobals->filteredKnobBuffer[i];
+	}
 }
 
-void interperetKnob(uint8_t select)
+void interperetKnob(uint8_t select, Pattern *currentKnobPattern, Screen *knobScreen, Globals *currentGlobals)
 {//this function will compare outputs, and write to our struct.
 	select = select%44;
-	//we might not need this with the IIR filter
-	float volumeDivisor = 3.1875;
-	
-	
-	//Change from FIR filter to IIR filter.
-     checkBuffer[select] += ((knobBuffer[select]-checkBuffer[select])/2);
-	
 	
 	if (select<40)
 	{
 		uint8_t positionSelect = select%8;
+		uint8_t positionSelectTracks = select%8; //this seems redundant looking at it. Maybe there is a clever way we can avoid this?
 		uint8_t bankSwitch = select/8;
-		switch (bankSwitch)
+		if(((currentGlobals->buttonSwitchFlag)&0x01)==1) //we only want to check bit 1 of the GP buttons. We might want to check other values later. 
 		{
+			positionSelectTracks=positionSelectTracks+8;
+		}
+		
+		switch (bankSwitch){
+
+			uint8_t prevRead = 0;
+			uint8_t newRead = 0;
+			case 0:; //outputVolume
 			
-			case 0:; //switch cases are "labels", used for goto stuff. so, you have to end the label before declaring variables. should be fine?
-			
-			int16_t currentOutVoulume = ((currentPattern.outputLevelMSB[positionSelect]<<8)|(currentPattern.outputLevelLSB[positionSelect])); 
+			//int16_t currentOutVoulume = ((currentKnobPattern->outputLevelMSB[positionSelect]<<8)|(currentKnobPattern->outputLevelLSB[positionSelect])); 
 			//this should be a regular integer between -70 and +10
-			int16_t negCheckValue = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
-			if(currentOutVoulume!=negCheckValue)
+			prevRead = currentGlobals->lastFilteredKnobBuffer[select];
+			newRead = currentGlobals->filteredKnobBuffer[select];
+
+			if(checkVariation(newRead,prevRead)>2)
 			{
-				currentPattern.outputLevelLSB[positionSelect] = (negCheckValue);
+				
+				int16_t negCheckValue = (currentGlobals->filteredKnobBuffer[select] / volumeDivisor)-NegativeOffset;
+				currentGlobals->valueChangeFlag |= (1<<knobChange); //if knob change bit is already set, this should be fine.
+				currentGlobals->knobStatus = (bankSwitch<<4)|positionSelect; //we don't want to | this, we just want to set it equal, so the screen only updates the last value 
+				
+				currentKnobPattern->outputLevelLSB[positionSelect] = (negCheckValue);
 				if(negCheckValue>(-1))
 				{
-					currentPattern.outputLevelMSB[positionSelect] = 0;
-					//just hard coding this for now until we make a function.
-					outVolumePrint[14] = 48;
-					outVolumePrint[16] = (currentPattern.outputLevelLSB[positionSelect]%10)+48;
-					outVolumePrint[15] = ((currentPattern.outputLevelLSB[positionSelect]%100)/10)+48;
+					currentKnobPattern->outputLevelMSB[positionSelect] = 0;	
 				}else
 				{
-					currentPattern.outputLevelMSB[positionSelect] = 255;
-					outVolumePrint[14] = '-';
-					outVolumePrint[15] = ((((currentPattern.outputLevelLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
-					outVolumePrint[16] = (((currentPattern.outputLevelLSB[positionSelect]^255)+1)%10)+48;
+					currentKnobPattern->outputLevelMSB[positionSelect] = 255;
 				}
-				//then output to screen. 
-				outVolumePrint[10] = positionSelect + 49;
-				outputS(outVolumePrint, 3);
-				setOutputVolume(currentPattern.outputLevelLSB[positionSelect], currentPattern.outputLevelMSB[positionSelect], positionSelect);
+				setOutputVolume(currentKnobPattern->outputLevelLSB[positionSelect], currentKnobPattern->outputLevelMSB[positionSelect], positionSelect);
+				currentGlobals->lastFilteredKnobBuffer[select] = currentGlobals->filteredKnobBuffer[select];
 			}
 			break;
 			
- 			case 1:
- 			if(currentPattern.outputPitch[positionSelect]!=(checkBuffer[select]^128))
+ 			case 1: //pitch
+ 			if(currentGlobals->lastFilteredKnobBuffer[select]!=(currentGlobals->filteredKnobBuffer[select]))
  			{
- 				(currentPattern.outputPitch[positionSelect]) = (checkBuffer[select]^128);
-				 if(encoderAValue == 0)
-				 {
-					 pitchPrint[5] = (positionSelect+49);
-					 if(currentPattern.outputPitch[positionSelect]>>7)
-					 {
-						 //again, hard coding.
-						 pitchPrint[7] = '-';
-						 numPrinter(pitchPrint, 8, 3, (currentPattern.outputPitch[positionSelect]^255));
-					 
-					 }else{
-						 pitchPrint[7] = '+';
-					 numPrinter(pitchPrint,8,3,currentPattern.outputPitch[positionSelect]);}
-					 outputS(pitchPrint, 3);
-				 }
-				 outputSampleRate(positionSelect, 0, currentPattern.outputPitch[positionSelect]);
-				 
+				currentGlobals->valueChangeFlag |= (1<<knobChange); //if knob change bit is already set, this should be fine.
+				currentGlobals->knobStatus = (bankSwitch<<4)|positionSelect; //we don't want to | this, we just want to set it equal, so the screen only updates the last value
+ 				currentKnobPattern->outputPitch[positionSelect] = (currentGlobals->filteredKnobBuffer[select]^128);
+				 currentGlobals->lastFilteredKnobBuffer[select] = currentGlobals->filteredKnobBuffer[select];
+				outputSampleRate(positionSelect, 0, currentKnobPattern->outputPitch[positionSelect]);
  			}
-			
  			break;
  			
- 			case 2:;
-			int16_t currentEnvelopeVolume = ((currentPattern.trackFadeGainMSB[positionSelect]<<8)|(currentPattern.trackFadeGainLSB[positionSelect]));
-			int16_t negCheckValueEnvelope = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
-			if(currentEnvelopeVolume!=negCheckValueEnvelope)
+ 			case 2:; //attackEnvelope
+			if(currentGlobals->lastFilteredKnobBuffer[select]!=currentGlobals->filteredKnobBuffer[select])
 			{
-				currentPattern.trackFadeGainLSB[positionSelect] = (negCheckValueEnvelope);
-				if(negCheckValueEnvelope>(-1))
-				{
-					currentPattern.trackFadeGainMSB[positionSelect] = 0;
-					//just hard coding this for now until we make a function.
-					envelopeLevelPrint[15] = 48;
-					envelopeLevelPrint[17] = (currentPattern.trackFadeGainLSB[positionSelect]%10)+48;
-					envelopeLevelPrint[16] = ((currentPattern.trackFadeGainLSB[positionSelect]%100)/10)+48;
-				}else
-				{
-					currentPattern.trackFadeGainMSB[positionSelect] = 255;
-					envelopeLevelPrint[15] = '-';
-					envelopeLevelPrint[16] = ((((currentPattern.trackFadeGainLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
-					envelopeLevelPrint[17] = (((currentPattern.trackFadeGainLSB[positionSelect]^255)+1)%10)+48;
-				}
-				//then output to screen.
-				envelopeLevelPrint[13] = positionSelect + 49;
-				outputS(envelopeLevelPrint, 3);
-				//nothing to "set", since envelopes are triggered after a sound is playing.
+				currentGlobals->valueChangeFlag |= (1<<knobChange); //if knob change bit is already set, this should be fine.
+				currentGlobals->knobStatus = (bankSwitch<<4)|positionSelect; //we don't want to | this, we just want to set it equal, so the screen only updates the last value	
+				
+				//we will eventually need a switch to write to the MSB also, for both attack and release.
+				currentKnobPattern->trackAttackTimeLSB[positionSelectTracks] = (currentGlobals->filteredKnobBuffer[select]);
+				uint16_t totalAttackTime = currentKnobPattern->trackAttackTimeLSB[positionSelectTracks]|((currentKnobPattern->trackAttackTimeMSB[positionSelectTracks])<<8);
+				currentGlobals->lastFilteredKnobBuffer[select] = currentGlobals->filteredKnobBuffer[select];
 			}
 			break;
  			
  			case 3:
- 			if(currentPattern.trackFadeTimeMSB[positionSelect]!=checkBuffer[select])
+ 			if(currentGlobals->lastFilteredKnobBuffer[select]!=currentGlobals->filteredKnobBuffer[select])
  			{
- 				(currentPattern.trackFadeTimeMSB[positionSelect]) = checkBuffer[select];
-				 numPrinter(envelopeTimePrint,14,4,currentPattern.trackFadeTimeMSB[positionSelect]);
-				 envelopeTimePrint[12] = positionSelect+49;
-				 outputS(envelopeTimePrint, 3);
+				currentGlobals->valueChangeFlag |= (1<<knobChange); //if knob change bit is already set, this should be fine.
+				currentGlobals->knobStatus = (bankSwitch<<4)|positionSelect; //we don't want to | this, we just want to set it equal, so the screen only updates the last value
+ 				currentKnobPattern->trackReleaseTimeLSB[positionSelectTracks] = currentGlobals->filteredKnobBuffer[select];
+				 currentGlobals->lastFilteredKnobBuffer[select] = currentGlobals->filteredKnobBuffer[select];
  			}
  			break;
  			
  			case 4:;
- 			int16_t currentTrackVolume = ((currentPattern.trackMainVolumeMSB[positionSelect]<<8)|(currentPattern.trackMainVolumeLSB[positionSelect]));
- 			int16_t negCheckValueTrack = (checkBuffer[select] / volumeDivisor)-70; //we need negative check values here, so this is what we have to do I guess?
- 			if(currentTrackVolume!=negCheckValueTrack)
+ 			//int16_t currentTrackValue = ((currentKnobPattern->trackMainVolumeMSB[positionSelectTracks]<<8)|(currentKnobPattern->trackMainVolumeLSB[positionSelectTracks]));
+			prevRead = currentGlobals->lastFilteredKnobBuffer[select];
+			newRead = currentGlobals->filteredKnobBuffer[select];
+ 			if(checkVariation(newRead,prevRead)>2)
  			{
-	 			currentPattern.trackMainVolumeLSB[positionSelect] = (negCheckValueTrack);
+				int16_t negCheckValueTrack = (currentGlobals->filteredKnobBuffer[select] / volumeDivisor)-NegativeOffset;
+				currentGlobals->valueChangeFlag |= (1<<knobChange); //if knob change bit is already set, this should be fine.
+				currentGlobals->knobStatus = (bankSwitch<<4)|positionSelect; //we don't want to | this, we just want to set it equal, so the screen only updates the last value
+				
+	 			currentKnobPattern->trackMainVolumeLSB[positionSelectTracks] = (negCheckValueTrack);
 	 			if(negCheckValueTrack>(-1))
 	 			{
-		 			currentPattern.trackMainVolumeMSB[positionSelect] = 0;
-		 			//just hard coding this for now until we make a function.
-		 			trackVolumePrint[15] = 48;
-		 			trackVolumePrint[17] = (currentPattern.trackMainVolumeLSB[positionSelect]%10)+48;
-		 			trackVolumePrint[16] = ((currentPattern.trackMainVolumeLSB[positionSelect]%100)/10)+48;
+		 			currentKnobPattern->trackMainVolumeMSB[positionSelectTracks] = 0;
 	 			}else
 	 			{
-		 			currentPattern.trackMainVolumeMSB[positionSelect] = 255;
-		 			trackVolumePrint[15] = '-';
-		 			trackVolumePrint[16] = ((((currentPattern.trackMainVolumeLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
-		 			trackVolumePrint[17] = (((currentPattern.trackMainVolumeLSB[positionSelect]^255)+1)%10)+48;
+		 			currentKnobPattern->trackMainVolumeMSB[positionSelectTracks] = 255;
 	 			}
-	 			//then output to screen.
-	 			trackVolumePrint[11] = positionSelect + 49;
-	 			outputS(trackVolumePrint, 3);
-	 			setTrackVolume(currentPattern.trackSampleLSB[positionSelect], currentPattern.trackSampleMSB[positionSelect],
-				 currentPattern.trackMainVolumeLSB[positionSelect], currentPattern.trackMainVolumeMSB[positionSelect]);
+
+				uint16_t totalAttackTime = currentKnobPattern->trackAttackTimeLSB[positionSelectTracks]|((currentKnobPattern->trackAttackTimeMSB[positionSelectTracks])<<8);
+				if(totalAttackTime==0) //we only want to set the track volume if the attack time is 0. otherwise, we have an envelope. 
+				{
+	 				setTrackVolume(currentKnobPattern->trackSampleLSB[positionSelectTracks], currentKnobPattern->trackSampleMSB[positionSelectTracks],
+					currentKnobPattern->trackMainVolumeLSB[positionSelectTracks], currentKnobPattern->trackMainVolumeMSB[positionSelectTracks]);
+				}
+				 currentGlobals->lastFilteredKnobBuffer[select] = currentGlobals->filteredKnobBuffer[select]; 
  			}
  			break;
+
 		
 		}
 		
@@ -283,12 +249,19 @@ void interperetKnob(uint8_t select)
 // 			break;
 // 			
  			case 42:
- 			if(currentPattern.patternBPM!=checkBuffer[select]+30)
-			{
- 				currentPattern.patternBPM = checkBuffer[select]+30;
-				if(encoderAValue==0){
-				 numPrinter(screen0[2], 5, 3, currentPattern.patternBPM);
-				 outputS(screen0[2], 2);
+			 
+			 //we need to do a bit more filtering here. Not sure if that's happening here, or in the actual knob read.
+			 if(currentGlobals->lastFilteredKnobBuffer[select]!=(currentGlobals->filteredKnobBuffer[select]))
+			{//not sure if this works here, but we're going to try it. 
+				
+				currentGlobals->valueChangeFlag |= (1<<knobChange); //if knob change bit is already set, this should be fine.
+				currentGlobals->knobStatus = (5<<4); //since all other pot banks are 0-4, the next ones will be 5-8. We should maybe figure out a better system for this, 
+				//maybe some defines?				
+ 				currentKnobPattern->patternBPM = currentGlobals->filteredKnobBuffer[select];
+				currentGlobals->lastFilteredKnobBuffer[select] = currentGlobals->filteredKnobBuffer[select];
+				if(currentGlobals->menuState==0){
+					numPrinter(knobScreen->screen0[2], 5, 3, currentKnobPattern->patternBPM);
+					outputS(knobScreen->screen0[2], 2);
 				}
  			}
  			break;
@@ -305,15 +278,26 @@ void interperetKnob(uint8_t select)
 
 }
 
-void listenKnobs()
+void listenKnobs(Pattern *currentKnobPattern, Screen *currentScreen, Globals *currentGlobals)
 {
 	for(uint8_t loopCounter = 0; loopCounter<44; loopCounter++)
 	{
 		selectKnob(loopCounter);
-		updateKnob(loopCounter);
-		interperetKnob(loopCounter);
+		updateKnob(loopCounter, currentGlobals);
+		interperetKnob(loopCounter,currentKnobPattern, currentScreen, currentGlobals);
 	}
-
-
 }
 
+uint8_t checkVariation(uint8_t v1, uint8_t v2) //this is used to check the difference between 2 knob reads, and give how far appart they are.
+{
+	uint8_t returnMe=0;
+	if(v1>v2)
+	{
+		returnMe = v1-v2;
+	}
+	else
+	{
+		returnMe = v2-v1;
+	}
+	return returnMe;
+}

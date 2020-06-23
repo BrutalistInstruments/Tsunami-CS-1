@@ -46,7 +46,7 @@
     <com_atmel_avrdbg_tool_atmelice>
       <ToolOptions>
         <InterfaceProperties>
-          <JtagDbgClock>200000</JtagDbgClock>
+          <JtagDbgClock>100000</JtagDbgClock>
         </InterfaceProperties>
         <InterfaceName>JTAG</InterfaceName>
       </ToolOptions>
@@ -55,7 +55,7 @@
       <ToolName>Atmel-ICE</ToolName>
     </com_atmel_avrdbg_tool_atmelice>
     <avrtoolinterface>JTAG</avrtoolinterface>
-    <avrtoolinterfaceclock>200000</avrtoolinterfaceclock>
+    <avrtoolinterfaceclock>100000</avrtoolinterfaceclock>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -195,6 +195,12 @@
     <Compile Include="OLEDLib.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="sequencerLib.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sequencerLib.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="serialLib.c">
       <SubType>compile</SubType>
     </Compile>
@@ -205,6 +211,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="tsunamiLib.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="twiLib.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="twiLib.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

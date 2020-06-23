@@ -10,9 +10,7 @@
 #define ENCODERLIB_H_
 
 void initEncoders();
-void listenEncoders();
-void pollEncoder0(uint8_t *encoderC0);
-void pollEncoder1(uint8_t *encoderC1);
+void listenEncoders(Pattern *currentPattern, Globals *currentGlobals);
 
 
 

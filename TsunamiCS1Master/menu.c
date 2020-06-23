@@ -3,387 +3,385 @@
  *
  * Created: 8/13/2019 5:54:51 PM
  *  Author: Hal
- */ 
-
+ */
 #include <avr/io.h>
-#include <string.h>
-#include <stdio.h>
 #include "globalVariables.h"
 #include "OLEDLib.h"
 
-char midiNote[3] = "C-0";
+char midiNote[4] = "C-0";
 
-void initMenu()
+
+uint8_t prevMenuState; //do we need this anymore?
+
+//I don't like using a global extern here, instead of a passed pointer,
+//but I can't seem to get the struct to stay in scope.
+void initMenu(Screen *initTheScreen, Pattern currentPattern, Globals currentGlobals)
 {
 
-numPrinter(screen0[2],5,3, currentPattern.patternBPM);
-numPrinter(screen3[1],14,2, (midiChannel+1));
-numPrinter(screen0[1], 9, 3, currentPatternNumber);
-numPrinter(screen1[1], 9, 3, currentPatternNumber);
-numPrinter(screen0[2], 5, 3, currentPattern.patternBPM);
+//screen0
+// = {"Performance Mode    ","Pattern:            ","BPM: xxx            ","Stop                "}
+initArrays(initTheScreen->screen0,8,1,"Pattern:");
+initArrays(initTheScreen->screen0,4,2,"BPM:");
+initArrays(initTheScreen->screen0,4,3,"Stop");
+initArrays(initTheScreen->screen0,16,0,"Performance Mode");
+//screen1
+// = {"Sequence Edit       ","Pattern:            ","Steps:              ","Step number:        "}; //this will eventually be 5 once we implement naming of samples.
+initArrays(initTheScreen->screen1,8,1,"Pattern:");
+initArrays(initTheScreen->screen1,6,2,"Steps:");
+initArrays(initTheScreen->screen1,12,3,"Step number:");
+initArrays(initTheScreen->screen1,13,0,"Sequence Edit");
+//screen2
+//= {"Track Settings      ","Track:              ","Play Mode           ","OutRoute            "};
+initArrays(initTheScreen->screen2,6,1,"Track:");
+initArrays(initTheScreen->screen2,9,2,"PlayMode:");
+initArrays(initTheScreen->screen2,9,3,"OutRoute:");
+initArrays(initTheScreen->screen2,14,0,"Track Settings");
+//screen3
+// = {"Global Settings     ","Midi Channel: xx    ", "Midi trig:  "};
+initArrays(initTheScreen->screen3,13,1,"Midi Channel:");
+initArrays(initTheScreen->screen3,18,2,"Midi trig   :       ");
+initArrays(initTheScreen->screen3,20,3,"                     ");
+initArrays(initTheScreen->screen3,15,0,"Global Settings");
 
-for(uint8_t i=0;i<4; i++ ){
-	outputS(screen0[i],i);
-}
+//init all of the knob arrays:
 
+initArrays(initTheScreen->knobScreen,19,0,"OutVolume x : xxxdb");//string 0 is outVolume
+initArrays(initTheScreen->knobScreen,11,1,"Pitch : xxx");//string 1 is pitch
+initArrays(initTheScreen->knobScreen,20,2,"AttackTime  : xxx MS"); //string 2 is Envelope gain
+initArrays(initTheScreen->knobScreen,20,3,"ReleaseTimexx:xxxxMS"); //string 3 is Envelop Time
+initArrays(initTheScreen->knobScreen,20,4,"TrackVolume xx:xxxdb"); //string 4 is track Level.
+//we might want to put in one of these for BPM, but I'm not sure. 
 
-}
-
-void updateScreen()
-{
-	if(prevEncoderBValue!=encoderBValue)
+numPrinter(initTheScreen->screen0[2],5,3, currentPattern.patternBPM);
+numPrinter(initTheScreen->screen3[1],14,2, (currentGlobals.midiChannel)+1);
+numPrinter(initTheScreen->screen0[1], 9, 3, (currentGlobals.currentPatternNumber)+1);
+numPrinter(initTheScreen->screen1[1], 9, 3, (currentGlobals.currentPatternNumber)+1);
+numPrinter(initTheScreen->screen1[2], 7, 2, currentPattern.numSteps);
+numPrinter(initTheScreen->screen1[3], 13, 2, (currentGlobals.currentStep)+1);
+ 
+	for(uint8_t i=0;i<4; i++ )
 	{
-		encoderBValue = encoderBValue%4;
-		//this needs some work...
-		uint8_t menuMoveArrow = encoderBValue - prevEncoderBValue; //this tells us whether we need to move up or down.
-		switch(encoderAValue)
+		outputS(initTheScreen->screen0[i],i);
+	}
+}
+
+//this method fills all the relevant screens once we load a new pattern. 
+void reInitMenuOnLoad(Screen *initTheScreen, Pattern *currentPattern, Globals *currentGlobals)
+{
+	numPrinter(initTheScreen->screen0[2],5,3, currentPattern->patternBPM);
+	numPrinter(initTheScreen->screen1[2], 7, 2, currentPattern->numSteps);
+	numPrinter(initTheScreen->screen1[1],9,3,(currentGlobals->currentPatternNumber)+1);
+	numPrinter(initTheScreen->screen0[1],9,3,(currentGlobals->currentPatternNumber)+1);
+}
+
+void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentGlobals)
+{
+	
+	if((currentGlobals->valueChangeFlag)&(1<<encoderChange))//check if encoder bit is high
+	{ 
+		currentGlobals->valueChangeFlag = currentGlobals->valueChangeFlag&(0xFF&(0<<encoderChange));//set encoder bit low, and carry our whatever encoder change has occurred. 
+		//we need to debug this to make sure it's doing what we think it's doing.
+		switch(currentGlobals->menuState)
 		{
-			///Sequencer Edit Screen
-			case 1:
-			if(encoderBFlag)
-			{
-				switch (screen1Index)
-				{
-					// change pattern
-					case 1:
-					if(menuMoveArrow==1)
-					{
-						currentPatternNumber = currentPatternNumber + 1;
-						numPrinter(screen1[1],9,3,currentPatternNumber);
-						outputS(screen1[1], 1);
-					}else
-					{
-						currentPatternNumber = currentPatternNumber - 1;
-						numPrinter(screen1[1],9,3,currentPatternNumber);
-						outputS(screen1[1], 1);
-					}
-					break;
-				
-					//edit number of steps
-					case 2:
-					if(menuMoveArrow==1){
-						currentPattern.numSteps = currentPattern.numSteps+1;
-						if(currentPattern.numSteps>64)
-						{
-							currentPattern.numSteps = 64;
-						}
-						numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
-						outputS(screen1[2], 2);
-					}else
-					{
-					
-						currentPattern.numSteps = currentPattern.numSteps-1;
-						if(currentPattern.numSteps<1)
-						{
-							currentPattern.numSteps= 1;
+			case PreformanceModeInit: //initial state
+			reInitMenuOnLoad(menuScreen, currentPattern, currentGlobals);
+			outputS(menuScreen->screen0[0], 0);
+			outputS(menuScreen->screen0[1], 1);
+			outputS(menuScreen->screen0[2], 2);
+			outputS(menuScreen->screen0[3], 3);
+			break;
+
+			case SequencerMenuInit:
+			outputS(menuScreen->screen1[0], 0);
+			outputS(menuScreen->screen1[1], 1);
+			outputS(menuScreen->screen1[2], 2);
+			outputS(menuScreen->screen1[3], 3);
+	
+			currentGlobals->menuState = SequencerMenuArrow1; 
+	
+	
+			case SequencerMenuArrow1:
+			menuScreen->screen1[1][19]= 8;
+			menuScreen->screen1[2][19] = ' ';
+			menuScreen->screen1[3][19] = ' ';
+			outputS(menuScreen->screen1[1], 1);
+			outputS(menuScreen->screen1[2], 2);
+			outputS(menuScreen->screen1[3], 3);
+			break;
 			
-						}
-						numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
-						outputS(screen1[2],2);
-					}
-					break;
-				
-				
-				
-				//edit current step
+			case SequencerMenuArrow1Select:
+			reInitMenuOnLoad(menuScreen, currentPattern, currentGlobals);
+			outputS(menuScreen->screen1[1],1);
+			break;
+	
+	
+			case SequencerMenuArrow2:
+			menuScreen->screen1[1][19]= ' ';
+			menuScreen->screen1[2][19] = 8;
+			menuScreen->screen1[3][19] = ' ';
+			outputS(menuScreen->screen1[1], 1);
+			outputS(menuScreen->screen1[2], 2);
+			outputS(menuScreen->screen1[3], 3);
+			break;
+	
+			case SequencerMenuArrow2Select:
+			numPrinter(menuScreen->screen1[2],7,2,currentPattern->numSteps);
+			outputS(menuScreen->screen1[2],2);
+			break;
+	
+			case SequencerMenuArrow3:
+			menuScreen->screen1[1][19]= ' ';
+			menuScreen->screen1[2][19] = ' ';
+			menuScreen->screen1[3][19] = 8;
+			outputS(menuScreen->screen1[1], 1);
+			outputS(menuScreen->screen1[2], 2);
+			outputS(menuScreen->screen1[3], 3);
+			break;
+		
+			case SequencerMenuArrow3Select:
+			numPrinter(menuScreen->screen1[3],14,2,(currentGlobals->currentStep)+1); //these are 0 indexed, so we need to add 1 to the display.
+			outputS(menuScreen->screen1[3],3);
+			break;
+	
+
+			case TrackMenuInit:
+			outputS(menuScreen->screen2[0], 0);
+			outputS(menuScreen->screen2[1], 1);
+			outputS(menuScreen->screen2[2], 2);
+			outputS(menuScreen->screen2[3], 3);
+			currentGlobals->menuState = TrackMenuArrow1;
+		
+			case TrackMenuArrow1:
+			menuScreen->screen2[1][19]= 8;
+			menuScreen->screen2[2][19] = ' ';
+			menuScreen->screen2[3][19] = ' ';
+			outputS(menuScreen->screen2[1], 1);
+			outputS(menuScreen->screen2[2], 2);
+			outputS(menuScreen->screen2[3], 3);
+			break;
+		
+			case TrackMenuArrow1Select:;
+			uint16_t trackSample = (currentPattern->trackSampleMSB[currentGlobals->currentTrack]<<8)|(currentPattern->trackSampleLSB[currentGlobals->currentTrack]);
+			numPrinter(menuScreen->screen2[1],10,4,(trackSample));
+			outputS(menuScreen->screen2[1],1);
+			break;
+	
+			case TrackMenuArrow2:
+			menuScreen->screen2[1][19]= ' ';
+			menuScreen->screen2[2][19] = 8;
+			menuScreen->screen2[3][19] = ' ';
+			outputS(menuScreen->screen2[1], 1);
+			outputS(menuScreen->screen2[2], 2);
+			outputS(menuScreen->screen2[3], 3);
+			break;
+		
+			case TrackMenuArrow2Select:
+			//we need some serious button code in these two cases. 
+			switch (currentPattern->trackPlayMode[currentGlobals->currentTrack])
+			{
+				case 0:
+				menuScreen->screen2[2][10] = 'S';
+				menuScreen->screen2[2][11] = 'o';
+				menuScreen->screen2[2][12] = 'l';
+				menuScreen->screen2[2][13] = 'o';
+				break;
+
+				case 1:
+				menuScreen->screen2[2][10] = 'P';
+				menuScreen->screen2[2][11] = 'o';
+				menuScreen->screen2[2][12] = 'l';
+				menuScreen->screen2[2][13] = 'y';
+				break;
+
+				//these additional cases will be for loops and other stuff. have not decided on how to deal with them yet.
+				case 2:
+				break;
+	
 				case 3:
-					if(menuMoveArrow==1)
-					{
-						currentStep = currentStep+1;
-						if(currentStep>(currentPattern.numSteps)-1)
-						{
-							currentStep = (currentPattern.numSteps)-1;
-						}
-						numPrinter(screen1[3], 13, 2, currentStep+1);
-						outputS(screen1[3], 3);
-					
-					}else
-					{
-						currentStep = currentStep-1;
-						if(currentStep==255)
-						{
-							currentStep = 0;
-						}
-						numPrinter(screen1[3], 13, 2, currentStep+1);
-						outputS(screen1[3], 3);
-					}
-					break;
-				}//end of switch statment.
-				
-				//Move screen arrow/
-			}else{
-			if(menuMoveArrow==1)
-			{
-				//move screen arrow down
-				screen1Index++;
-				if(screen1Index>3)
-				{
-					screen1Index = 3;
-				}
-				screen1[screen1Index][19] = '<';
-				screen1[screen1Index-1][19] = ' ';
-				outputS(screen1[screen1Index], screen1Index);
-				outputS(screen1[screen1Index-1], screen1Index-1);
-			}else 
-			{
-				//move arrow up
-				screen1Index--;
-				if(screen1Index>250||screen1Index==0)
-				{
-					screen1Index = 1;
-				}
-				screen1[screen1Index][19] = '<';
-				screen1[screen1Index+1][19] = ' ';
-				outputS(screen1[screen1Index], screen1Index);
-				outputS(screen1[screen1Index+1], screen1Index+1);
+				break;
 			}
-			}
-		break;
 			
+			outputS(menuScreen->screen2[2], 2);
+			break;
+
+			case TrackMenuArrow3:
+			menuScreen->screen2[1][19]= ' ';
+			menuScreen->screen2[2][19] = ' ';
+			menuScreen->screen2[3][19] = 8;
+			outputS(menuScreen->screen2[1], 1);
+			outputS(menuScreen->screen2[2], 2);
+			outputS(menuScreen->screen2[3], 3);
+			break;
+		
+			case TrackMenuArrow3Select:
+			numPrinter(menuScreen->screen2[3],10,2,(currentPattern->trackOutputRoute[currentGlobals->currentTrack])+1);
+			outputS(menuScreen->screen2[3],3);
+			break;
+
+			case GlobalMenuInit:
+			outputS(menuScreen->screen3[0], 0);
+			outputS(menuScreen->screen3[1], 1);
+			outputS(menuScreen->screen3[2], 2);
+			outputS(menuScreen->screen3[3], 3);
+			currentGlobals->menuState = GlobalMenuArrow1;
+
+			case GlobalMenuArrow1:
+			menuScreen->screen3[1][19]= 8;
+			menuScreen->screen3[2][19] = ' ';
+			menuScreen->screen3[3][19] = ' ';
+			outputS(menuScreen->screen3[1], 1);
+			outputS(menuScreen->screen3[2], 2);
+			outputS(menuScreen->screen3[3], 3);
+			break;
 			
-			//track setting screen
-			case 2:
-			if(encoderBFlag)
-			{
-				switch (screen2Index)
-				{
-					case 1:
-					if(menuMoveArrow==1)
+			case GlobalMenuArrow1Select:
+			numPrinter(menuScreen->screen3[1],14,2,(currentGlobals->midiChannel)+1);
+			outputS(menuScreen->screen3[1],1);
+			break;
+
+			case GlobalMenuArrow2:
+			menuScreen->screen3[1][19]= ' ';
+			menuScreen->screen3[2][19] = 8;
+			menuScreen->screen3[3][19] = ' ';
+			outputS(menuScreen->screen3[1], 1);
+			outputS(menuScreen->screen3[2], 2);
+			outputS(menuScreen->screen3[3], 3);
+			break;
+			
+			case GlobalMenuArrow2Select:
+			midiNotePrinter(menuScreen->screen3[2],14,currentGlobals->midiTrackNote[currentGlobals->currentTrack]); 
+			outputS(menuScreen->screen3[2],2);
+			break;
+
+			case GlobalMenuArrow3:
+			menuScreen->screen3[1][19]= ' ';
+			menuScreen->screen3[2][19] = ' ';
+			menuScreen->screen3[3][19] = 8;
+			outputS(menuScreen->screen3[1], 1);
+			outputS(menuScreen->screen3[2], 2);
+			outputS(menuScreen->screen3[3], 3);
+			break;
+		}
+		prevMenuState = currentGlobals->menuState;
+	}
+	//We should only reach this in track selection and global settings for setting midi notes. 
+	if(currentGlobals->valueChangeFlag&(1<<triggerChange))
+	{
+		currentGlobals->valueChangeFlag = currentGlobals->valueChangeFlag&(0<<triggerChange);
+		switch((currentGlobals->menuState)>>4) //we don't need to worry about what the bottom encoder is doing.  
+		{
+			case 2:;
+			uint16_t trackSample = (currentPattern->trackSampleMSB[currentGlobals->currentTrack]<<8)|(currentPattern->trackSampleLSB[currentGlobals->currentTrack]);
+			numPrinter(menuScreen->screen2[1], 7, 2, (currentGlobals->currentTrack)+1);
+			numPrinter(menuScreen->screen2[1], 10, 4, trackSample);
+			//this feels dumb having it in two places, but It should take care of both cases. Maybe this should be a function?
+					switch (currentPattern->trackPlayMode[currentGlobals->currentTrack])
 					{
-						currentPattern.trackSampleLSB[currentTrack] = (currentPattern.trackSampleLSB[currentTrack])+ 1;
-						uint16_t currentSample = (currentPattern.trackSampleMSB[currentTrack]<<8)|(currentPattern.trackSampleLSB[currentTrack]);
-						numPrinter(screen2[1], 7, 2, (currentTrack+1));
-						numPrinter(screen2[1], 10, 4, currentSample);
-						outputS(screen2[1], 1);
-						
-					}else
-					{
-						currentPattern.trackSampleLSB[currentTrack] = (currentPattern.trackSampleLSB[currentTrack])- 1;
-						uint16_t currentSample = (currentPattern.trackSampleMSB[currentTrack]<<8)|(currentPattern.trackSampleLSB[currentTrack]);
-						numPrinter(screen2[1], 7, 2, (currentTrack+1));
-						numPrinter(screen2[1], 10, 4, currentSample);
-						outputS(screen2[1], 1);
+						case 0:
+						menuScreen->screen2[2][10] = 'S';
+						menuScreen->screen2[2][11] = 'o';
+						menuScreen->screen2[2][12] = 'l';
+						menuScreen->screen2[2][13] = 'o';
+						break;
+
+						case 1:
+						menuScreen->screen2[2][10] = 'P';
+						menuScreen->screen2[2][11] = 'o';
+						menuScreen->screen2[2][12] = 'l';
+						menuScreen->screen2[2][13] = 'y';
+						break;
+
+						//these additional cases will be for loops and other stuff. have not decided on how to deal with them yet.
+						case 2:
+						break;
+
+						case 3:
+						break;
 					}
 					
-					break;
-					
-					case 2:
-					if(menuMoveArrow==1)
-					{
-						currentPattern.trackPlayMode[currentTrack] = (currentPattern.trackPlayMode[currentTrack])+1;
-						if(currentPattern.trackPlayMode[currentTrack]>6)
-						{
-							currentPattern.trackPlayMode[currentTrack] = 6;
-						}
-						//do printing poly or solo stuff here.
-						
-						outputS(screen2[2], 2);
-						
-					}else
-					{
-						currentPattern.trackPlayMode[currentTrack] = (currentPattern.trackPlayMode[currentTrack])+1;
-						if(currentPattern.trackPlayMode[currentTrack]==255)
-						{
-							currentPattern.trackPlayMode[currentTrack] = 0;
-						}
-						//do printing poly or solo stuff here
-						outputS(screen2[2], 2);
-					}
-					break;
-					
-					//output routing on track setting screen
-					case 3:
-					if(menuMoveArrow==1)
-					{
-						currentPattern.trackOutputRoute[currentTrack] = (currentPattern.trackOutputRoute[currentTrack])+1;
-						if(currentPattern.trackOutputRoute[currentTrack]>7)
-						{
-							currentPattern.trackOutputRoute[currentTrack] = 7;
-						}
-						numPrinter(screen2[3], 10, 2, (currentPattern.trackOutputRoute[currentTrack])+1);
-						outputS(screen2[3],3);
-						
-					}else
-					{
-						currentPattern.trackOutputRoute[currentTrack] = (currentPattern.trackOutputRoute[currentTrack])-1;
-						if(currentPattern.trackOutputRoute[currentTrack]==255)
-						{
-							currentPattern.trackOutputRoute[currentTrack] = 0;
-						}
-						numPrinter(screen2[3], 10, 2, (currentPattern.trackOutputRoute[currentTrack])+1);
-						outputS(screen2[3],3);
-						
-					}
-					
-					break;
-					
-				}
-				
-			}else{
-			if(menuMoveArrow==1)
-			{
-				screen2Index++;
-				if(screen2Index>3)
-				{
-					screen2Index = 3;
-				}
-				screen2[screen2Index][19] = '<';
-				screen2[screen2Index-1][19] = ' ';
-				outputS(screen2[screen2Index], screen2Index);
-				outputS(screen2[screen2Index-1], screen2Index-1);
-				
-				
+			numPrinter(menuScreen->screen2[3], 10, 2, (currentPattern->trackOutputRoute[currentGlobals->currentTrack]+1));
+			outputS(menuScreen->screen2[1], 1);
+			outputS(menuScreen->screen2[2], 2);
+			outputS(menuScreen->screen2[3], 3);
+			break;
+			
+			case 3:;
+			//do we need this variable?
+			numPrinter(menuScreen->screen3[2],10,2,(currentGlobals->currentTrack)+1);
+			midiNotePrinter(menuScreen->screen3[2],14,currentGlobals->midiTrackNote[currentGlobals->currentTrack]); 
+			outputS(menuScreen->screen3[2],2);
+			break;
+			
+		}
+	}
+	if(currentGlobals->valueChangeFlag&(1<<knobChange)) // since this is the last check, we don't really need this & operation. It just reads a bit better.
+	{
+		//so, it seems like the responsiveness of this implementation is a lot slower than printing inside of the interpret knob method. 
+		//Not sure why, will look into it later. For now, it works, and testing for this will be on the to-do list. 
+		
+		uint8_t positionSelect = currentGlobals->knobStatus&0x0F; //this is the bottom 4 bits, for the track location
+		if((((currentGlobals->buttonSwitchFlag)&0x01)==1)&&(positionSelect>15))
+		{
+			positionSelect = positionSelect + 8;
+		}
+
+		switch((currentGlobals->knobStatus)>>4)
+		{
+			case 0: //output volume
+			if((currentPattern->outputLevelMSB[positionSelect])==0)
+			{ //value is positive
+				numPrinter(menuScreen->knobScreen[0],14,3,currentPattern->outputLevelLSB[positionSelect]); //should be a value between 0 and 8
 			}else
 			{
-				//moving arrow on track setting screen
-				screen2Index--;
-				if(screen2Index>250||screen2Index==0) //this should account for any negative numbers from overflow.
-				{
-					screen2Index = 1;
-				}
-				screen2[screen2Index][19] = '<';
-				screen2[screen2Index+1][19] = ' ';
-				outputS(screen2[screen2Index], screen2Index);
-				outputS(screen2[screen2Index+1], screen2Index+1);
-				
+				menuScreen->knobScreen[0][14] = '-';
+				menuScreen->knobScreen[0][15] = ((((currentPattern->outputLevelLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
+				menuScreen->knobScreen[0][16] = (((currentPattern->outputLevelLSB[positionSelect]^255)+1)%10)+48;
 			}
-			}
-			
-			break;
-			
-			case 3:
-			
-				//this is the functionality if encoder B flag is not pressed
-				//haha, I probably need to change this to how all of the other cases work up there. 
-				if(menuMoveArrow==1)
-				{
-					if(encoderBFlag)
-					{
-						switch(screen3Index)
-						{
-							case 1:
-							midiChannel = midiChannel+1;
-							if(midiChannel>15)
-							{
-								midiChannel = 15;
-							}
-							numPrinter(screen3[1], 14, 2, (midiChannel+1));
-							outputS(screen3[1], 1);
-							break;
-							
-							case 2:
-							currentPattern.midiTrackNote[currentTrack] = (currentPattern.midiTrackNote[currentTrack]) + 1;
-							numPrinter(screen3[2], 14, 2, currentPattern.midiTrackNote[currentTrack]);
-							outputS(screen3[2], 2);
-							break;
-							
-							
-						}
-					}else
-					{
-						screen3Index++;
-						if(screen3Index>2)
-						{
-							screen3Index = 2;
-						}
-						screen3[screen3Index][19] = '<';
-						screen3[screen3Index-1][19] = ' ';
-						outputS(screen3[screen3Index], screen3Index);
-						outputS(screen3[screen3Index-1], screen3Index-1);
-					}
-					
-					
-				}else
-				{
-					if(encoderBFlag)
-					{
-						switch(screen3Index)
-						{
-							case 1:
-							midiChannel = midiChannel-1;
-							if(midiChannel==255)
-							{
-								midiChannel = 0;
-							}
-							numPrinter(screen3[1], 14, 2, (midiChannel+1));
-							outputS(screen3[1], 1);
-							break;
-							
-							case 2:
-							currentPattern.midiTrackNote[currentTrack] = (currentPattern.midiTrackNote[currentTrack]) - 1;
-							numPrinter(screen3[2], 14, 2, currentPattern.midiTrackNote[currentTrack]);
-							outputS(screen3[2], 2);
-							break;
-							
-						}
-					}else{
-					screen3Index--;
-					if(screen3Index>250||screen3Index==0) //this should account for any negative numbers from overflow.
-					{
-						screen3Index = 1;
-					}
-					screen3[screen3Index][19] = '<';
-					screen3[screen3Index+1][19] = ' ';
-					outputS(screen3[screen3Index], screen3Index);
-					outputS(screen3[screen3Index+1], screen3Index+1);
-				}
-					}
 				
-			
+			menuScreen->knobScreen[0][10] = (currentGlobals->knobStatus&0x0F) + 49;
+			outputS(menuScreen->knobScreen[0], 3);
 			break;
-					
+				
+			case 1: //pitch
+			menuScreen->knobScreen[1][5] = positionSelect+49; 
+			if(currentPattern->outputPitch[positionSelect]>>7)
+			{
+				menuScreen->knobScreen[1][7] = '-';
+				numPrinter(menuScreen->knobScreen[1], 8, 3, (currentPattern->outputPitch[positionSelect])^255);
+			}else
+			{
+				menuScreen->knobScreen[1][7] = '+';
+				numPrinter(menuScreen->knobScreen[1],8,3,currentPattern->outputPitch[positionSelect]);
+			}
+			outputS(menuScreen->knobScreen[1],3);
+			break;
+				
+			case 2: //attack envelope 				
+			numPrinter(menuScreen->knobScreen[2],14, 4, currentPattern->trackAttackTimeLSB[positionSelect]);	
+			numPrinter(menuScreen->knobScreen[2],10,2,positionSelect+1);
+			outputS(menuScreen->knobScreen[2], 3); //This is not MS, but ideal for testing it Attack really works. 
+			break;
+				
+			case 3: //envelope bottom knob
+			numPrinter(menuScreen->knobScreen[3],14,4,currentPattern->trackReleaseTimeLSB[positionSelect]);
+			numPrinter(menuScreen->knobScreen[3],11,2,positionSelect+1);
+			outputS(menuScreen->knobScreen[3], 3);
+			break;
+				
+			case 4: //track volume
+			if(currentPattern->trackMainVolumeMSB[positionSelect]==0)
+			{
+				numPrinter(menuScreen->knobScreen[4],15, 2, currentPattern->trackMainVolumeLSB[positionSelect]);
+			}else
+			{
+				menuScreen->knobScreen[4][15] = '-';
+				menuScreen->knobScreen[4][16] = ((((currentPattern->trackMainVolumeLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
+				menuScreen->knobScreen[4][17] = (((currentPattern->trackMainVolumeLSB[positionSelect]^255)+1)%10)+48;
+			}
+				 numPrinter(menuScreen->knobScreen[4],12,2,positionSelect+1);
+				 outputS(menuScreen->knobScreen[4], 3);
+			break;
 		}
-		prevEncoderBValue = encoderBValue;
+		currentGlobals->valueChangeFlag = currentGlobals->valueChangeFlag&(0xFF&(0<<knobChange));			
 	}
-	
-	//top encoder
-	if(prevEncoderAValue!=encoderAValue){
-	encoderAValue = encoderAValue%4;
-	switch (encoderAValue)
-	{
-		case 0:
-		numPrinter(screen0[2], 5, 3, currentPattern.patternBPM);
-		for(uint8_t i=0;i<4; i++ ){
-			outputS(screen0[i],i);
-		}
-		screen0Index = 0;
-		
-		break;
-		
-		case 1:
-		numPrinter(screen1[2], 6, 2, currentPattern.numSteps);
-		numPrinter(screen1[3], 13, 2, (currentStep+1));
-		for(uint8_t i=0;i<4; i++ ){
- 		outputS(screen1[i],i);
-		}
-		screen1Index = 0;
- 		break;
-		 
-		case 2:
-		for(uint8_t i=0;i<4; i++ ){
-			outputS(screen2[i],i);
-		}
-		screen2Index = 0;
-		break;
-		 
-		case 3:
-		for(uint8_t i=0;i<4; i++ ){
-			outputS(screen3[i],i);
-		}
-		screen3Index = 0;
-		break;
-		 
-		 
-	}
-	prevEncoderAValue = encoderAValue;
-	
-	}
-
-
-}
-
-void numToMidiNote(uint8_t inputNum, char midiNote[3])
-{
-	//write this I guess?
-	
 }
