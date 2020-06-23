@@ -19,32 +19,28 @@ void initMenu(Screen *initTheScreen, Pattern currentPattern, Globals currentGlob
 {
 
 //screen0
-// = {"Performance Mode    ","Pattern:            ","BPM: xxx            ","Stop                "}
+initArrays(initTheScreen->screen0,0,"Performance Mode");
 initArrays(initTheScreen->screen0,1,"Pattern:");
 initArrays(initTheScreen->screen0,2,"BPM:");
 initArrays(initTheScreen->screen0,3,"Stop");
-initArrays(initTheScreen->screen0,0,"Performance Mode");
-//screen1
-// = {"Sequence Edit       ","Pattern:            ","Steps:              ","Step number:        "}; //this will eventually be 5 once we implement naming of samples.
+
+//screen1initArrays(initTheScreen->screen1,0,"Sequence Edit");
 initArrays(initTheScreen->screen1,1,"Pattern:");
 initArrays(initTheScreen->screen1,2,"Steps:");
 initArrays(initTheScreen->screen1,3,"Step number:");
-initArrays(initTheScreen->screen1,0,"Sequence Edit");
-//screen2
-//= {"Track Settings      ","Track:              ","Play Mode           ","OutRoute            "};
+
+//screen2initArrays(initTheScreen->screen2,0,"Track Settings");
 initArrays(initTheScreen->screen2,1,"Track:");
 initArrays(initTheScreen->screen2,2,"PlayMode:");
 initArrays(initTheScreen->screen2,3,"OutRoute:");
-initArrays(initTheScreen->screen2,0,"Track Settings");
+
 //screen3
-// = {"Global Settings     ","Midi Channel: xx    ", "Midi trig:  "};
 initArrays(initTheScreen->screen3,1,"Midi Channel:");
 initArrays(initTheScreen->screen3,2,"Midi trig   :       ");
 initArrays(initTheScreen->screen3,3,"                     ");
 initArrays(initTheScreen->screen3,0,"Global Settings");
 
 //init all of the knob arrays:
-
 initArrays(initTheScreen->knobScreen,0,"OutVolume x : xxxdb");//string 0 is outVolume
 initArrays(initTheScreen->knobScreen,1,"Pitch : xxx");//string 1 is pitch
 initArrays(initTheScreen->knobScreen,2,"AttackTime  : xxx MS"); //string 2 is Envelope gain
@@ -315,16 +311,15 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 			
 		}
 	}
-	if(currentGlobals->valueChangeFlag&(1<<knobChange)) // since this is the last check, we don't really need this & operation. It just reads a bit better.
+	if(currentGlobals->valueChangeFlag&(1<<knobChange))
 	{
-		//so, it seems like the responsiveness of this implementation is a lot slower than printing inside of the interpret knob method. 
-		//Not sure why, will look into it later. For now, it works, and testing for this will be on the to-do list. 
-		
 		uint8_t positionSelect = currentGlobals->knobStatus&0x0F; //this is the bottom 4 bits, for the track location
-		if(positionSelect>15)
+		uint8_t positionSelectUpper = 0;
+		if((currentGlobals->buttonSwitchFlag)&0x01)
 		{
-			outputS("OVER 15",0);
+			positionSelectUpper = 8;
 		}
+		
 
 		switch((currentGlobals->knobStatus)>>4)
 		{
@@ -339,7 +334,7 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 				menuScreen->knobScreen[0][16] = (((currentPattern->outputLevelLSB[positionSelect]^255)+1)%10)+48;
 			}
 				
-			menuScreen->knobScreen[0][10] = (currentGlobals->knobStatus&0x0F) + 49;
+			menuScreen->knobScreen[0][10] = positionSelect + 49;
 			outputS(menuScreen->knobScreen[0], 3);
 			break;
 				
@@ -358,28 +353,28 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 			break;
 				
 			case 2: //attack envelope 				
-			numPrinter(menuScreen->knobScreen[2],14, 4, currentPattern->trackAttackTimeLSB[positionSelect]);	
-			numPrinter(menuScreen->knobScreen[2],10,2,positionSelect+1);
+			numPrinter(menuScreen->knobScreen[2],14, 4, currentPattern->trackAttackTimeLSB[(positionSelect+positionSelectUpper)]);	
+			numPrinter(menuScreen->knobScreen[2],10,2,(positionSelect+1+positionSelectUpper));
 			outputS(menuScreen->knobScreen[2], 3); //This is not MS, but ideal for testing it Attack really works. 
 			break;
 				
 			case 3: //envelope bottom knob
-			numPrinter(menuScreen->knobScreen[3],14,4,currentPattern->trackReleaseTimeLSB[positionSelect]);
-			numPrinter(menuScreen->knobScreen[3],11,2,positionSelect+1);
+			numPrinter(menuScreen->knobScreen[3],14,4,currentPattern->trackReleaseTimeLSB[(positionSelect+positionSelectUpper)]);
+			numPrinter(menuScreen->knobScreen[3],11,2,(positionSelect+1+positionSelectUpper));
 			outputS(menuScreen->knobScreen[3], 3);
 			break;
 				
 			case 4: //track volume
-			if(currentPattern->trackMainVolumeMSB[positionSelect]==0)
+			if(currentPattern->trackMainVolumeMSB[(positionSelect+positionSelectUpper)]==0)
 			{
-				numPrinter(menuScreen->knobScreen[4],15, 2, currentPattern->trackMainVolumeLSB[positionSelect]);
+				numPrinter(menuScreen->knobScreen[4],15, 2, currentPattern->trackMainVolumeLSB[(positionSelect+positionSelectUpper)]);
 			}else
 			{
 				menuScreen->knobScreen[4][15] = '-';
-				menuScreen->knobScreen[4][16] = ((((currentPattern->trackMainVolumeLSB[positionSelect]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
-				menuScreen->knobScreen[4][17] = (((currentPattern->trackMainVolumeLSB[positionSelect]^255)+1)%10)+48;
+				menuScreen->knobScreen[4][16] = ((((currentPattern->trackMainVolumeLSB[(positionSelect+positionSelectUpper)]^255)+1)%100)/10)+48; //negative 8 bit numbers: flip every bit and add 1.
+				menuScreen->knobScreen[4][17] = (((currentPattern->trackMainVolumeLSB[(positionSelect+positionSelectUpper)]^255)+1)%10)+48;
 			}
-				 numPrinter(menuScreen->knobScreen[4],12,2,positionSelect+1);
+				 numPrinter(menuScreen->knobScreen[4],12,2,(positionSelect+positionSelectUpper+1));
 				 outputS(menuScreen->knobScreen[4], 3);
 			break;
 			
