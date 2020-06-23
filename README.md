@@ -10,7 +10,7 @@ Check out the build progress with pictures and video over at https://www.instagr
 - 8 Individual Assignable Outputs
 - Per output volume control
 - Per output pitch control (1 octave up and down)
-- Volume envelope per sample
+- ASR Envelope per sample
 - Per Sample volume control
 - Midi control of all tracks
 - Midi In, Out and Through
@@ -23,9 +23,11 @@ In this repository, you'll find:
 We currently have schematics for the Main Control Surface, and the IO Board
 (currently out of date with new board revisions)
 ## TsunamiArduinoCore
-This is where the current stable build lives. Upload this through USB on your Arduino Mega in Platformio. Arudino IDE support coming soon (though not hard to convert for yourself). 
+This version is uploadable through the Arudino IDE. Currnently holding the depreciated Platformio/Atom version, Concurrent version coming soon.  
 ## TsunamiCS1Master
-This is the development section of repository, only to be used with Atmel Studio and the Atmel Ice programmer. If you're interested In development and onboard debugging through J-tag, this is what you want to use. (currently depreciated)
+This is the development section of repository, only to be used with Atmel Studio and the Atmel Ice programmer. If you're interested In development and onboard debugging through J-tag, this is what you want to use.
+(This is the current )
 ## Enclosure
 This has Files for laser cutting 1/8th " material to create enclosure. 
-As this project progresses, new enclosure files for different fabrication facilities will be placed here.  (New enclosure files needed for new board revisions)
+As this project progresses, new enclosure files for different fabrication facilities will be placed here.  
+(New enclosure files needed for new board revisions)

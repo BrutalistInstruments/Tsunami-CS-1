@@ -12,21 +12,27 @@ What's here:
 #### Firmware
 | Known Bug| Proposed Solution |
 | ------ | ------ |
+|Encoder Reading sometimes goes backwards|timer based debouncing, a bit more research|
+|Attack Envelopes sometime cutting off sound|Possible knob jitter issue? Find lowest stable attack value and make that the first possible value|
 
 ## To-Implement
 #### Firmware
 | Feature |Depenencies|
 | ------- |-------|
-|Midi-Out|Midi-In functioning correctly|
-|Logarithmic Knob Reading|Knob Library|
-|Envelop Knob Functionality|Knob Library|
+|SustainStage and Release state|Version 0.97|
+|Factory Reset in Global Menu|Version 1.0|
+|Midi-Out|Version 1.1|
+|Logarithmic Knob Reading|Verion 1.2|
+
 
 #### Hardware
 |Feature|Dependencies|
 |----|----|
-|Encoder Pin Interrupts|Encoders need to be changed so that each have 1 interrupt pin, instead of EncoderA having 2.|
-|Resistors on the 2 lines of the SPI bus connecting them to VCC|Rev5 of CS-PCB|
-|Move Tsunami power and serial pin Headers|
+|Voltage Divider for Tsunami Serial port out|Board Revision 8|
+|A2 eeprom chip tied to +5v instead of GND|Board Revision 8|
+|Schematic reading of 4.7K pullups on TWI Buss|Board Revision 8|
+
+
 
 ## Features Complete
 #### Firmware
@@ -48,4 +54,6 @@ What's here:
 |Audio and Midi ground on IO board have been separated, eliminating digital noise|
 |Midi in is not fully functional, using a home-made midi library|
 |Encoders are now on interrupt pins in new hardware revision, but need to be re-coded for such use. |
-|GP-Button LEDs|LED output Library|
+|GP-Button LED|
+|Factory Reset in code|
+|Attack envelopes|
