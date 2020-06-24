@@ -10,6 +10,7 @@
 #ifndef TSUNAMILIB_H_
 #define TSUNAMILIB_H_
 
+void initEnvelopes();
 void getVersion();
 void getSysInfo();
 void setReporting(char reportBool);

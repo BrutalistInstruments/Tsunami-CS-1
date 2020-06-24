@@ -238,7 +238,7 @@ void eepromSavePattern(Pattern inPattern, uint8_t patternNumber)
 	twi_write((eepromWriteAddress>>8)); //MSB
 	twi_write((eepromWriteAddress & 0xFF));  //LSB
 	
-	for (int i = 0; i<120; i++)
+	for (int i = 0; i<123; i++)
 	{
 		twi_write(eepromWriteBuffer[i]);
 	}
@@ -291,7 +291,7 @@ void eepromSavePattern(Pattern inPattern, uint8_t patternNumber)
 		twi_write(((eepromWriteAddress+128)>>8)); //MSB
 		twi_write(((eepromWriteAddress+128) & 0xFF));  //LSB
 		
-		for (int i = 0; i<83; i++)
+		for (int i = 0; i<128; i++)
 		{
 			twi_write(eepromWriteBuffer[i]);
 		}
@@ -307,6 +307,7 @@ void eepromSavePattern(Pattern inPattern, uint8_t patternNumber)
 		}
 		twi_write(((eepromWriteAddress+256)>>8)); //MSB
 		twi_write(((eepromWriteAddress+256) & 0xFF));  //LSB
+		
 		for (int i = 0; i<64; i++)
 		{
 			twi_write((inPattern.trackSequence[i]>>8));
@@ -365,13 +366,11 @@ void eepromLoadPattern(Pattern *currentPattern, uint8_t patternNumber)
 	}
 	for(int i=0; i<8; i++)//8-15 bytes
 	{
-		//oldPattern.outputLevelLSB[i] = currentPattern->outputLevelLSB[i];
 		currentPattern->outputLevelLSB[i]=patternBuffer[i+8];
 		setOutputVolume(currentPattern->outputLevelLSB[i], currentPattern->outputLevelMSB[i], i);
 	}
 	for(int i=0; i<8; i++)//16-23 bytes
 	{
-		//oldPattern.outputPitch[i] = currentPattern->outputPitch[i];
 		currentPattern->outputPitch[i]=patternBuffer[i+16];
 		outputSampleRate(i,0,currentPattern->outputPitch[i]);
 	}
@@ -436,8 +435,6 @@ void eepromLoadPattern(Pattern *currentPattern, uint8_t patternNumber)
 	{
 		currentPattern->envelopeType[i]=patternBuffer[i+240];
 	}
-
-
 							// now we just need to read in the sequencer
 
 	for (int i = 0; i<64; i++)

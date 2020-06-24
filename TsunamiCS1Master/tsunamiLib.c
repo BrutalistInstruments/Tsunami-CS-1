@@ -19,7 +19,15 @@ extern uint8_t muteVolLSB;
 //|      0       |        1     |      2       |     3     |     4-8   |    9    |
 
 
-
+void initEnvelopes()
+{
+	//here we need to set up a timer to tell when the release stage needs to happen. 
+	//should be in milliseconds, and should hold a 32 bit integer. We could probably store it in Globals. 
+	
+	//we also need an update envelopes function that checks if the timer has been reached, if the 16 bit flag has been set, and do the release stage. 
+	 
+	
+}
 void getVersion()
 {//gets the version from tsunami. may be useful in later versions,
 	//to print the version on the OLED Screen.
@@ -101,40 +109,32 @@ void playTrack(Pattern *currentPattern, Globals *currentGlobals, uint8_t trigInp
 	//we could maybe streamline this by playing the sample in every case, before checking any if statements?
 	//don't know if these would cause any more latency between the if statement.
 	
-	uint16_t totalAttack = currentPattern->trackAttackTimeLSB[trigInput]|((currentPattern->trackAttackTimeMSB[trigInput])<<8);
-	uint16_t totalRelease = currentPattern->trackReleaseTimeLSB[trigInput]|((currentPattern->trackReleaseTimeMSB[trigInput])<<8);
-	if((totalAttack==0)) //&&(totalRelease==0))
+	switch(currentPattern->envelopeType[trigInput])
 	{
-		trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput], 
+		case 0: //A-R //not currently implemented
+			trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
 			currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
-	}
-	else //if(totalRelease==0) //attack stage only
-	{
+		break;
+		
+		case 1: //R //not currently implemented. 
+		trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
+		currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
+		break;
+		
+		case 2: //A 
 		setTrackVolume(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],255,186);
-				trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
-				currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
-		setTrackFade(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput], 
-		currentPattern->trackMainVolumeLSB[trigInput], currentPattern->trackMainVolumeMSB[trigInput], 
+		trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
+		currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
+		setTrackFade(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
+		currentPattern->trackMainVolumeLSB[trigInput], currentPattern->trackMainVolumeMSB[trigInput],
 		currentPattern->trackAttackTimeLSB[trigInput], currentPattern->trackAttackTimeMSB[trigInput], 0);
+		break;
+		
+		case 3: //none
+		trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
+		currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
+		break;
 	}
-	/*
-	else if(totalAttack==0)//release stage only
-	{
-		trackControl(trackNumberLSB, trackNumberMSB, outputNumber, trackCommand);
-		//do release section stuff
-		//we need to set the release time here, and set the release bit in whatever is calling the trigger.
-		
-		
-	}
-	else
-	{
-		trackControl(trackNumberLSB, trackNumberMSB, outputNumber, trackCommand);
-		setTrackFade(trackNumberLSB, trackNumberMSB, sustainLSB, sustainMSB, attackLSB, attackMSB, 0);
-		//do release section stuff
-		
-		
-	}
-	*/
 }
 
 void sendPatternOnLoad(Pattern *currentPattern, Pattern oldPattern)
