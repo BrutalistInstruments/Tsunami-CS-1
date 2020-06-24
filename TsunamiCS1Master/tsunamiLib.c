@@ -8,16 +8,14 @@
 #include "serialLib.h"
 #include <avr/io.h>
 #include "globalVariables.h"
-
-extern uint8_t muteVolMSB;
-extern uint8_t muteVolLSB;
-//maybe not best
+#include <avr/interrupt.h>
 
 //               0     1     2     3     4     5     6     7     8     9
 //message format:0xf0, 0xaa, 0x0a, 0x03, 0x01, 0x11, 0x00, 0x00, 0x00, 0x55
 //|StartOfMessage|StartOfMessage|BytesInMessage|MessageCode|MessageData|EndOfData|
 //|      0       |        1     |      2       |     3     |     4-8   |    9    |
-
+uint32_t releaseCounter = 0;
+extern currentGlobals;
 
 void initEnvelopes()
 {
@@ -25,9 +23,16 @@ void initEnvelopes()
 	//should be in milliseconds, and should hold a 32 bit integer. We could probably store it in Globals. 
 	
 	//we also need an update envelopes function that checks if the timer has been reached, if the 16 bit flag has been set, and do the release stage. 
-	 
+	//We'll be using timer3 for this. 
+	TCCR3A = (1<<WGM32); //set timer to CTC mode (clear timer on correct value)
+	//this is CTC mode 4 on data sheet page 145. We may want to use mode 12, since OCRnA may be in use from timer 0
+	TCCR3B = (1<<CS31)|(1<<CS30); //64 prescaller. 
+	OCR3AH = 0;
+	OCR3AL = 250; //250*64 = 1,600 ->1Ms worth of clock cycles. 
+	TIMSK3 = (1<<OCIE3A);
 	
 }
+
 void getVersion()
 {//gets the version from tsunami. may be useful in later versions,
 	//to print the version on the OLED Screen.
@@ -102,27 +107,31 @@ void setInPutMix(uint8_t outputMask)
 }
 void playTrack(Pattern *currentPattern, Globals *currentGlobals, uint8_t trigInput) //most of these params are just getting passed through.
 { //4 cases:
-	//1:no envelopes/play sample as normal
-	//2:only attack envelope
-	//3:only release envelopes
-	//4:both sides of the envelope
-	//we could maybe streamline this by playing the sample in every case, before checking any if statements?
-	//don't know if these would cause any more latency between the if statement.
+	
+	uint16_t sustainTime = (currentPattern->trackSustainTimeLSB[trigInput])|((currentPattern->trackSustainTimeMSB[trigInput])<<8);
 	
 	switch(currentPattern->envelopeType[trigInput])
 	{
 		case 0: //A-R //not currently implemented
+			setTrackVolume(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],255,186); //we might want to do this on load, and on option change.
 			trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
 			currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
+			setTrackFade(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
+			currentPattern->trackMainVolumeLSB[trigInput], currentPattern->trackMainVolumeMSB[trigInput],
+			currentPattern->trackAttackTimeLSB[trigInput], currentPattern->trackAttackTimeMSB[trigInput], 0);
+			currentGlobals->releaseTracker|=(1<<trigInput); //set tracking 
+			currentGlobals->sustainCounterArray[trigInput] = currentGlobals->releaseCounter+sustainTime;
 		break;
 		
 		case 1: //R //not currently implemented. 
 		trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
 		currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
+		currentGlobals->releaseTracker|=(1<<trigInput);
+		currentGlobals->sustainCounterArray[trigInput] = currentGlobals->releaseCounter+sustainTime;
 		break;
 		
 		case 2: //A 
-		setTrackVolume(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],255,186);
+		setTrackVolume(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],255,186); //we might want to do this on load, and on option change. 
 		trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
 		currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
 		setTrackFade(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
@@ -163,5 +172,11 @@ void sendPatternOnLoad(Pattern *currentPattern, Pattern oldPattern)
 			//set track volume
 			setTrackVolume(currentPattern->trackSampleLSB[i], currentPattern->trackSampleMSB[i], currentPattern->trackMainVolumeLSB[i], currentPattern->trackMainVolumeMSB[i]);
 	}
+	
+}
+
+void releaseUpdate(Pattern *currentPattern, Globals *currentGlobals)
+{
+	
 	
 }

@@ -82,8 +82,6 @@ typedef struct Pattern
 	uint8_t envelopeType[16]; //16 bytes //currently we only have 4, but eventually I'd like to have release stages triggered by "off" messages, especially for looped samples. 
 	uint16_t trackSequence[64]; //128 bytes - this will be a separate page
 	
-
-
 } Pattern; //total bytes - 128 for the sequence, 251 bytes for all other data.
 //so 3 pages in total, 1 for sequencer data, 2 for all other data (248 bytes, room for expansion)
 
@@ -120,10 +118,9 @@ typedef struct Globals
 	uint8_t filteredKnobBuffer[44]; //we do math to the raw Knob buffer, and store it here, to check against current knobs with. 
 	uint8_t lastFilteredKnobBuffer[44]; //we use this to check if any knob positions have changed. 
 	//envelope variables
-	uint32_t releaseCounter; //global counter for release times.
+	uint32_t releaseCounter;
 	uint16_t releaseTracker; //this is a bitwise tracker to keep track of which tracks still need to be releases.
 	uint32_t sustainCounterArray[16]; //this will be where we store values for release times to check against the release counter.
-
 	
 }Globals;
 

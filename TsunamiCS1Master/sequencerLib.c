@@ -9,6 +9,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+//should both of these be globals?
 uint16_t clockCounter = 0; // how many 0.0001 seconds have passed.
 //(1 degree of magnitude smaller than millis)
 uint8_t currentPlayStep = 0; //this is different than the currentStep, which is for editing.
@@ -16,7 +17,7 @@ uint8_t currentPlayStep = 0; //this is different than the currentStep, which is 
 
 void initSequencer()
 {
-	//here we need to setup our timer interrupt, and set playback to stop.
+	//here we need to setup our timer interrupt
 	TCCR0A = (1 << WGM01); //set to clear on correct compare
 	TCCR0B = (1 << CS01) | (1 << CS00); // set pre-scaler to 64
 	OCR0A = 25; // every 25 ticks will be 0.0001 seconds at this prescale.

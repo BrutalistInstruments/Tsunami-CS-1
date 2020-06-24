@@ -12,14 +12,17 @@
 #include "sequencerLib.h"
 #include "twiLib.h"
 #include "midiLib.h"
+#include <avr/interrupt.h>
 
-
-int main(){
 
 Pattern currentPattern;
 Screen screenBank;
-Globals currentGlobals;
+volatile Globals currentGlobals;
 uint8_t factoryReset=0; // set this to 1 if you would like to fill the eeprom with Factory data, and erase all user data.
+
+int main(){
+
+
 	
 	initScreen();
 	initGlobals(&currentGlobals, factoryReset);  
@@ -29,7 +32,7 @@ uint8_t factoryReset=0; // set this to 1 if you would like to fill the eeprom wi
 	initADC();
 	serialInit0();
 	initMidi();
-	//initEnvelopes();
+	initEnvelopes();
 	initSequencer();
 	twi_init();
 	initBank(&currentPattern);
@@ -53,11 +56,15 @@ uint8_t factoryReset=0; // set this to 1 if you would like to fill the eeprom wi
 	globalLoad(&currentGlobals, factoryReset);
 	initMenu(&screenBank, currentPattern, currentGlobals); //fills screenBank with menu strings
 
-	//what were these for? Some timer interrupt somewhere?
+	//this ISR is used for Button De-Bouncing. Maybe we could put it somewhere else. 
 	TCCR2B = 1<<CS22;//using 64 from pre-scaler
 	TIMSK2 = 1<<TOIE2;
 
+
 	sei();	
+
+
+
 
 while(1) {
 	
@@ -70,7 +77,13 @@ while(1) {
 	updateSequencer(currentPattern, currentGlobals);
 	updateScreen(&screenBank, &currentPattern, &currentGlobals);
 	midiRead(currentPattern, currentGlobals);
-	//releaseCheck(releaseCounter, &releaseTracker, releaseCounterArray[16],currentPattern);
+	//releaseUpdate(releaseCounter, &releaseTracker, releaseCounterArray[16],currentPattern);
 
 	}
+}
+
+ISR(TIMER3_COMPA_vect)
+{
+	currentGlobals.releaseCounter++; //this will increase every millisecond.
+	//should run for about 1000 hours before overflow, so not something we really have to worry about.
 }
