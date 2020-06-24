@@ -186,7 +186,7 @@ void eepromSavePattern(Pattern inPattern, uint8_t patternNumber)
 	//first write (first 128 bytes)============================/////////
 	for(int i = 0; i<8; i++)//0-7 bytes
 	{
-		eepromWriteBuffer[i]=	inPattern.outputLevelMSB[i];
+		eepromWriteBuffer[i]=inPattern.outputLevelMSB[i];
 	}
 	for(int i=0; i<8; i++)//8-15 bytes
 	{
@@ -220,6 +220,13 @@ void eepromSavePattern(Pattern inPattern, uint8_t patternNumber)
 	{
 		eepromWriteBuffer[i+104]=inPattern.trackReleaseTimeMSB[i];
 	}//first buffer filled
+	
+	eepromWriteBuffer[121] = (inPattern.patternBPM>>8); //MSB
+	eepromWriteBuffer[122] = (inPattern.patternBPM & 0xFF);  //LSB
+
+	eepromWriteBuffer[123] = (inPattern.numSteps);
+
+	
 	
 	//page write here.
 	if(twi_start(eepromWriteBlock)==1)
@@ -259,19 +266,19 @@ void eepromSavePattern(Pattern inPattern, uint8_t patternNumber)
 	{
 		eepromWriteBuffer[i+64]=inPattern.voiceLockFlag[i];
 	}
-	
-	//This needs to be saved in a specific place on the eeprom, or on the atmega internal eeprom. (probably a better place for it.)
-	//we also need to change the write buffer to have the right amount 
-	/*
-	for(int i=0; i<16; i++)//80-96 bytes
+	for(int i=0; i<16; i++)//80-95
 	{
-		eepromWriteBuffer[i+80]=inPattern.midiTrackNote[i];
+		eepromWriteBuffer[i+80]=inPattern.trackSustainTimeMSB[i];
 	}
-	*/
-		eepromWriteBuffer[80] = (inPattern.patternBPM>>8); //MSB
-		eepromWriteBuffer[81] = (inPattern.patternBPM & 0xFF);  //LSB
-
-		eepromWriteBuffer[82] = (inPattern.numSteps);
+	for(int i=0; i<16; i++)//96-111
+	{
+		eepromWriteBuffer[i+96]=inPattern.trackSustainTimeLSB[i];
+	}
+	for(int i=0; i<16; i++)//112-127
+	{
+		eepromWriteBuffer[i+112]=inPattern.envelopeType[i];
+	}
+	//we need to move these to the previous eeprom write. 
 
 		//page write here, but with 128 bytes of offset from the first write
 
@@ -392,6 +399,10 @@ void eepromLoadPattern(Pattern *currentPattern, uint8_t patternNumber)
 	{
 		currentPattern->trackReleaseTimeMSB[i]=patternBuffer[i+104];
 	}
+	
+			currentPattern->patternBPM = ((patternBuffer[121]<<8)|patternBuffer[122]);
+			currentPattern->numSteps=patternBuffer[123];
+	
 	for(int i=0; i<16; i++)//0-15 bytes //start of the read of the next block
 	{
 		currentPattern->trackReleaseTimeLSB[i]=patternBuffer[i+128];
@@ -413,9 +424,20 @@ void eepromLoadPattern(Pattern *currentPattern, uint8_t patternNumber)
 	{
 		currentPattern->voiceLockFlag[i]=patternBuffer[i+192];
 	}
+	for(int i=0; i<16; i++)//80-95
+	{
+		currentPattern->trackSustainTimeMSB[i]=patternBuffer[i+208];
+	}
+	for(int i=0; i<16; i++)//96-111
+	{
+		currentPattern->trackSustainTimeLSB[i]=patternBuffer[i+224];
+	}
+	for(int i=0; i<16; i++)//112-127
+	{
+		currentPattern->envelopeType[i]=patternBuffer[i+240];
+	}
 
-		currentPattern->patternBPM = ((patternBuffer[208]<<8)|patternBuffer[209]);
-		currentPattern->numSteps=patternBuffer[210];
+
 							// now we just need to read in the sequencer
 
 	for (int i = 0; i<64; i++)

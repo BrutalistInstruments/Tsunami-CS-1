@@ -33,6 +33,9 @@ void initBank(Pattern *currentInitPattern)
   {
     currentInitPattern->trackSampleLSB[i] = i+1;
     currentInitPattern->trackPlayMode[i] = 0x01;
+	currentInitPattern->envelopeType[i] = 0;
+	currentInitPattern->trackSustainTimeLSB[i] = 0;
+	currentInitPattern->trackSustainTimeMSB[i] = 0;
   }
   
   for(uint8_t j = 0; j<64; j++)

@@ -233,7 +233,7 @@ void listenEncoders(Pattern *currentPattern, Globals *currentGlobals)
 			case TrackMenuArrow1:;
 			if(menuSub==1)
 			{
-				currentGlobals->menuState = TrackMenuArrow3;
+				currentGlobals->menuState = TrackMenuArrow5;
 			}else
 			{
 				currentGlobals->menuState = TrackMenuArrow2;
@@ -285,7 +285,7 @@ void listenEncoders(Pattern *currentPattern, Globals *currentGlobals)
 				currentGlobals->menuState = TrackMenuArrow2;
 			}else
 			{
-				currentGlobals->menuState = TrackMenuArrow1;
+				currentGlobals->menuState = TrackMenuArrow4;
 			}
 			break;
 			
@@ -305,6 +305,62 @@ void listenEncoders(Pattern *currentPattern, Globals *currentGlobals)
 				if(currentPattern->trackOutputRoute[currentGlobals->currentTrack]>7)
 				{
 					currentPattern->trackOutputRoute[currentGlobals->currentTrack]=0;
+				}
+			}
+			break;
+			
+			case TrackMenuArrow4:
+			if(menuSub==1)
+			{
+				currentGlobals->menuState = TrackMenuArrow3;
+			}else
+			{
+				currentGlobals->menuState = TrackMenuArrow5;
+			}
+			break;
+			
+			case TrackMenuArrow4Select:
+			if(menuSub==1)
+			{
+				(currentPattern->envelopeType[currentGlobals->currentTrack])++;
+				if((currentPattern->envelopeType[currentGlobals->currentTrack])>4)
+				{
+					(currentPattern->envelopeType[currentGlobals->currentTrack])=4;
+				}
+			}else
+			{
+				(currentPattern->envelopeType[currentGlobals->currentTrack])--;
+				if((currentPattern->envelopeType[currentGlobals->currentTrack])>4)
+				{
+					(currentPattern->envelopeType[currentGlobals->currentTrack])=0;
+				}
+			}
+			break;
+			
+			case TrackMenuArrow5:
+			if(menuSub==1)
+			{
+				currentGlobals->menuState = TrackMenuArrow4;
+			}else
+			{
+				currentGlobals->menuState = TrackMenuArrow1;
+			}
+			break;
+			
+			case TrackMenuArrow5Select:
+			if(menuSub==1)
+			{
+				currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack]++;
+				if(currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack]>254)
+				{
+					currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack] = 254;
+				}
+			}else
+			{
+				currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack]--;
+				if(currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack]>254)
+				{
+					currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack] = 0;
 				}
 			}
 			break;

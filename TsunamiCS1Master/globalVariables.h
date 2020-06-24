@@ -36,11 +36,16 @@
 	#define	TrackMenuArrow1 33 //case 0 010 0 001
 	#define	TrackMenuArrow2 34 //case 0 010 0 010
 	#define	TrackMenuArrow3 35 //case 0 010 0 011
+	#define	TrackMenuArrow4 36 //case 0 010 0 100
+	#define	TrackMenuArrow5 37 //case 0 010 0 101
+
 
 	#define TrackMenuArrow1Select 41 //case 0 010 1 001
 	#define TrackMenuArrow2Select 42 //case 0 010 1 010
 	#define TrackMenuArrow3Select 43 //case 0 010 1 011
-
+	#define TrackMenuArrow4Select 44 //case 0 010 1 100
+	#define TrackMenuArrow5Select 45 //case 0 010 1 101
+	
 	#define	GlobalMenuInit 48  //case 0 011 0 000
 	#define	GlobalMenuArrow1 49 //case 0 011 0 001
 	#define	GlobalMenuArrow2 50 //case 0 011 0 010
@@ -61,10 +66,10 @@ typedef struct Pattern
  	uint8_t outputPitch[8]; // 8 bytes
  	uint8_t trackOutputRoute[16]; // 16 bytes
  	uint8_t trackMainVolumeMSB[16]; //16 bytes
- 	uint8_t trackMainVolumeLSB[16]; //16 bytes //should maybe be replaces with "trackStartVolume"
- 	uint8_t trackAttackTimeMSB[16]; //16 bytes //replace with "attackTime"
+ 	uint8_t trackMainVolumeLSB[16]; //16 bytes 
+ 	uint8_t trackAttackTimeMSB[16]; //16 bytes 
  	uint8_t trackAttackTimeLSB[16]; //16 bytes
- 	uint8_t trackReleaseTimeMSB[16]; //16 bytes  //replace with "releaseTime"
+ 	uint8_t trackReleaseTimeMSB[16]; //16 bytes  
  	uint8_t trackReleaseTimeLSB[16]; //16 bytes
  	uint8_t trackPlayMode[16]; //16 bytes //right now, only play solo (0)and Poly (1)are supported. loop mode (4) is in the works. 
  	uint8_t trackSampleMSB[16]; //16 bytes
@@ -72,20 +77,14 @@ typedef struct Pattern
  	uint8_t voiceLockFlag[16]; //16 bytes
 	uint16_t patternBPM; //2 bytes
 	uint8_t numSteps; //1 byte
-	uint8_t trackSustainTimeMSB[16];
-	uint8_t trackSustainTimeLSB[16];
+	uint8_t trackSustainTimeMSB[16]; //16 bytes 
+	uint8_t trackSustainTimeLSB[16]; //16 bytes
+	uint8_t envelopeType[16]; //16 bytes //currently we only have 4, but eventually I'd like to have release stages triggered by "off" messages, especially for looped samples. 
 	uint16_t trackSequence[64]; //128 bytes - this will be a separate page
 	
-	//attack time (2 8 bit integers) - replaced
-	//sustain volume (aka, track volume) - this will be the Track Volume item. It won't change the track volume in the play function. 
-	//sustain Time (2 8 bit integers?) - needs to be added. 
-	//release time (2 8 bit integers) - replaced
-	//I don't think we necessarily need release level, since we'll be stopping the track after each release stage is complete. 
-	//though this may cause issues if two of the same tracks get triggered right after on another. 
-	//will the first release stop the track? or should we wait until the last release is sent, and ignore the previous release comands?
 
 
-} Pattern; //total bytes - 128 for the sequence, 203 bytes for all other data.
+} Pattern; //total bytes - 128 for the sequence, 251 bytes for all other data.
 //so 3 pages in total, 1 for sequencer data, 2 for all other data (248 bytes, room for expansion)
 
 typedef struct Screen
@@ -95,10 +94,6 @@ typedef struct Screen
 	unsigned char screen1[9][21]; //not every array needs to be initialized, but it is important for our initArray method that they be uniform. 
 	unsigned char screen2[9][21];
 	unsigned char screen3[9][21];
-	uint8_t screen0Index;
-	uint8_t screen1Index;
-	uint8_t screen2Index;
-	uint8_t screen3Index;
 	unsigned char knobScreen[9][21]; 
 	
 

@@ -24,20 +24,24 @@ initArrays(initTheScreen->screen0,1,"Pattern:");
 initArrays(initTheScreen->screen0,2,"BPM:");
 initArrays(initTheScreen->screen0,3,"Stop");
 
-//screen1initArrays(initTheScreen->screen1,0,"Sequence Edit");
+//screen1
+initArrays(initTheScreen->screen1,0,"Sequence Edit");
 initArrays(initTheScreen->screen1,1,"Pattern:");
 initArrays(initTheScreen->screen1,2,"Steps:");
 initArrays(initTheScreen->screen1,3,"Step number:");
 
-//screen2initArrays(initTheScreen->screen2,0,"Track Settings");
+//screen2
+initArrays(initTheScreen->screen2,0,"Track Settings");
 initArrays(initTheScreen->screen2,1,"Track:");
 initArrays(initTheScreen->screen2,2,"PlayMode:");
 initArrays(initTheScreen->screen2,3,"OutRoute:");
+initArrays(initTheScreen->screen2,4,"EnvelopeMode:");
+initArrays(initTheScreen->screen2,5,"SustainTime: ");
 
 //screen3
 initArrays(initTheScreen->screen3,1,"Midi Channel:");
-initArrays(initTheScreen->screen3,2,"Midi trig   :       ");
-initArrays(initTheScreen->screen3,3,"                     ");
+initArrays(initTheScreen->screen3,2,"Midi trig   :");
+initArrays(initTheScreen->screen3,3," ");
 initArrays(initTheScreen->screen3,0,"Global Settings");
 
 //init all of the knob arrays:
@@ -93,10 +97,9 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 			outputS(menuScreen->screen1[1], 1);
 			outputS(menuScreen->screen1[2], 2);
 			outputS(menuScreen->screen1[3], 3);
-	
 			currentGlobals->menuState = SequencerMenuArrow1; 
-	
-	
+			
+			
 			case SequencerMenuArrow1:
 			menuScreen->screen1[1][19]= 8;
 			menuScreen->screen1[2][19] = ' ';
@@ -214,6 +217,63 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 			numPrinter(menuScreen->screen2[3],10,2,(currentPattern->trackOutputRoute[currentGlobals->currentTrack])+1);
 			outputS(menuScreen->screen2[3],3);
 			break;
+			
+			case TrackMenuArrow4:
+			menuScreen->screen2[2][19]= ' ';
+			menuScreen->screen2[3][19] = ' ';
+			menuScreen->screen2[4][19] = 8;
+			outputS(menuScreen->screen2[2], 1);
+			outputS(menuScreen->screen2[3], 2);
+			outputS(menuScreen->screen2[4], 3);
+			break;
+			
+			case TrackMenuArrow4Select:
+			switch(currentPattern->envelopeType[currentGlobals->currentTrack])
+			{
+				case 0: //A/R
+				menuScreen->screen2[4][14] = 'A';
+				menuScreen->screen2[4][15] = '-';
+				menuScreen->screen2[4][16] = 'R';
+				menuScreen->screen2[4][17] = ' ';
+				break;
+				
+				case 1: //only release
+				menuScreen->screen2[4][14] = 'R';
+				menuScreen->screen2[4][15] = ' ';
+				menuScreen->screen2[4][16] = ' ';
+				menuScreen->screen2[4][17] = ' ';
+				break;
+				
+				case 2: //only attack
+				menuScreen->screen2[4][14] = 'A';
+				menuScreen->screen2[4][15] = ' ';
+				menuScreen->screen2[4][16] = ' ';
+				menuScreen->screen2[4][17] = ' ';
+				break;
+				
+				case 3: //No envelope
+				menuScreen->screen2[4][14] = 'N';
+				menuScreen->screen2[4][15] = 'o';
+				menuScreen->screen2[4][16] = 'n';
+				menuScreen->screen2[4][17] = 'e';
+				break;
+			}
+			outputS(menuScreen->screen2[4],3);
+			break;
+			
+			case TrackMenuArrow5:
+			menuScreen->screen2[3][19]= ' ';
+			menuScreen->screen2[4][19] = ' ';
+			menuScreen->screen2[5][19] = 8;
+			outputS(menuScreen->screen2[3], 1);
+			outputS(menuScreen->screen2[4], 2);
+			outputS(menuScreen->screen2[5], 3);
+			break;
+
+			case TrackMenuArrow5Select:
+			numPrinter(menuScreen->screen2[5],13,3,(currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack]));
+			outputS(menuScreen->screen2[5],3);
+			break;
 
 			case GlobalMenuInit:
 			outputS(menuScreen->screen3[0], 0);
@@ -264,7 +324,7 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 	//We should only reach this in track selection and global settings for setting midi notes. 
 	if(currentGlobals->valueChangeFlag&(1<<triggerChange))
 	{
-		currentGlobals->valueChangeFlag = currentGlobals->valueChangeFlag&(0<<triggerChange);
+		currentGlobals->valueChangeFlag = currentGlobals->valueChangeFlag&(0<<triggerChange); //this is wrong. Will erase all of valueChange Flag. 
 		switch((currentGlobals->menuState)>>4) //we don't need to worry about what the bottom encoder is doing.  
 		{
 			case 2:;
@@ -297,9 +357,50 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 					}
 					
 			numPrinter(menuScreen->screen2[3], 10, 2, (currentPattern->trackOutputRoute[currentGlobals->currentTrack]+1));
-			outputS(menuScreen->screen2[1], 1);
-			outputS(menuScreen->screen2[2], 2);
-			outputS(menuScreen->screen2[3], 3);
+			switch(currentPattern->envelopeType[currentGlobals->currentTrack])
+			{
+				case 0: //A/R
+				menuScreen->screen2[4][14] = 'A';
+				menuScreen->screen2[4][15] = '-';
+				menuScreen->screen2[4][16] = 'R';
+				menuScreen->screen2[4][17] = ' ';
+				break;
+				
+				case 1: //only release
+				menuScreen->screen2[4][14] = 'R';
+				menuScreen->screen2[4][15] = ' ';
+				menuScreen->screen2[4][16] = ' ';
+				menuScreen->screen2[4][17] = ' ';
+				break;
+				
+				case 2: //only attack
+				menuScreen->screen2[4][14] = 'A';
+				menuScreen->screen2[4][15] = ' ';
+				menuScreen->screen2[4][16] = ' ';
+				menuScreen->screen2[4][17] = ' ';
+				break;
+				
+				case 3: //No envelope
+				menuScreen->screen2[4][14] = 'N';
+				menuScreen->screen2[4][15] = 'o';
+				menuScreen->screen2[4][16] = 'n';
+				menuScreen->screen2[4][17] = 'e';
+				break;
+			}
+			numPrinter(menuScreen->screen2[5],13,3,(currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack]));
+			//the track settings screens should now be populated
+			
+			
+			//this is a bit messy, but seems to fix bugs on this portion of the menu for now. 
+			uint8_t triggerChangeScreen = 1;
+
+			if(currentGlobals->menuState>35) //this accounts for menu stats 36,37,44, and 45
+			{
+				triggerChangeScreen = (currentGlobals->menuState&0xF7) - 34; //mask to get rid of encoder B pushed state. 
+			}
+			outputS(menuScreen->screen2[triggerChangeScreen], 1); 
+			outputS(menuScreen->screen2[triggerChangeScreen+1], 2); 
+			outputS(menuScreen->screen2[triggerChangeScreen+2], 3);
 			break;
 			
 			case 3:;
