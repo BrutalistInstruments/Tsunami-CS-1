@@ -24,4 +24,5 @@ void outputSampleRate(uint8_t outputSelect, uint8_t offsetLSB, uint8_t offsetMSB
 void setInPutMix(uint8_t outputMask);
 void playTrack(Pattern *currentPattern, Globals *currentGlobals, uint8_t trigInput);
 void sendPatternOnLoad(Pattern *currentPattern, Pattern oldPattern); 
+void releaseUpdate(Pattern *currentPattern, Globals *currentGlobals);
 #endif /* TSUNAMILIB_H_ */

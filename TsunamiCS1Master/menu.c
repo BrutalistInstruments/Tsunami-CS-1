@@ -47,7 +47,7 @@ initArrays(initTheScreen->screen3,0,"Global Settings");
 //init all of the knob arrays:
 initArrays(initTheScreen->knobScreen,0,"OutVolume x : xxxdb");//string 0 is outVolume
 initArrays(initTheScreen->knobScreen,1,"Pitch : xxx");//string 1 is pitch
-initArrays(initTheScreen->knobScreen,2,"AttackTime  : xxx MS"); //string 2 is Envelope gain
+initArrays(initTheScreen->knobScreen,2,"AttackTime  :      S"); //string 2 is Envelope gain
 initArrays(initTheScreen->knobScreen,3,"ReleaseTimexx:xxxxMS"); //string 3 is Envelop Time
 initArrays(initTheScreen->knobScreen,4,"TrackVolume xx:xxxdb"); //string 4 is track Level.
 //initArrays(initTheScreen->knobScreen,5,"BPM: ");
@@ -453,8 +453,13 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 			outputS(menuScreen->knobScreen[1],3);
 			break;
 				
-			case 2: //attack envelope 				
-			numPrinter(menuScreen->knobScreen[2],14, 4, currentPattern->trackAttackTimeLSB[(positionSelect+positionSelectUpper)]);	
+			case 2:; //attack envelope 
+			uint16_t totalAttackTime = currentPattern->trackAttackTimeLSB[positionSelect]|((currentPattern->trackAttackTimeMSB[positionSelect])<<8);				
+			numPrinter(menuScreen->knobScreen[2],14, 5, totalAttackTime);
+			menuScreen->knobScreen[2][13] = menuScreen->knobScreen[2][14];
+			menuScreen->knobScreen[2][14] = menuScreen->knobScreen[2][15];
+			menuScreen->knobScreen[2][15] = '.';
+			//do stuff here to add the decimal point	
 			numPrinter(menuScreen->knobScreen[2],10,2,(positionSelect+1+positionSelectUpper));
 			outputS(menuScreen->knobScreen[2], 3); //This is not MS, but ideal for testing it Attack really works. 
 			break;

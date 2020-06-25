@@ -33,7 +33,7 @@ void initBank(Pattern *currentInitPattern)
   {
     currentInitPattern->trackSampleLSB[i] = i+1;
     currentInitPattern->trackPlayMode[i] = 0x01;
-	currentInitPattern->envelopeType[i] = 0;
+	currentInitPattern->envelopeType[i] = 3;
 	currentInitPattern->trackSustainTimeLSB[i] = 0;
 	currentInitPattern->trackSustainTimeMSB[i] = 0;
   }

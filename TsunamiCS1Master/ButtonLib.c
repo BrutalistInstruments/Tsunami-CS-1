@@ -59,8 +59,6 @@ void listenTrigButtons(Pattern *buttonCurrentPattern, Globals *currentGlobals)
 					case 0: //performance mode
 					//we trigger a sound here based on the location of bc
 					playTrack(buttonCurrentPattern, currentGlobals,bc);
-					//trackControl(buttonCurrentPattern->trackSampleLSB[bc], buttonCurrentPattern->trackSampleMSB[bc], buttonCurrentPattern->trackOutputRoute[bc], buttonCurrentPattern->trackPlayMode[bc]);
-					// void trackControl(char trackNumberLSB, char trackNumberMSB, char outputNumber, char trackCommand);
 					break;
 
 					case 1:
@@ -76,11 +74,7 @@ void listenTrigButtons(Pattern *buttonCurrentPattern, Globals *currentGlobals)
 					//uint16_t currentSample = (buttonCurrentPattern->trackSampleMSB[bc]<<8)|(buttonCurrentPattern->trackSampleLSB[bc]);
 					currentGlobals->currentTrack = bc;
 					currentGlobals->valueChangeFlag |=(1<<triggerChange);
-					trackControl(buttonCurrentPattern->trackSampleLSB[bc], buttonCurrentPattern->trackSampleMSB[bc], buttonCurrentPattern->trackOutputRoute[bc], buttonCurrentPattern->trackPlayMode[bc]);
-					break;
-
-				
-
+					playTrack(buttonCurrentPattern, currentGlobals,bc);
 					break;
 
 					default:
@@ -150,5 +144,19 @@ void listenGPButtons(Pattern currentPattern, Globals *currentGlobals) //may need
 			currentGlobals->buttonSwitchFlag = 1;
 			currentGlobals->currentGPButtons |=0x02;
 		}
+	}
+	uint8_t fineButtonMask = 4;
+	uint8_t fineStateCheck = (currentGlobals->currentGPButtons) & fineButtonMask;
+	if(button_down(1<<PB1))
+	{		
+		if(fineStateCheck)
+		{
+			
+			currentGlobals->currentGPButtons &=(~0x04);
+		}else
+		{
+			currentGlobals->currentGPButtons |=0x04;
+		}
+		
 	}
 }

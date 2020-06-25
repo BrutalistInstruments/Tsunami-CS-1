@@ -238,7 +238,7 @@ void eepromSavePattern(Pattern inPattern, uint8_t patternNumber)
 	twi_write((eepromWriteAddress>>8)); //MSB
 	twi_write((eepromWriteAddress & 0xFF));  //LSB
 	
-	for (int i = 0; i<123; i++)
+	for (int i = 0; i<124; i++)
 	{
 		twi_write(eepromWriteBuffer[i]);
 	}

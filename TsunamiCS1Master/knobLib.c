@@ -177,12 +177,23 @@ void interperetKnob(uint8_t select, Pattern *currentKnobPattern, Globals *curren
  			case 2:; //attackEnvelope
 			if(currentGlobals->lastFilteredKnobBuffer[select]!=currentGlobals->filteredKnobBuffer[select])
 			{
+				uint16_t totalAttackTime = currentKnobPattern->trackAttackTimeLSB[positionSelectTracks]|((currentKnobPattern->trackAttackTimeMSB[positionSelectTracks])<<8);
 				currentGlobals->valueChangeFlag |= (1<<knobChange); //if knob change bit is already set, this should be fine.
 				currentGlobals->knobStatus = (bankSwitch<<4)|positionSelect; //we don't want to | this, we just want to set it equal, so the screen only updates the last value	
 				
+				if(currentGlobals->currentGPButtons&0x04) 
+				{ //if "fine" is on:
+					totalAttackTime = totalAttackTime+((currentGlobals->filteredKnobBuffer[select])-(currentGlobals->lastFilteredKnobBuffer[select])); 
+					//this algorithm needs work. We need to not write to Attack time if attack time is less than 20ms. 
+					//maybe this algorythm is fine, we just don't print/attack stage for values under 20MS?
+				}else
+				{
+					totalAttackTime = ((currentGlobals->filteredKnobBuffer[select])-1)*238;
+				}
+				currentKnobPattern->trackAttackTimeMSB[positionSelectTracks] = ((totalAttackTime)>>8);
+				currentKnobPattern->trackAttackTimeLSB[positionSelectTracks] = (totalAttackTime); //this should truncate the top 8 bits. 
 				//we will eventually need a switch to write to the MSB also, for both attack and release.
-				currentKnobPattern->trackAttackTimeLSB[positionSelectTracks] = (currentGlobals->filteredKnobBuffer[select]);
-				uint16_t totalAttackTime = currentKnobPattern->trackAttackTimeLSB[positionSelectTracks]|((currentKnobPattern->trackAttackTimeMSB[positionSelectTracks])<<8);
+
 				currentGlobals->lastFilteredKnobBuffer[select] = currentGlobals->filteredKnobBuffer[select];
 			}
 			break;
@@ -216,8 +227,8 @@ void interperetKnob(uint8_t select, Pattern *currentKnobPattern, Globals *curren
 		 			currentKnobPattern->trackMainVolumeMSB[positionSelectTracks] = 255;
 	 			}
 
-				uint16_t totalAttackTime = currentKnobPattern->trackAttackTimeLSB[positionSelectTracks]|((currentKnobPattern->trackAttackTimeMSB[positionSelectTracks])<<8);
-				if(totalAttackTime==0) //we only want to set the track volume if the attack time is 0. otherwise, we have an envelope. 
+				
+				if(currentKnobPattern->envelopeType[positionSelectTracks]==1||currentKnobPattern->envelopeType[positionSelectTracks]==3) //set track volume directly if Envelope mode is only release, or none. 
 				{
 	 				setTrackVolume(currentKnobPattern->trackSampleLSB[positionSelectTracks], currentKnobPattern->trackSampleMSB[positionSelectTracks],
 					currentKnobPattern->trackMainVolumeLSB[positionSelectTracks], currentKnobPattern->trackMainVolumeMSB[positionSelectTracks]);

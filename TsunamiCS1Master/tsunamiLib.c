@@ -112,8 +112,7 @@ void playTrack(Pattern *currentPattern, Globals *currentGlobals, uint8_t trigInp
 	
 	switch(currentPattern->envelopeType[trigInput])
 	{
-		case 0: //A-R //not currently implemented
-			setTrackVolume(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],255,186); //we might want to do this on load, and on option change.
+		case 0: //A-R
 			trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
 			currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
 			setTrackFade(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
@@ -123,7 +122,7 @@ void playTrack(Pattern *currentPattern, Globals *currentGlobals, uint8_t trigInp
 			currentGlobals->sustainCounterArray[trigInput] = currentGlobals->releaseCounter+sustainTime;
 		break;
 		
-		case 1: //R //not currently implemented. 
+		case 1: //R 
 		trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
 		currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
 		currentGlobals->releaseTracker|=(1<<trigInput);
@@ -131,7 +130,6 @@ void playTrack(Pattern *currentPattern, Globals *currentGlobals, uint8_t trigInp
 		break;
 		
 		case 2: //A 
-		setTrackVolume(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],255,186); //we might want to do this on load, and on option change. 
 		trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
 		currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
 		setTrackFade(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
@@ -177,6 +175,19 @@ void sendPatternOnLoad(Pattern *currentPattern, Pattern oldPattern)
 
 void releaseUpdate(Pattern *currentPattern, Globals *currentGlobals)
 {
+	uint16_t releaseTrackerParse = currentGlobals->releaseTracker;	
 	
+	for(int i = 0; i<16; i++)
+	{//check every track, if there is a 1 in release counter, we check math. 
+		if(releaseTrackerParse&1) //if the first bit in the counter is a 1, we check for release times. 
+		//we could role this into one if statement, but I'm not sure that would be more efficient. Here we're using the release tracker as sort of an initial buffer. 
+		{
+			if((currentGlobals->sustainCounterArray[i])>=(currentGlobals->releaseCounter))
+			{
+				//we need to do the release state here.
+				setTrackFade(currentPattern->trackSampleLSB[i],currentPattern->trackSampleMSB[i],255,186,currentPattern->trackReleaseTimeLSB[i],currentPattern->trackReleaseTimeMSB[i],1);
+			} //1 makes the stop flag active, so sample will end after the release envelope is done triggering. 
+		}
+	}
 	
 }

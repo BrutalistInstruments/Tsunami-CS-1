@@ -335,6 +335,14 @@ void listenEncoders(Pattern *currentPattern, Globals *currentGlobals)
 					(currentPattern->envelopeType[currentGlobals->currentTrack])=0;
 				}
 			}
+			if(currentPattern->envelopeType[currentGlobals->currentTrack]==0||currentPattern->envelopeType[currentGlobals->currentTrack]==2) //AR or A
+			{
+				setTrackVolume(currentPattern->trackSampleLSB[currentGlobals->currentTrack], currentPattern->trackSampleMSB[currentGlobals->currentTrack],255,186);
+			}else
+			{
+				setTrackVolume(currentPattern->trackSampleLSB[currentGlobals->currentTrack], currentPattern->trackSampleMSB[currentGlobals->currentTrack],
+				currentPattern->trackMainVolumeLSB[currentGlobals->currentTrack],currentPattern->trackMainVolumeMSB[currentGlobals->currentTrack]);		
+			}
 			break;
 			
 			case TrackMenuArrow5:

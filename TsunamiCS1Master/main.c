@@ -77,7 +77,7 @@ while(1) {
 	updateSequencer(currentPattern, currentGlobals);
 	updateScreen(&screenBank, &currentPattern, &currentGlobals);
 	midiRead(currentPattern, currentGlobals);
-	//releaseUpdate(releaseCounter, &releaseTracker, releaseCounterArray[16],currentPattern);
+	releaseUpdate(&currentPattern, &currentGlobals);
 
 	}
 }
