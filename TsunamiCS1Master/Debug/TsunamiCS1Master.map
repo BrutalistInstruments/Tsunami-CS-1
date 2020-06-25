@@ -490,7 +490,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x3cde
+.text           0x00000000     0x3db4
  *(.vectors)
  .vectors       0x00000000       0xe4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6/crtatmega2560.o
                 0x00000000                __vector_default
@@ -636,252 +636,252 @@ END GROUP
                 0x00000560       0x3c EncoderLib.o
                 0x00000560                __vector_6
  .text.listenEncoders
-                0x0000059c      0x514 EncoderLib.o
+                0x0000059c      0x522 EncoderLib.o
                 0x0000059c                listenEncoders
  .text.initArrays
-                0x00000ab0       0x7e globalVariables.o
-                0x00000ab0                initArrays
+                0x00000abe       0x7e globalVariables.o
+                0x00000abe                initArrays
  .text.initBank
-                0x00000b2e       0x5e globalVariables.o
-                0x00000b2e                initBank
+                0x00000b3c       0x5e globalVariables.o
+                0x00000b3c                initBank
  .text.initGlobals
-                0x00000b8c       0x62 globalVariables.o
-                0x00000b8c                initGlobals
+                0x00000b9a       0x62 globalVariables.o
+                0x00000b9a                initGlobals
  .text.startADCConversion
-                0x00000bee       0x16 knobLib.o
-                0x00000bee                startADCConversion
- .text.initADC  0x00000c04       0x2a knobLib.o
-                0x00000c04                initADC
+                0x00000bfc       0x16 knobLib.o
+                0x00000bfc                startADCConversion
+ .text.initADC  0x00000c12       0x2a knobLib.o
+                0x00000c12                initADC
  .text.selectKnob
-                0x00000c2e       0x80 knobLib.o
-                0x00000c2e                selectKnob
+                0x00000c3c       0x80 knobLib.o
+                0x00000c3c                selectKnob
  .text.updateKnob
-                0x00000cae       0x3e knobLib.o
-                0x00000cae                updateKnob
+                0x00000cbc       0x3e knobLib.o
+                0x00000cbc                updateKnob
  .text.initializeKnob
-                0x00000cec       0x18 knobLib.o
-                0x00000cec                initializeKnob
+                0x00000cfa       0x18 knobLib.o
+                0x00000cfa                initializeKnob
  .text.interperetKnob
-                0x00000d04      0x3b6 knobLib.o
-                0x00000d04                interperetKnob
+                0x00000d12      0x406 knobLib.o
+                0x00000d12                interperetKnob
  .text.listenKnobs
-                0x000010ba       0x34 knobLib.o
-                0x000010ba                listenKnobs
+                0x00001118       0x34 knobLib.o
+                0x00001118                listenKnobs
  .text.initLEDs
-                0x000010ee        0x6 LEDLib.o
-                0x000010ee                initLEDs
+                0x0000114c        0x6 LEDLib.o
+                0x0000114c                initLEDs
  .text.parseLEDs
-                0x000010f4       0x34 LEDLib.o
-                0x000010f4                parseLEDs
+                0x00001152       0x34 LEDLib.o
+                0x00001152                parseLEDs
  .text.updateLEDs
-                0x00001128       0x7a LEDLib.o
-                0x00001128                updateLEDs
- .text.main     0x000011a2      0x300 main.o
-                0x000011a2                main
+                0x00001186       0x7a LEDLib.o
+                0x00001186                updateLEDs
+ .text.main     0x00001200      0x302 main.o
+                0x00001200                main
  .text.__vector_32
-                0x000014a2       0x4e main.o
-                0x000014a2                __vector_32
+                0x00001502       0x4e main.o
+                0x00001502                __vector_32
  .text.initMenu
-                0x000014f0      0x20e menu.o
-                0x000014f0                initMenu
+                0x00001550      0x20e menu.o
+                0x00001550                initMenu
  .text.reInitMenuOnLoad
-                0x000016fe       0x72 menu.o
-                0x000016fe                reInitMenuOnLoad
+                0x0000175e       0x72 menu.o
+                0x0000175e                reInitMenuOnLoad
  .text.updateScreen
-                0x00001770      0xa80 menu.o
-                0x00001770                updateScreen
+                0x000017d0      0xaf6 menu.o
+                0x000017d0                updateScreen
  .text.__vector_54
-                0x000021f0      0x116 MidiLib.o
-                0x000021f0                __vector_54
+                0x000022c6      0x116 MidiLib.o
+                0x000022c6                __vector_54
  .text.initMidi
-                0x00002306       0x20 MidiLib.o
-                0x00002306                initMidi
+                0x000023dc       0x20 MidiLib.o
+                0x000023dc                initMidi
  .text.midiRead
-                0x00002326       0xf4 MidiLib.o
-                0x00002326                midiRead
+                0x000023fc       0xf4 MidiLib.o
+                0x000023fc                midiRead
  .text.enableCycle
-                0x0000241a       0x1a OLEDLib.o
-                0x0000241a                enableCycle
- .text.command  0x00002434       0x10 OLEDLib.o
-                0x00002434                command
- .text.data     0x00002444       0x10 OLEDLib.o
-                0x00002444                data
+                0x000024f0       0x1a OLEDLib.o
+                0x000024f0                enableCycle
+ .text.command  0x0000250a       0x10 OLEDLib.o
+                0x0000250a                command
+ .text.data     0x0000251a       0x10 OLEDLib.o
+                0x0000251a                data
  .text.initScreen
-                0x00002454       0xba OLEDLib.o
-                0x00002454                initScreen
- .text.outputS  0x0000250e       0x30 OLEDLib.o
-                0x0000250e                outputS
+                0x0000252a       0xba OLEDLib.o
+                0x0000252a                initScreen
+ .text.outputS  0x000025e4       0x30 OLEDLib.o
+                0x000025e4                outputS
  .text.numPrinter
-                0x0000253e      0x38c OLEDLib.o
-                0x0000253e                numPrinter
+                0x00002614      0x38c OLEDLib.o
+                0x00002614                numPrinter
  .text.midiNotePrinter
-                0x000028ca       0x92 OLEDLib.o
-                0x000028ca                midiNotePrinter
+                0x000029a0       0x92 OLEDLib.o
+                0x000029a0                midiNotePrinter
  .text.initSequencer
-                0x0000295c       0x12 sequencerLib.o
-                0x0000295c                initSequencer
+                0x00002a32       0x12 sequencerLib.o
+                0x00002a32                initSequencer
  .text.__vector_21
-                0x0000296e       0x2e sequencerLib.o
-                0x0000296e                __vector_21
+                0x00002a44       0x2e sequencerLib.o
+                0x00002a44                __vector_21
  .text.updateSequencer
-                0x0000299c       0xee sequencerLib.o
-                0x0000299c                updateSequencer
+                0x00002a72       0xee sequencerLib.o
+                0x00002a72                updateSequencer
  .text.__vector_27
-                0x00002a8a       0x7a serialLib.o
-                0x00002a8a                __vector_27
+                0x00002b60       0x7a serialLib.o
+                0x00002b60                __vector_27
  .text.appendSerial0
-                0x00002b04       0x30 serialLib.o
-                0x00002b04                appendSerial0
+                0x00002bda       0x30 serialLib.o
+                0x00002bda                appendSerial0
  .text.serialWrite0
-                0x00002b34       0x3a serialLib.o
-                0x00002b34                serialWrite0
+                0x00002c0a       0x3a serialLib.o
+                0x00002c0a                serialWrite0
  .text.serialInit0
-                0x00002b6e       0x18 serialLib.o
-                0x00002b6e                serialInit0
+                0x00002c44       0x18 serialLib.o
+                0x00002c44                serialInit0
  .text.initEnvelopes
-                0x00002b86       0x1e tsunamiLib.o
-                0x00002b86                initEnvelopes
+                0x00002c5c       0x1e tsunamiLib.o
+                0x00002c5c                initEnvelopes
  .text.trackControl
-                0x00002ba4       0x4c tsunamiLib.o
-                0x00002ba4                trackControl
+                0x00002c7a       0x4c tsunamiLib.o
+                0x00002c7a                trackControl
  .text.setOutputVolume
-                0x00002bf0       0x48 tsunamiLib.o
-                0x00002bf0                setOutputVolume
+                0x00002cc6       0x48 tsunamiLib.o
+                0x00002cc6                setOutputVolume
  .text.setTrackVolume
-                0x00002c38       0x4a tsunamiLib.o
-                0x00002c38                setTrackVolume
+                0x00002d0e       0x4a tsunamiLib.o
+                0x00002d0e                setTrackVolume
  .text.setTrackFade
-                0x00002c82       0x5c tsunamiLib.o
-                0x00002c82                setTrackFade
+                0x00002d58       0x5c tsunamiLib.o
+                0x00002d58                setTrackFade
  .text.outputSampleRate
-                0x00002cde       0x48 tsunamiLib.o
-                0x00002cde                outputSampleRate
+                0x00002db4       0x48 tsunamiLib.o
+                0x00002db4                outputSampleRate
  .text.playTrack
-                0x00002d26      0x200 tsunamiLib.o
-                0x00002d26                playTrack
+                0x00002dfc      0x200 tsunamiLib.o
+                0x00002dfc                playTrack
  .text.releaseUpdate
-                0x00002f26       0xaa tsunamiLib.o
-                0x00002f26                releaseUpdate
+                0x00002ffc       0xaa tsunamiLib.o
+                0x00002ffc                releaseUpdate
  .text.twi_init
-                0x00002fd0        0xc twiLib.o
-                0x00002fd0                twi_init
+                0x000030a6        0xc twiLib.o
+                0x000030a6                twi_init
  .text.twi_start
-                0x00002fdc       0x4e twiLib.o
-                0x00002fdc                twi_start
+                0x000030b2       0x4e twiLib.o
+                0x000030b2                twi_start
  .text.twi_stop
-                0x0000302a       0x12 twiLib.o
-                0x0000302a                twi_stop
+                0x00003100       0x12 twiLib.o
+                0x00003100                twi_stop
  .text.twi_write
-                0x0000303c       0x24 twiLib.o
-                0x0000303c                twi_write
+                0x00003112       0x24 twiLib.o
+                0x00003112                twi_write
  .text.twi_readAck
-                0x00003060       0x16 twiLib.o
-                0x00003060                twi_readAck
+                0x00003136       0x16 twiLib.o
+                0x00003136                twi_readAck
  .text.twi_readNak
-                0x00003076       0x16 twiLib.o
-                0x00003076                twi_readNak
+                0x0000314c       0x16 twiLib.o
+                0x0000314c                twi_readNak
  .text.eepromSavePattern
-                0x0000308c      0x3da twiLib.o
-                0x0000308c                eepromSavePattern
+                0x00003162      0x3da twiLib.o
+                0x00003162                eepromSavePattern
  .text.eepromLoadPattern
-                0x00003466      0x362 twiLib.o
-                0x00003466                eepromLoadPattern
+                0x0000353c      0x362 twiLib.o
+                0x0000353c                eepromLoadPattern
  .text.factoryResetEeprom
-                0x000037c8       0x5c twiLib.o
-                0x000037c8                factoryResetEeprom
+                0x0000389e       0x5c twiLib.o
+                0x0000389e                factoryResetEeprom
  .text.globalWrite
-                0x00003824       0x22 twiLib.o
-                0x00003824                globalWrite
+                0x000038fa       0x22 twiLib.o
+                0x000038fa                globalWrite
  .text.globalLoad
-                0x00003846       0x26 twiLib.o
-                0x00003846                globalLoad
+                0x0000391c       0x26 twiLib.o
+                0x0000391c                globalLoad
  .text.avr-libc.fplib
-                0x0000386c        0xa c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(addsf3.o)
-                0x0000386c                __subsf3
-                0x0000386e                __addsf3
+                0x00003942        0xa c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(addsf3.o)
+                0x00003942                __subsf3
+                0x00003944                __addsf3
  .text.avr-libc.fplib
-                0x00003876       0xc0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(addsf3x.o)
-                0x00003890                __addsf3x
+                0x0000394c       0xc0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(addsf3x.o)
+                0x00003966                __addsf3x
  .text.avr-libc.fplib
-                0x00003936        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(divsf3.o)
-                0x00003936                __divsf3
+                0x00003a0c        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(divsf3.o)
+                0x00003a0c                __divsf3
  .text.avr-libc.fplib
-                0x0000393a       0xcc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(divsf3x.o)
-                0x00003950                __divsf3x
-                0x00003954                __divsf3_pse
+                0x00003a10       0xcc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(divsf3x.o)
+                0x00003a26                __divsf3x
+                0x00003a2a                __divsf3_pse
  .text.avr-libc.fplib
-                0x00003a06        0xa c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fixsfsi.o)
-                0x00003a06                __fixsfsi
+                0x00003adc        0xa c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fixsfsi.o)
+                0x00003adc                __fixsfsi
  .text.avr-libc.fplib
-                0x00003a10       0x58 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fixunssfsi.o)
-                0x00003a10                __fixunssfsi
+                0x00003ae6       0x58 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fixunssfsi.o)
+                0x00003ae6                __fixunssfsi
  .text.avr-libc.fplib
-                0x00003a68       0x7a c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(floatsisf.o)
-                0x00003a68                __floatunsisf
-                0x00003a6c                __floatsisf
+                0x00003b3e       0x7a c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(floatsisf.o)
+                0x00003b3e                __floatunsisf
+                0x00003b42                __floatsisf
  .text.avr-libc.fplib
-                0x00003ae2        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fp_inf.o)
-                0x00003ae2                __fp_inf
+                0x00003bb8        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fp_inf.o)
+                0x00003bb8                __fp_inf
  .text.avr-libc.fplib
-                0x00003aee        0x6 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fp_nan.o)
-                0x00003aee                __fp_nan
+                0x00003bc4        0x6 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fp_nan.o)
+                0x00003bc4                __fp_nan
  .text.avr-libc.fplib
-                0x00003af4        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fp_pscA.o)
-                0x00003af4                __fp_pscA
+                0x00003bca        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fp_pscA.o)
+                0x00003bca                __fp_pscA
  .text.avr-libc.fplib
-                0x00003b02        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fp_pscB.o)
-                0x00003b02                __fp_pscB
+                0x00003bd8        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fp_pscB.o)
+                0x00003bd8                __fp_pscB
  .text.avr-libc.fplib
-                0x00003b10       0x22 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fp_round.o)
-                0x00003b10                __fp_round
+                0x00003be6       0x22 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fp_round.o)
+                0x00003be6                __fp_round
  .text.avr-libc.fplib
-                0x00003b32       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fp_split3.o)
-                0x00003b32                __fp_split3
-                0x00003b42                __fp_splitA
+                0x00003c08       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fp_split3.o)
+                0x00003c08                __fp_split3
+                0x00003c18                __fp_splitA
  .text.avr-libc.fplib
-                0x00003b76        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fp_zero.o)
-                0x00003b76                __fp_zero
-                0x00003b78                __fp_szero
+                0x00003c4c        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a(fp_zero.o)
+                0x00003c4c                __fp_zero
+                0x00003c4e                __fp_szero
  .text.libgcc.div
-                0x00003b84       0x26 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_divmodhi4.o)
-                0x00003b84                _div
-                0x00003b84                __divmodhi4
+                0x00003c5a       0x26 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_divmodhi4.o)
+                0x00003c5a                _div
+                0x00003c5a                __divmodhi4
  .text.libgcc.div
-                0x00003baa       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_divmodsi4.o)
-                0x00003baa                __divmodsi4
+                0x00003c80       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_divmodsi4.o)
+                0x00003c80                __divmodsi4
  .text.libgcc.div
-                0x00003bd2       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_negsi2.o)
-                0x00003bd2                __negsi2
- .text.libgcc   0x00003be2       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_tablejump2.o)
-                0x00003be2                __tablejump2__
+                0x00003ca8       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_negsi2.o)
+                0x00003ca8                __negsi2
+ .text.libgcc   0x00003cb8       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_tablejump2.o)
+                0x00003cb8                __tablejump2__
  .text.libgcc.mul
-                0x00003bf2       0x1e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_umulhisi3.o)
-                0x00003bf2                __umulhisi3
+                0x00003cc8       0x1e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_umulhisi3.o)
+                0x00003cc8                __umulhisi3
  .text.libgcc.div
-                0x00003c10       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_udivmodhi4.o)
-                0x00003c10                __udivmodhi4
+                0x00003ce6       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_udivmodhi4.o)
+                0x00003ce6                __udivmodhi4
  .text.libgcc.div
-                0x00003c38       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_udivmodsi4.o)
-                0x00003c38                __udivmodsi4
+                0x00003d0e       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_udivmodsi4.o)
+                0x00003d0e                __udivmodsi4
  .text.avr-libc
-                0x00003c7c       0x20 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eerd_block.o)
-                0x00003c7c                eeprom_read_block
-                0x00003c80                eeprom_read_blraw
+                0x00003d52       0x20 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eerd_block.o)
+                0x00003d52                eeprom_read_block
+                0x00003d56                eeprom_read_blraw
  .text.avr-libc
-                0x00003c9c       0x10 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eerd_byte.o)
-                0x00003c9c                eeprom_read_byte
+                0x00003d72       0x10 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eerd_byte.o)
+                0x00003d72                eeprom_read_byte
  .text.avr-libc
-                0x00003cac       0x12 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eewr_block.o)
-                0x00003cac                eeprom_write_block
+                0x00003d82       0x12 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eewr_block.o)
+                0x00003d82                eeprom_write_block
  .text.avr-libc
-                0x00003cbe       0x1c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eewr_byte.o)
-                0x00003cbe                eeprom_write_byte
-                0x00003cc0                eeprom_write_r18
-                0x00003cda                . = ALIGN (0x2)
+                0x00003d94       0x1c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eewr_byte.o)
+                0x00003d94                eeprom_write_byte
+                0x00003d96                eeprom_write_r18
+                0x00003db0                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00003cda        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
-                0x00003cda                _exit
-                0x00003cda                exit
+ .fini9         0x00003db0        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
+                0x00003db0                _exit
+                0x00003db0                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -900,11 +900,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00003cda        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
+ .fini0         0x00003db0        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
  *(.fini0)
-                0x00003cde                _etext = .
+                0x00003db4                _etext = .
 
-.data           0x00800200      0x18c load address 0x00003cde
+.data           0x00800200      0x192 load address 0x00003db4
                 0x00800200                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -929,87 +929,87 @@ END GROUP
  .rodata        0x0080020c       0x54 twiLib.o
  *(.rodata*)
  .rodata.str1.1
-                0x00800260      0x117 menu.o
-                                0x119 (size before relaxing)
+                0x00800260      0x11d menu.o
+                                0x11f (size before relaxing)
  .rodata.str1.1
-                0x00800377       0x15 twiLib.o
+                0x0080037d       0x15 twiLib.o
  *(.gnu.linkonce.r*)
-                0x0080038c                . = ALIGN (0x2)
-                0x0080038c                _edata = .
-                0x0080038c                PROVIDE (__data_end, .)
+                0x00800392                . = ALIGN (0x2)
+                0x00800392                _edata = .
+                0x00800392                PROVIDE (__data_end, .)
 
-.bss            0x0080038c      0x7c8
-                0x0080038c                PROVIDE (__bss_start, .)
+.bss            0x00800392      0x7c8
+                0x00800392                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  .bss.button_state.1747
-                0x0080038c        0x1 ButtonLib.o
+                0x00800392        0x1 ButtonLib.o
  .bss.lastFullBits
-                0x0080038d        0x2 ButtonLib.o
-                0x0080038d                lastFullBits
+                0x00800393        0x2 ButtonLib.o
+                0x00800393                lastFullBits
  .bss.encoderPortStates
-                0x0080038f        0x1 EncoderLib.o
-                0x0080038f                encoderPortStates
+                0x00800395        0x1 EncoderLib.o
+                0x00800395                encoderPortStates
  .bss.bottomEncoderLastValue
-                0x00800390        0x1 EncoderLib.o
-                0x00800390                bottomEncoderLastValue
+                0x00800396        0x1 EncoderLib.o
+                0x00800396                bottomEncoderLastValue
  .bss.topEncoderLastValue
-                0x00800391        0x1 EncoderLib.o
-                0x00800391                topEncoderLastValue
+                0x00800397        0x1 EncoderLib.o
+                0x00800397                topEncoderLastValue
  .bss.bottomEncoderValue
-                0x00800392        0x1 EncoderLib.o
-                0x00800392                bottomEncoderValue
+                0x00800398        0x1 EncoderLib.o
+                0x00800398                bottomEncoderValue
  .bss.topEncoderValue
-                0x00800393        0x1 EncoderLib.o
-                0x00800393                topEncoderValue
+                0x00800399        0x1 EncoderLib.o
+                0x00800399                topEncoderValue
  .bss.factoryReset
-                0x00800394        0x1 main.o
-                0x00800394                factoryReset
+                0x0080039a        0x1 main.o
+                0x0080039a                factoryReset
  .bss.midiReadIndex
-                0x00800395        0x1 MidiLib.o
-                0x00800395                midiReadIndex
+                0x0080039b        0x1 MidiLib.o
+                0x0080039b                midiReadIndex
  .bss.midiWriteIndex
-                0x00800396        0x1 MidiLib.o
-                0x00800396                midiWriteIndex
+                0x0080039c        0x1 MidiLib.o
+                0x0080039c                midiWriteIndex
  .bss.currentPlayStep
-                0x00800397        0x1 sequencerLib.o
-                0x00800397                currentPlayStep
+                0x0080039d        0x1 sequencerLib.o
+                0x0080039d                currentPlayStep
  .bss.clockCounter
-                0x00800398        0x2 sequencerLib.o
-                0x00800398                clockCounter
+                0x0080039e        0x2 sequencerLib.o
+                0x0080039e                clockCounter
  .bss.serialWritePos
-                0x0080039a        0x2 serialLib.o
-                0x0080039a                serialWritePos
+                0x008003a0        0x2 serialLib.o
+                0x008003a0                serialWritePos
  .bss.serialReadPos
-                0x0080039c        0x2 serialLib.o
-                0x0080039c                serialReadPos
+                0x008003a2        0x2 serialLib.o
+                0x008003a2                serialReadPos
  *(COMMON)
- COMMON         0x0080039e        0x2 ButtonLib.o
-                0x0080039e                buttonsCurrentCycle
-                0x0080039f                currentTrig
- COMMON         0x008003a0        0x1 DebounceLib.o
-                0x008003a0                buttons_down
- COMMON         0x008003a1        0x1 knobLib.o
-                0x008003a1                knobBufferCounter
- COMMON         0x008003a2      0x613 main.o
-                0x008003a2                currentPattern
-                0x0080051d                currentGlobals
-                0x00800604                screenBank
- COMMON         0x008009b5        0x1 menu.o
-                0x008009b5                prevMenuState
- COMMON         0x008009b6       0x1e MidiLib.o
-                0x008009b6                midiEventBuffer
- COMMON         0x008009d4      0x180 serialLib.o
-                0x008009d4                serial0Buffer
-                0x00800b54                PROVIDE (__bss_end, .)
-                0x00003cde                __data_load_start = LOADADDR (.data)
-                0x00003e6a                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x008003a4        0x2 ButtonLib.o
+                0x008003a4                buttonsCurrentCycle
+                0x008003a5                currentTrig
+ COMMON         0x008003a6        0x1 DebounceLib.o
+                0x008003a6                buttons_down
+ COMMON         0x008003a7        0x1 knobLib.o
+                0x008003a7                knobBufferCounter
+ COMMON         0x008003a8      0x613 main.o
+                0x008003a8                currentPattern
+                0x00800523                currentGlobals
+                0x0080060a                screenBank
+ COMMON         0x008009bb        0x1 menu.o
+                0x008009bb                prevMenuState
+ COMMON         0x008009bc       0x1e MidiLib.o
+                0x008009bc                midiEventBuffer
+ COMMON         0x008009da      0x180 serialLib.o
+                0x008009da                serial0Buffer
+                0x00800b5a                PROVIDE (__bss_end, .)
+                0x00003db4                __data_load_start = LOADADDR (.data)
+                0x00003f46                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800b54        0x0
+.noinit         0x00800b5a        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800b54                _end = .
+                0x00800b5a                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -1129,27 +1129,27 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x7520
+.debug_info     0x00000000     0x757c
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0xbbc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_info    0x00000bbc      0x673 ButtonLib.o
  .debug_info    0x0000122f      0x133 DebounceLib.o
- .debug_info    0x00001362      0x540 EncoderLib.o
- .debug_info    0x000018a2      0x470 globalVariables.o
- .debug_info    0x00001d12      0x7a7 knobLib.o
- .debug_info    0x000024b9      0x48b LEDLib.o
- .debug_info    0x00002944      0x476 main.o
- .debug_info    0x00002dba     0x18ff menu.o
- .debug_info    0x000046b9      0x51d MidiLib.o
- .debug_info    0x00004bd6      0x6fe OLEDLib.o
- .debug_info    0x000052d4      0x417 sequencerLib.o
- .debug_info    0x000056eb      0x172 serialLib.o
- .debug_info    0x0000585d      0xa0c tsunamiLib.o
- .debug_info    0x00006269     0x1005 twiLib.o
- .debug_info    0x0000726e       0xad C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eerd_block.o)
- .debug_info    0x0000731b       0xac C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eerd_byte.o)
- .debug_info    0x000073c7       0xad C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eewr_block.o)
- .debug_info    0x00007474       0xac C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eewr_byte.o)
+ .debug_info    0x00001362      0x550 EncoderLib.o
+ .debug_info    0x000018b2      0x470 globalVariables.o
+ .debug_info    0x00001d22      0x7c4 knobLib.o
+ .debug_info    0x000024e6      0x48b LEDLib.o
+ .debug_info    0x00002971      0x476 main.o
+ .debug_info    0x00002de7     0x192e menu.o
+ .debug_info    0x00004715      0x51d MidiLib.o
+ .debug_info    0x00004c32      0x6fe OLEDLib.o
+ .debug_info    0x00005330      0x417 sequencerLib.o
+ .debug_info    0x00005747      0x172 serialLib.o
+ .debug_info    0x000058b9      0xa0c tsunamiLib.o
+ .debug_info    0x000062c5     0x1005 twiLib.o
+ .debug_info    0x000072ca       0xad C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eerd_block.o)
+ .debug_info    0x00007377       0xac C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eerd_byte.o)
+ .debug_info    0x00007423       0xad C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eewr_block.o)
+ .debug_info    0x000074d0       0xac C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eewr_byte.o)
 
 .debug_abbrev   0x00000000     0x2032
  *(.debug_abbrev)
@@ -1173,93 +1173,93 @@ END GROUP
  .debug_abbrev  0x0000200a       0x14 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eewr_block.o)
  .debug_abbrev  0x0000201e       0x14 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eewr_byte.o)
 
-.debug_line     0x00000000     0x342c
+.debug_line     0x00000000     0x34ec
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x1f9 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_line    0x000001f9      0x275 ButtonLib.o
  .debug_line    0x0000046e      0x13b DebounceLib.o
- .debug_line    0x000005a9      0x4bd EncoderLib.o
- .debug_line    0x00000a66      0x259 globalVariables.o
- .debug_line    0x00000cbf      0x41c knobLib.o
- .debug_line    0x000010db      0x187 LEDLib.o
- .debug_line    0x00001262      0x1f2 main.o
- .debug_line    0x00001454      0x7e3 menu.o
- .debug_line    0x00001c37      0x1da MidiLib.o
- .debug_line    0x00001e11      0x442 OLEDLib.o
- .debug_line    0x00002253      0x16e sequencerLib.o
- .debug_line    0x000023c1      0x15c serialLib.o
- .debug_line    0x0000251d      0x38e tsunamiLib.o
- .debug_line    0x000028ab      0x93e twiLib.o
- .debug_line    0x000031e9       0xab C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eerd_block.o)
- .debug_line    0x00003294       0x7a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eerd_byte.o)
- .debug_line    0x0000330e       0x80 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eewr_block.o)
- .debug_line    0x0000338e       0x9e C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eewr_byte.o)
+ .debug_line    0x000005a9      0x4e1 EncoderLib.o
+ .debug_line    0x00000a8a      0x259 globalVariables.o
+ .debug_line    0x00000ce3      0x440 knobLib.o
+ .debug_line    0x00001123      0x187 LEDLib.o
+ .debug_line    0x000012aa      0x1f2 main.o
+ .debug_line    0x0000149c      0x85b menu.o
+ .debug_line    0x00001cf7      0x1da MidiLib.o
+ .debug_line    0x00001ed1      0x442 OLEDLib.o
+ .debug_line    0x00002313      0x16e sequencerLib.o
+ .debug_line    0x00002481      0x15c serialLib.o
+ .debug_line    0x000025dd      0x38e tsunamiLib.o
+ .debug_line    0x0000296b      0x93e twiLib.o
+ .debug_line    0x000032a9       0xab C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eerd_block.o)
+ .debug_line    0x00003354       0x7a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eerd_byte.o)
+ .debug_line    0x000033ce       0x80 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eewr_block.o)
+ .debug_line    0x0000344e       0x9e C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6\libatmega2560.a(eewr_byte.o)
 
-.debug_frame    0x00000000      0xbd8
+.debug_frame    0x00000000      0xbe0
  *(.debug_frame)
  .debug_frame   0x00000000       0xb4 ButtonLib.o
  .debug_frame   0x000000b4       0x24 DebounceLib.o
  .debug_frame   0x000000d8       0xd8 EncoderLib.o
  .debug_frame   0x000001b0       0x64 globalVariables.o
- .debug_frame   0x00000214      0x114 knobLib.o
- .debug_frame   0x00000328       0x54 LEDLib.o
- .debug_frame   0x0000037c       0xa0 main.o
- .debug_frame   0x0000041c       0xcc menu.o
- .debug_frame   0x000004e8       0xd0 MidiLib.o
- .debug_frame   0x000005b8       0xb4 OLEDLib.o
- .debug_frame   0x0000066c       0x84 sequencerLib.o
- .debug_frame   0x000006f0       0x90 serialLib.o
- .debug_frame   0x00000780      0x284 tsunamiLib.o
- .debug_frame   0x00000a04      0x1d4 twiLib.o
+ .debug_frame   0x00000214      0x11c knobLib.o
+ .debug_frame   0x00000330       0x54 LEDLib.o
+ .debug_frame   0x00000384       0xa0 main.o
+ .debug_frame   0x00000424       0xcc menu.o
+ .debug_frame   0x000004f0       0xd0 MidiLib.o
+ .debug_frame   0x000005c0       0xb4 OLEDLib.o
+ .debug_frame   0x00000674       0x84 sequencerLib.o
+ .debug_frame   0x000006f8       0x90 serialLib.o
+ .debug_frame   0x00000788      0x284 tsunamiLib.o
+ .debug_frame   0x00000a0c      0x1d4 twiLib.o
 
-.debug_str      0x00000000     0x14e0
+.debug_str      0x00000000     0x1502
  *(.debug_str)
  .debug_str     0x00000000      0x3e6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_str     0x000003e6      0x552 ButtonLib.o
                                 0x596 (size before relaxing)
  .debug_str     0x00000938       0x48 DebounceLib.o
                                 0x1aa (size before relaxing)
- .debug_str     0x00000980      0x101 EncoderLib.o
-                                0x4f6 (size before relaxing)
- .debug_str     0x00000a81       0x8d globalVariables.o
+ .debug_str     0x00000980      0x10d EncoderLib.o
+                                0x502 (size before relaxing)
+ .debug_str     0x00000a8d       0x8d globalVariables.o
                                 0x478 (size before relaxing)
- .debug_str     0x00000b0e      0x18b knobLib.o
-                                0x588 (size before relaxing)
- .debug_str     0x00000c99       0x80 LEDLib.o
+ .debug_str     0x00000b1a      0x19c knobLib.o
+                                0x599 (size before relaxing)
+ .debug_str     0x00000cb6       0x80 LEDLib.o
                                 0x466 (size before relaxing)
- .debug_str     0x00000d19       0x5e main.o
+ .debug_str     0x00000d36       0x5e main.o
                                 0x467 (size before relaxing)
- .debug_str     0x00000d77       0xba menu.o
-                                0x510 (size before relaxing)
- .debug_str     0x00000e31       0xe7 MidiLib.o
+ .debug_str     0x00000d94       0xcb menu.o
+                                0x532 (size before relaxing)
+ .debug_str     0x00000e5f       0xe7 MidiLib.o
                                 0x4dc (size before relaxing)
- .debug_str     0x00000f18      0x162 OLEDLib.o
+ .debug_str     0x00000f46      0x162 OLEDLib.o
                                 0x2f3 (size before relaxing)
- .debug_str     0x0000107a       0x7d sequencerLib.o
+ .debug_str     0x000010a8       0x7d sequencerLib.o
                                 0x470 (size before relaxing)
- .debug_str     0x000010f7       0x7d serialLib.o
+ .debug_str     0x00001125       0x7d serialLib.o
                                 0x1d4 (size before relaxing)
- .debug_str     0x00001174      0x1ce tsunamiLib.o
+ .debug_str     0x000011a2      0x1c2 tsunamiLib.o
                                 0x636 (size before relaxing)
- .debug_str     0x00001342      0x19e twiLib.o
+ .debug_str     0x00001364      0x19e twiLib.o
                                 0x647 (size before relaxing)
 
-.debug_loc      0x00000000     0x5032
+.debug_loc      0x00000000     0x536c
  *(.debug_loc)
  .debug_loc     0x00000000      0x2db ButtonLib.o
  .debug_loc     0x000002db       0x69 DebounceLib.o
- .debug_loc     0x00000344      0x5aa EncoderLib.o
- .debug_loc     0x000008ee      0x1e3 globalVariables.o
- .debug_loc     0x00000ad1      0xaa9 knobLib.o
- .debug_loc     0x0000157a      0x20d LEDLib.o
- .debug_loc     0x00001787      0x186 main.o
- .debug_loc     0x0000190d      0x94e menu.o
- .debug_loc     0x0000225b      0x22e MidiLib.o
- .debug_loc     0x00002489      0x9fc OLEDLib.o
- .debug_loc     0x00002e85      0x245 sequencerLib.o
- .debug_loc     0x000030ca      0x181 serialLib.o
- .debug_loc     0x0000324b      0xc07 tsunamiLib.o
- .debug_loc     0x00003e52     0x11e0 twiLib.o
+ .debug_loc     0x00000344      0x628 EncoderLib.o
+ .debug_loc     0x0000096c      0x1e3 globalVariables.o
+ .debug_loc     0x00000b4f      0xb69 knobLib.o
+ .debug_loc     0x000016b8      0x20d LEDLib.o
+ .debug_loc     0x000018c5      0x186 main.o
+ .debug_loc     0x00001a4b      0xb4a menu.o
+ .debug_loc     0x00002595      0x22e MidiLib.o
+ .debug_loc     0x000027c3      0x9fc OLEDLib.o
+ .debug_loc     0x000031bf      0x245 sequencerLib.o
+ .debug_loc     0x00003404      0x181 serialLib.o
+ .debug_loc     0x00003585      0xc07 tsunamiLib.o
+ .debug_loc     0x0000418c     0x11e0 twiLib.o
 
 .debug_macinfo
  *(.debug_macinfo)

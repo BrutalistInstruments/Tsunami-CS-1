@@ -185,32 +185,40 @@ void interperetKnob(uint8_t select, Pattern *currentKnobPattern, Globals *curren
 				{ //if "fine" is on:
 					totalAttackTime = totalAttackTime+((currentGlobals->filteredKnobBuffer[select])-(currentGlobals->lastFilteredKnobBuffer[select])); 
 					//this algorithm needs work. We need to not write to Attack time if attack time is less than 20ms. 
-					//maybe this algorythm is fine, we just don't print/attack stage for values under 20MS?
+					//maybe this algorithm is fine, we just don't print/attack stage for values under 20MS?
 				}else
 				{
 					totalAttackTime = ((currentGlobals->filteredKnobBuffer[select])-1)*238;
 				}
 				currentKnobPattern->trackAttackTimeMSB[positionSelectTracks] = ((totalAttackTime)>>8);
 				currentKnobPattern->trackAttackTimeLSB[positionSelectTracks] = (totalAttackTime); //this should truncate the top 8 bits. 
-				//we will eventually need a switch to write to the MSB also, for both attack and release.
 
 				currentGlobals->lastFilteredKnobBuffer[select] = currentGlobals->filteredKnobBuffer[select];
 			}
 			break;
  			
- 			case 3:
+ 			case 3: //release Envelope
  			if(currentGlobals->lastFilteredKnobBuffer[select]!=currentGlobals->filteredKnobBuffer[select])
  			{
+				 uint16_t totalReleaseTime = currentKnobPattern->trackReleaseTimeLSB[positionSelectTracks]|((currentKnobPattern->trackReleaseTimeMSB[positionSelectTracks])<<8);
 				currentGlobals->valueChangeFlag |= (1<<knobChange); //if knob change bit is already set, this should be fine.
 				currentGlobals->knobStatus = (bankSwitch<<4)|positionSelect; //we don't want to | this, we just want to set it equal, so the screen only updates the last value
- 				currentKnobPattern->trackReleaseTimeLSB[positionSelectTracks] = currentGlobals->filteredKnobBuffer[select];
-				 currentGlobals->lastFilteredKnobBuffer[select] = currentGlobals->filteredKnobBuffer[select];
+				if(currentGlobals->currentGPButtons&0x04)
+				{ //if "fine" is on:
+					totalReleaseTime = totalReleaseTime+((currentGlobals->filteredKnobBuffer[select])-(currentGlobals->lastFilteredKnobBuffer[select]));
+				}else
+				{
+					totalReleaseTime = ((currentGlobals->filteredKnobBuffer[select])-1)*238;
+				}
+				currentKnobPattern->trackReleaseTimeMSB[positionSelectTracks] = ((totalReleaseTime)>>8);
+				currentKnobPattern->trackReleaseTimeLSB[positionSelectTracks] = (totalReleaseTime);	
+				
+				currentGlobals->lastFilteredKnobBuffer[select] = currentGlobals->filteredKnobBuffer[select];
  			}
  			break;
  			
  			case 4:;
- 			//int16_t currentTrackValue = ((currentKnobPattern->trackMainVolumeMSB[positionSelectTracks]<<8)|(currentKnobPattern->trackMainVolumeLSB[positionSelectTracks]));
-			prevRead = currentGlobals->lastFilteredKnobBuffer[select];
+ 			prevRead = currentGlobals->lastFilteredKnobBuffer[select];
 			newRead = currentGlobals->filteredKnobBuffer[select];
  			if(checkVariation(newRead,prevRead)>2)
  			{

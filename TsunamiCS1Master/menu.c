@@ -36,7 +36,7 @@ initArrays(initTheScreen->screen2,1,"Track:");
 initArrays(initTheScreen->screen2,2,"PlayMode:");
 initArrays(initTheScreen->screen2,3,"OutRoute:");
 initArrays(initTheScreen->screen2,4,"EnvelopeMode:");
-initArrays(initTheScreen->screen2,5,"SustainTime: ");
+initArrays(initTheScreen->screen2,5,"SustainTime:      S");
 
 //screen3
 initArrays(initTheScreen->screen3,1,"Midi Channel:");
@@ -48,7 +48,7 @@ initArrays(initTheScreen->screen3,0,"Global Settings");
 initArrays(initTheScreen->knobScreen,0,"OutVolume x : xxxdb");//string 0 is outVolume
 initArrays(initTheScreen->knobScreen,1,"Pitch : xxx");//string 1 is pitch
 initArrays(initTheScreen->knobScreen,2,"AttackTime  :      S"); //string 2 is Envelope gain
-initArrays(initTheScreen->knobScreen,3,"ReleaseTimexx:xxxxMS"); //string 3 is Envelop Time
+initArrays(initTheScreen->knobScreen,3,"ReleaseTimexx:xx xxx"); //string 3 is Envelop Time
 initArrays(initTheScreen->knobScreen,4,"TrackVolume xx:xxxdb"); //string 4 is track Level.
 //initArrays(initTheScreen->knobScreen,5,"BPM: ");
 //we might want to put in one of these for BPM, but I'm not sure. 
@@ -270,8 +270,12 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 			outputS(menuScreen->screen2[5], 3);
 			break;
 
-			case TrackMenuArrow5Select:
-			numPrinter(menuScreen->screen2[5],13,3,(currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack]));
+			case TrackMenuArrow5Select:;
+			uint16_t totalSustainTime = currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack]|((currentPattern->trackSustainTimeMSB[currentGlobals->currentTrack])<<8);
+			numPrinter(menuScreen->screen2[5],13, 5, totalSustainTime);
+			menuScreen->screen2[5][12] = menuScreen->screen2[5][13];
+			menuScreen->screen2[5][13] = menuScreen->screen2[5][14];
+			menuScreen->screen2[5][14] = '.';
 			outputS(menuScreen->screen2[5],3);
 			break;
 
@@ -387,7 +391,11 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 				menuScreen->screen2[4][17] = 'e';
 				break;
 			}
-			numPrinter(menuScreen->screen2[5],13,3,(currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack]));
+		uint16_t totalSustainTime = currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack]|((currentPattern->trackSustainTimeMSB[currentGlobals->currentTrack])<<8);
+		numPrinter(menuScreen->screen2[5],13, 5, totalSustainTime);
+		menuScreen->screen2[5][12] = menuScreen->screen2[5][13];
+		menuScreen->screen2[5][13] = menuScreen->screen2[5][14];
+		menuScreen->screen2[5][14] = '.';
 			//the track settings screens should now be populated
 			
 			
@@ -454,18 +462,21 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 			break;
 				
 			case 2:; //attack envelope 
-			uint16_t totalAttackTime = currentPattern->trackAttackTimeLSB[positionSelect]|((currentPattern->trackAttackTimeMSB[positionSelect])<<8);				
+			uint16_t totalAttackTime = currentPattern->trackAttackTimeLSB[positionSelect+positionSelectUpper]|((currentPattern->trackAttackTimeMSB[positionSelect+positionSelectUpper])<<8);				
 			numPrinter(menuScreen->knobScreen[2],14, 5, totalAttackTime);
 			menuScreen->knobScreen[2][13] = menuScreen->knobScreen[2][14];
 			menuScreen->knobScreen[2][14] = menuScreen->knobScreen[2][15];
-			menuScreen->knobScreen[2][15] = '.';
-			//do stuff here to add the decimal point	
+			menuScreen->knobScreen[2][15] = '.';	
 			numPrinter(menuScreen->knobScreen[2],10,2,(positionSelect+1+positionSelectUpper));
 			outputS(menuScreen->knobScreen[2], 3); //This is not MS, but ideal for testing it Attack really works. 
 			break;
 				
-			case 3: //envelope bottom knob
-			numPrinter(menuScreen->knobScreen[3],14,4,currentPattern->trackReleaseTimeLSB[(positionSelect+positionSelectUpper)]);
+			case 3:; //release envelope
+			uint16_t totalReleaseTime = currentPattern->trackReleaseTimeLSB[positionSelect+positionSelectUpper]|((currentPattern->trackReleaseTimeMSB[positionSelect+positionSelectUpper])<<8);
+			numPrinter(menuScreen->knobScreen[3],15, 5, totalReleaseTime);
+			menuScreen->knobScreen[3][14] = menuScreen->knobScreen[3][15];
+			menuScreen->knobScreen[3][15] = menuScreen->knobScreen[3][16];
+			menuScreen->knobScreen[3][16] = '.';
 			numPrinter(menuScreen->knobScreen[3],11,2,(positionSelect+1+positionSelectUpper));
 			outputS(menuScreen->knobScreen[3], 3);
 			break;

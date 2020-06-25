@@ -323,14 +323,14 @@ void listenEncoders(Pattern *currentPattern, Globals *currentGlobals)
 			if(menuSub==1)
 			{
 				(currentPattern->envelopeType[currentGlobals->currentTrack])++;
-				if((currentPattern->envelopeType[currentGlobals->currentTrack])>4)
+				if((currentPattern->envelopeType[currentGlobals->currentTrack])>3)
 				{
-					(currentPattern->envelopeType[currentGlobals->currentTrack])=4;
+					(currentPattern->envelopeType[currentGlobals->currentTrack])=3;
 				}
 			}else
 			{
 				(currentPattern->envelopeType[currentGlobals->currentTrack])--;
-				if((currentPattern->envelopeType[currentGlobals->currentTrack])>4)
+				if((currentPattern->envelopeType[currentGlobals->currentTrack])>3)
 				{
 					(currentPattern->envelopeType[currentGlobals->currentTrack])=0;
 				}
@@ -355,22 +355,41 @@ void listenEncoders(Pattern *currentPattern, Globals *currentGlobals)
 			}
 			break;
 			
-			case TrackMenuArrow5Select:
+			case TrackMenuArrow5Select:;
+			uint16_t sustainTime = (currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack])|((currentPattern->trackSustainTimeMSB[currentGlobals->currentTrack])<<8);	
 			if(menuSub==1)
 			{
-				currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack]++;
-				if(currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack]>254)
+				if((currentGlobals->currentGPButtons)&(0x04))
 				{
-					currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack] = 254;
+					sustainTime++;
+				}
+				else
+				{
+					sustainTime = sustainTime+236;
+				}
+				
+				if(sustainTime>60000)
+				{
+					sustainTime = 60000;
 				}
 			}else
 			{
-				currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack]--;
-				if(currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack]>254)
+				if((currentGlobals->currentGPButtons)&(0x04))
 				{
-					currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack] = 0;
+					sustainTime--;
+				}else
+				{	
+					sustainTime = sustainTime - 236;
+				}
+				
+				if(sustainTime>60000)
+				{
+					sustainTime = 0;
 				}
 			}
+			currentPattern->trackSustainTimeMSB[currentGlobals->currentTrack] = (sustainTime>>8);
+			currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack] = sustainTime; //upper bits will be truncated.
+
 			break;
 			
 			case GlobalMenuArrow1:

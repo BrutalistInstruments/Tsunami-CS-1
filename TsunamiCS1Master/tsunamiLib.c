@@ -109,17 +109,21 @@ void playTrack(Pattern *currentPattern, Globals *currentGlobals, uint8_t trigInp
 { //4 cases:
 	
 	uint16_t sustainTime = (currentPattern->trackSustainTimeLSB[trigInput])|((currentPattern->trackSustainTimeMSB[trigInput])<<8);
+	//uint16_t totalAttackTime = currentPattern->trackAttackTimeLSB[trigInput]|((currentPattern->trackAttackTimeMSB[trigInput])<<8);
+	//uint16_t totalReleaseTime = currentPattern->trackReleaseTimeLSB[trigInput]|((currentPattern->trackReleaseTimeMSB[trigInput])<<8);
+	//we need to handle attackTimes less than 20ms. 
 	
 	switch(currentPattern->envelopeType[trigInput])
 	{
 		case 0: //A-R
-			trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
-			currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
-			setTrackFade(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
-			currentPattern->trackMainVolumeLSB[trigInput], currentPattern->trackMainVolumeMSB[trigInput],
-			currentPattern->trackAttackTimeLSB[trigInput], currentPattern->trackAttackTimeMSB[trigInput], 0);
-			currentGlobals->releaseTracker|=(1<<trigInput); //set tracking 
-			currentGlobals->sustainCounterArray[trigInput] = currentGlobals->releaseCounter+sustainTime;
+		trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
+		currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
+			
+		setTrackFade(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
+		currentPattern->trackMainVolumeLSB[trigInput], currentPattern->trackMainVolumeMSB[trigInput],
+		currentPattern->trackAttackTimeLSB[trigInput], currentPattern->trackAttackTimeMSB[trigInput], 0);
+		currentGlobals->releaseTracker|=(1<<trigInput); //set tracking 
+		currentGlobals->sustainCounterArray[trigInput] = currentGlobals->releaseCounter+sustainTime;
 		break;
 		
 		case 1: //R 
