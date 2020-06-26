@@ -104,13 +104,10 @@ void listenEncoders(Pattern *currentPattern, Globals *currentGlobals)
 	if(topEncoderValue!=topEncoderLastValue)
 	{
 		currentGlobals->menuState = ((topEncoderValue%4)<<4);
-		bottomEncoderValue = 0;
+		bottomEncoderValue = 0; 
+		bottomEncoderLastValue = 0; 
 		currentGlobals->valueChangeFlag |= (1<<encoderChange);
 		topEncoderLastValue = topEncoderValue;
-		
-		//This seems to fix a bug where when going into performance mode, patternNumber is decremented.
-		//may not be the best solution.
-		return; 
 	}
 	
 	if(bottomEncoderValue!=bottomEncoderLastValue)

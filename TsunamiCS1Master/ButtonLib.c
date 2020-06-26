@@ -62,7 +62,7 @@ void listenTrigButtons(Pattern *buttonCurrentPattern, Globals *currentGlobals)
 					break;
 
 					case 1:
-					buttonCurrentPattern->trackSequence[currentGlobals->currentStep] ^=currentGlobals->currentTrigButtons;
+					buttonCurrentPattern->trackSequence[currentGlobals->currentStep] ^= currentGlobals->currentTrigButtons;
 					//turn on step number, or turn off step number.
 					//step sequencer mode.
 					break;
