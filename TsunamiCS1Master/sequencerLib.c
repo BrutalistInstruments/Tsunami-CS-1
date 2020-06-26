@@ -44,7 +44,8 @@ void updateSequencer(Pattern sequencerPattern, Globals currentGlobals)
 		{//we're going to loop through all of the possible tracks, and trigger them
 			if((parseStep&1)==1)
 			{
-				trackControl(sequencerPattern.trackSampleLSB[sc], sequencerPattern.trackSampleMSB[sc], sequencerPattern.trackOutputRoute[sc], sequencerPattern.trackPlayMode[sc]);
+				//trackControl(sequencerPattern.trackSampleLSB[sc], sequencerPattern.trackSampleMSB[sc], sequencerPattern.trackOutputRoute[sc], sequencerPattern.trackPlayMode[sc]);
+				playTrack(&sequencerPattern, &currentGlobals, sc);
 			}
 			parseStep = parseStep>>1; //shift bits down one to check the next slot in the sequence.
 		}
@@ -53,10 +54,9 @@ void updateSequencer(Pattern sequencerPattern, Globals currentGlobals)
 		{
 			currentPlayStep=0; // don't play more steps than are in the sequence.
 		}
-
+		
 	}else if(clockCounter>=BPMvar && !currentGlobals.playState)
 	{ currentPlayStep=0;
 		clockCounter = 0;
 	}
-
 }

@@ -8,6 +8,7 @@
 #include "globalVariables.h"
 #include "OLEDLib.h"
 
+#define selectBit 0xF7
 char midiNote[4] = "C-0";
 
 
@@ -401,14 +402,16 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 			
 			//this is a bit messy, but seems to fix bugs on this portion of the menu for now. 
 			uint8_t triggerChangeScreen = 1;
-
-			if(currentGlobals->menuState>35) //this accounts for menu stats 36,37,44, and 45
+			
+			if(((currentGlobals->menuState)&selectBit)>35) //this accounts for menu stats 36,37,44, and 45
 			{
-				triggerChangeScreen = (currentGlobals->menuState&0xF7) - 34; //mask to get rid of encoder B pushed state. 
+				triggerChangeScreen = ((currentGlobals->menuState)&selectBit) - 34; //mask to get rid of encoder B pushed state. 
 			}
+			
 			outputS(menuScreen->screen2[triggerChangeScreen], 1); 
 			outputS(menuScreen->screen2[triggerChangeScreen+1], 2); 
 			outputS(menuScreen->screen2[triggerChangeScreen+2], 3);
+			
 			break;
 			
 			case 3:;

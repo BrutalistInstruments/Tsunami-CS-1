@@ -14,15 +14,14 @@
 #include "midiLib.h"
 #include <avr/interrupt.h>
 
-
-Pattern currentPattern;
-Screen screenBank;
+//Pattern may not need to be volatile, but I'd like to keep it around. 
+volatile Pattern currentPattern;
 volatile Globals currentGlobals;
-uint8_t factoryReset=0; // set this to 1 if you would like to fill the eeprom with Factory data, and erase all user data.
+
 
 int main(){
-
-
+	uint8_t factoryReset=0; // set this to 1 if you would like to fill the eeprom with Factory data, and erase all user data.
+	Screen screenBank;
 	
 	initScreen();
 	initGlobals(&currentGlobals, factoryReset);  

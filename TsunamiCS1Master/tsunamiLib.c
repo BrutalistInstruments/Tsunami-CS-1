@@ -109,7 +109,7 @@ void playTrack(Pattern *currentPattern, Globals *currentGlobals, uint8_t trigInp
 { //4 cases:
 	
 	uint16_t sustainTime = (currentPattern->trackSustainTimeLSB[trigInput])|((currentPattern->trackSustainTimeMSB[trigInput])<<8);
-	//uint16_t totalAttackTime = currentPattern->trackAttackTimeLSB[trigInput]|((currentPattern->trackAttackTimeMSB[trigInput])<<8);
+	uint16_t totalAttackTime = currentPattern->trackAttackTimeLSB[trigInput]|((currentPattern->trackAttackTimeMSB[trigInput])<<8);
 	//uint16_t totalReleaseTime = currentPattern->trackReleaseTimeLSB[trigInput]|((currentPattern->trackReleaseTimeMSB[trigInput])<<8);
 	//we need to handle attackTimes less than 20ms. 
 	
@@ -123,7 +123,7 @@ void playTrack(Pattern *currentPattern, Globals *currentGlobals, uint8_t trigInp
 		currentPattern->trackMainVolumeLSB[trigInput], currentPattern->trackMainVolumeMSB[trigInput],
 		currentPattern->trackAttackTimeLSB[trigInput], currentPattern->trackAttackTimeMSB[trigInput], 0);
 		currentGlobals->releaseTracker|=(1<<trigInput); //set tracking 
-		currentGlobals->sustainCounterArray[trigInput] = currentGlobals->releaseCounter+sustainTime;
+		currentGlobals->sustainCounterArray[trigInput] = (currentGlobals->releaseCounter)+sustainTime+totalAttackTime;
 		break;
 		
 		case 1: //R 
