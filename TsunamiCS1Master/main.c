@@ -13,6 +13,8 @@
 #include "twiLib.h"
 #include "midiLib.h"
 #include <avr/interrupt.h>
+#include <avr/delay.h>
+#define F_CPU 16000000UL
 
 //Pattern may not need to be volatile, but I'd like to keep it around. 
 volatile Pattern currentPattern;
@@ -24,8 +26,22 @@ int main(){
 	Screen screenBank;
 	
 	initScreen();
-	initGlobals(&currentGlobals, factoryReset);  
 	initButtons();
+	initEncoders();
+	//factory Reset;
+	if(((~PINA)&0x01)&&((~PINL)&0x01))
+	{//if both buttons are pressed on startup, wait 4 seconds
+		outputS("FactoryReset?       ",0);
+		_delay_ms(4000);
+		if(((~PINA)&0x01)&&((~PINL)&0x01))
+		{
+			outputS("yes?  no?           ",1);
+			//then do stuff here to cause factory reset. 
+			//probably use some while loop structure to make it happen. 
+		}
+		
+	}
+	initGlobals(&currentGlobals, factoryReset);  
 	initLEDs();
 	initEncoders();
 	initADC();

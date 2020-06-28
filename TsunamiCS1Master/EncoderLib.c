@@ -9,31 +9,27 @@
 #include "twiLib.h"
 #include "knobLib.h"
 
+#define topEncoderPinA 0
+#define topEncoderPinB 1
+#define bottomEncoderPinA 2
+#define bottomEncoderPinB 3
 
-uint8_t topEncoderValue = 0;
-uint8_t bottomEncoderValue = 0;
+
+volatile uint8_t topEncoderValue = 0;
+volatile uint8_t bottomEncoderValue = 0;
 uint8_t topEncoderLastValue = 0;
 uint8_t bottomEncoderLastValue = 0;
 
-uint8_t encoderPortStates = 0;
-//Bit 0 = pin2
-//Bit 1 = pin3
-//Bit 2 = pin4
-//Bit 3 = pin5 
+volatile uint8_t encoderPortStates = 0;
 
 //if a bit in this number is high when an interrupt is called, 
 //then we know we are turning that direction. If not, then set that bit. 
 	
 void initEncoders()
 {
-	//this method is much more stable (no jitters at all)
-	//but we're still getting backwards reads sometimes. 
-	//maybe implement this with detecting high and low pin state changes, and using a lookup table?
-	//we can play with the implementation, but for right now, this is as good as these encoders have ever been. 
 	
 	//Interrupt pins - 2,3,4,5
-	
-	
+		
 	//setup rising edge detection on Int pins 2 and 3 (would maybe want all pin states if this doesn't work).
 	EICRA |=(1<<ISC31)|(1<<ISC30)|(1 << ISC21)|(1 << ISC20); 
 	
@@ -48,53 +44,57 @@ void initEncoders()
  
 ISR(INT2_vect)
 {
-	if(0b00000010&encoderPortStates)//this means Pin 2 is coming after pin 3
+	
+	if((1<<topEncoderPinB)&encoderPortStates)//this means Pin 2 is coming after pin 3
 	{
 		bottomEncoderValue--;
-		encoderPortStates&=0b00001100; //reset our two pins to low. 
+		encoderPortStates&=(1<<bottomEncoderPinB)|(1<<bottomEncoderPinA);//reset our two pins to low. 
 	}
 	else
 	{
-		encoderPortStates|=0b00001101; //we want to set bit 1. 
+		encoderPortStates|=(1<<topEncoderPinA); //we want to set bit 0. 
 	}
 }
 
 ISR(INT3_vect)
 {
-	if(0b00000001&encoderPortStates)//this means Pin 3 is coming after pin 2
+
+	if((1<<topEncoderPinA)&encoderPortStates)//this means Pin 3 is coming after pin 2
 	{
 		bottomEncoderValue++;
-		encoderPortStates&=0b00001100; //reset our two pins to low.
+		encoderPortStates&=(1<<bottomEncoderPinA)|(1<<bottomEncoderPinB); //reset our two pins to low.
 	}
 	else
 	{
-		encoderPortStates|=0b00001110; //we want to set bit 2.
+		encoderPortStates|=(1<<topEncoderPinB); //we want to set bit 1.
 	}
 }
 
 ISR(INT4_vect)
 {
-	if(0b00001000&encoderPortStates)//this means Pin 4 is coming after pin 5
+	
+	if((1<<bottomEncoderPinB)&encoderPortStates)//this means Pin 4 is coming after pin 5
 	{
 		topEncoderValue++;
-		encoderPortStates&=0b00000011; //reset our two pins to low.
+		encoderPortStates&=(1<<topEncoderPinA)|(1<<topEncoderPinB); //reset our two pins to low.
 	}
 	else
 	{
-		encoderPortStates|=0b00000111; //we want to set bit three.
+		encoderPortStates|=(1<<bottomEncoderPinA); //we want to set bit 2.
 	}
 }
 
 ISR(INT5_vect)
 {
-	if(0b00000100&encoderPortStates)//this means Pin 3 is coming after pin 2
+	
+	if((1<<bottomEncoderPinA)&encoderPortStates)//this means Pin 3 is coming after pin 2
 	{
 		topEncoderValue--;
-		encoderPortStates&=0b00000011; //reset our two pins to low.
+		encoderPortStates&=(1<<topEncoderPinA)|(1<<topEncoderPinB); //reset our two pins to low.
 	}
 	else
 	{
-		encoderPortStates|=0b00001011; //we want to set bit two.
+		encoderPortStates|=(1<<bottomEncoderPinB); //we want to set bit 3.
 	}
 }
 
