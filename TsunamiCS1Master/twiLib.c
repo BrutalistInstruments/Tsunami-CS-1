@@ -453,10 +453,14 @@ void eepromLoadPattern(Pattern *currentPattern, uint8_t patternNumber)
 
 void factoryResetEeprom(Pattern inPattern)
 {
+	char progressBar[21] = "                    ";
 	for(uint8_t i = 0; i<255; i++)
 	{
 		eepromSavePattern(inPattern,i);
 		_delay_ms(80);
+		progressBar[(i/13)] = 219;
+		outputS(progressBar,3);
+
 	}
 
 }

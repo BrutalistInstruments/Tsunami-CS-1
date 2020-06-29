@@ -473,4 +473,12 @@ void listenEncoders(Pattern *currentPattern, Globals *currentGlobals)
 		//menuSub=0;
 	}
 }
+uint8_t listenEnoderReset()
+{
+	uint8_t returnMe = 2;
+	if(topEncoderValue!=topEncoderLastValue){
+	returnMe = topEncoderValue%2; //should be 0 or 1.
+	}
+	return returnMe;
+}
 

@@ -11,6 +11,7 @@
 
 void initEncoders();
 void listenEncoders(Pattern *currentPattern, Globals *currentGlobals);
+uint8_t listenEnoderReset();
 
 
 

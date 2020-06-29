@@ -25,41 +25,66 @@ int main(){
 	uint8_t factoryReset=0; // set this to 1 if you would like to fill the eeprom with Factory data, and erase all user data.
 	Screen screenBank;
 	
+	
 	initScreen();
 	initButtons();
 	initEncoders();
-	//factory Reset;
+	initBank(&currentPattern);
+	twi_init();
+	sei();
+	//factory Reset, we should turn this into a global function. 
 	if(((~PINA)&0x01)&&((~PINL)&0x01))
 	{//if both buttons are pressed on startup, wait 4 seconds
 		outputS("FactoryReset?       ",0);
 		_delay_ms(4000);
+
 		if(((~PINA)&0x01)&&((~PINL)&0x01))
-		{
-			outputS("yes?  no?           ",1);
-			//then do stuff here to cause factory reset. 
-			//probably use some while loop structure to make it happen. 
+		{ 
+			
+			uint8_t choice = 2;
+			uint8_t select = 0;
+			char resetArray[21] = "yes?        no?     ";
+			while(choice==2){
+				outputS(resetArray,1);
+				select = listenEnoderReset();
+				if(select==0)
+				{
+					resetArray[4] = 8;
+					resetArray[15] = ' ';
+				}
+				if(select==1)
+				{
+					resetArray[4] = ' ';
+					resetArray[15] = 8;
+				}				
+				if((~PINB)&(1<<5))
+				{
+					choice = select; //break out of while loop, and reset, or not. 
+				}
+			}
+			
+			if(select==0) //yes was selected. 
+			{
+				outputS("Progress:           ",2);
+				factoryReset=1;
+				initGlobals(&currentGlobals, factoryReset);
+				factoryResetEeprom(currentPattern);
+				globalWrite(&currentGlobals);
+			}
 		}
 		
 	}
-	initGlobals(&currentGlobals, factoryReset);  
+	
+	
+	initGlobals(&currentGlobals, factoryReset);
 	initLEDs();
-	initEncoders();
 	initADC();
 	serialInit0();
 	initMidi();
 	initEnvelopes();
 	initSequencer();
-	twi_init();
-	initBank(&currentPattern);
 	
-	//this should be a global function. 
-	if(factoryReset==1)
-	{
-		//do factory reset here.
-		factoryResetEeprom(currentPattern);
-		globalWrite(&currentGlobals);
-	}
-
+	
 	eepromLoadPattern(&currentPattern,currentGlobals.currentPatternNumber);
 	for(uint16_t i = 0; i<440; i++ ) //we need to load the FilterKnobbuffer into a stable state 
 	{
@@ -76,7 +101,7 @@ int main(){
 	TIMSK2 = 1<<TOIE2;
 
 
-	sei();	
+	
 
 
 
