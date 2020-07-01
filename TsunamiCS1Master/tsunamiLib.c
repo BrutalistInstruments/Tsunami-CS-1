@@ -190,7 +190,8 @@ void releaseUpdate(Pattern *currentPattern, Globals *currentGlobals)
 			{
 				//we need to do the release state here.
 				setTrackFade(currentPattern->trackSampleLSB[i],currentPattern->trackSampleMSB[i],255,186,currentPattern->trackReleaseTimeLSB[i],currentPattern->trackReleaseTimeMSB[i],1);
-			} //1 makes the stop flag active, so sample will end after the release envelope is done triggering. 
+				(currentGlobals->releaseTracker)&=(~(1<<i)); //set the current bit in release tracker to 0.		
+			}
 		}
 	}
 	

@@ -183,12 +183,14 @@ void interperetKnob(uint8_t select, Pattern *currentKnobPattern, Globals *curren
 				
 				if(currentGlobals->currentGPButtons&0x04) 
 				{ //if "fine" is on:
-					totalAttackTime = totalAttackTime+((currentGlobals->filteredKnobBuffer[select])-(currentGlobals->lastFilteredKnobBuffer[select])); 
-					//this algorithm needs work. We need to not write to Attack time if attack time is less than 20ms. 
-					//maybe this algorithm is fine, we just don't print/attack stage for values under 20MS?
+						totalAttackTime = totalAttackTime+((currentGlobals->filteredKnobBuffer[select])-(currentGlobals->lastFilteredKnobBuffer[select])); 
 				}else
 				{
 					totalAttackTime = ((currentGlobals->filteredKnobBuffer[select])-1)*238;
+				}
+				if(totalAttackTime<20)
+				{
+					totalAttackTime = 20; 
 				}
 				currentKnobPattern->trackAttackTimeMSB[positionSelectTracks] = ((totalAttackTime)>>8);
 				currentKnobPattern->trackAttackTimeLSB[positionSelectTracks] = (totalAttackTime); //this should truncate the top 8 bits. 
@@ -209,6 +211,10 @@ void interperetKnob(uint8_t select, Pattern *currentKnobPattern, Globals *curren
 				}else
 				{
 					totalReleaseTime = ((currentGlobals->filteredKnobBuffer[select])-1)*238;
+				}
+				if(totalReleaseTime<20)
+				{
+					totalReleaseTime = 20;
 				}
 				currentKnobPattern->trackReleaseTimeMSB[positionSelectTracks] = ((totalReleaseTime)>>8);
 				currentKnobPattern->trackReleaseTimeLSB[positionSelectTracks] = (totalReleaseTime);	
