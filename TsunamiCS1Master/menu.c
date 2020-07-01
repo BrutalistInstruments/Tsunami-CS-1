@@ -438,7 +438,8 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 			case 0: //output volume
 			if((currentPattern->outputLevelMSB[positionSelect])==0)
 			{ //value is positive
-				numPrinter(menuScreen->knobScreen[0],14,3,currentPattern->outputLevelLSB[positionSelect]); //should be a value between 0 and 8
+				menuScreen->knobScreen[0][14] = ' ';
+				numPrinter(menuScreen->knobScreen[0],15,2,currentPattern->outputLevelLSB[positionSelect]); //should be a value between 0 and 8
 			}else
 			{
 				menuScreen->knobScreen[0][14] = '-';
@@ -487,7 +488,8 @@ void updateScreen(Screen *menuScreen, Pattern *currentPattern, Globals *currentG
 			case 4: //track volume
 			if(currentPattern->trackMainVolumeMSB[(positionSelect+positionSelectUpper)]==0)
 			{
-				numPrinter(menuScreen->knobScreen[4],15, 2, currentPattern->trackMainVolumeLSB[(positionSelect+positionSelectUpper)]);
+				menuScreen->knobScreen[4][15] = ' ';
+ 				numPrinter(menuScreen->knobScreen[4],16, 2, currentPattern->trackMainVolumeLSB[(positionSelect+positionSelectUpper)]);
 			}else
 			{
 				menuScreen->knobScreen[4][15] = '-';
