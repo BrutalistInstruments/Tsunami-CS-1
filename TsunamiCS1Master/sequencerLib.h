@@ -4,6 +4,6 @@
 #include "globalVariables.h"
 
 void initSequencer();
-void updateSequencer(Pattern sequencerPattern, Globals currentGlobals);
+void updateSequencer(Pattern sequencerPattern, Globals *currentGlobals);
 
 #endif /* SEQUENCERLIB_H_ */

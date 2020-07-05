@@ -61,7 +61,9 @@ void initGlobals(Globals *currentGlobals, uint8_t factoryReset)
 		currentGlobals->buttonSwitchFlag=0; // could be rolled into value bits.
 		currentGlobals->valueChangeFlag=0; //bit 0 -> changes in encoders, bit 1-> changes in buttons, bit2 -> changes in knobs
 		currentGlobals->knobStatus=0; //top 4 bits: knob type, bottom 4 bits: knob location.
-		
+		currentGlobals->releaseCounter = 0;
+		currentGlobals->lastGlobalTimer = 0;
+		currentGlobals->clockCounter = 0;
 		if(factoryReset==1)
 		{
 			currentGlobals->midiChannel=0;
@@ -82,4 +84,27 @@ void initGlobals(Globals *currentGlobals, uint8_t factoryReset)
 			currentGlobals->midiTrackNote[14] = 0x32;
 			currentGlobals->midiTrackNote[15] = 0x33;
 		}
+}
+
+void initTimer() //we only need to use 1 timer, and Use ISRs for that. 
+{
+	//we're using timer 2, because it's the highest priority 8 bit timer interupt. 
+	
+		//here we need to setup our timer interrupt
+		TCCR2A = (1 << WGM21); //set to clear on correct compare
+		TCCR2B = (1 << CS21) | (1 << CS20); // set pre-scaler to 64
+		OCR2A = 50; // every 25 ticks will be 0.0001 seconds at this pre scale.
+		TIMSK2 = (1 << OCIE2A); // Enable OCR0A compare interrupt
+		//interrupts should now be good to go.
+}
+void updateTimers(Globals *currentGlobals, uint32_t currentTime)
+{
+	uint8_t change = 0;
+	if(change=currentTime-(currentGlobals->lastGlobalTimer))
+	{
+		currentGlobals->clockCounter = (currentGlobals->clockCounter)+change;
+		currentGlobals->releaseCounter = (currentGlobals->releaseCounter)+change;
+		currentGlobals->lastGlobalTimer = currentTime;
+	}
+	
 }

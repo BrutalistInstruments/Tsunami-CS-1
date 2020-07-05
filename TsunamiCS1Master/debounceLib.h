@@ -25,7 +25,7 @@ uint8_t button_down(uint8_t button_mask);
 low = ~(low & mask); \
 high = low ^ (high & mask)
 
-static inline void debounce()
+static inline void debounce() //is this Timer interrupt too long?
 {
 	static uint8_t vcount_low = 0xFF, vcount_high = 0xFF;
 	static uint8_t button_state = 0;

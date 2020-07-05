@@ -14,8 +14,6 @@
 //message format:0xf0, 0xaa, 0x0a, 0x03, 0x01, 0x11, 0x00, 0x00, 0x00, 0x55
 //|StartOfMessage|StartOfMessage|BytesInMessage|MessageCode|MessageData|EndOfData|
 //|      0       |        1     |      2       |     3     |     4-8   |    9    |
-uint32_t releaseCounter = 0;
-extern currentGlobals;
 
 void initEnvelopes()
 {
@@ -24,12 +22,11 @@ void initEnvelopes()
 	
 	//we also need an update envelopes function that checks if the timer has been reached, if the 16 bit flag has been set, and do the release stage. 
 	//We'll be using timer3 for this. 
-	TCCR3A = (1<<WGM32); //set timer to CTC mode (clear timer on correct value)
-	//this is CTC mode 4 on data sheet page 145. We may want to use mode 12, since OCRnA may be in use from timer 0
-	TCCR3B = (1<<CS31)|(1<<CS30); //64 prescaller. 
-	OCR3AH = 0;
-	OCR3AL = 250; //250*64 = 1,600 ->1Ms worth of clock cycles. 
-	TIMSK3 = (1<<OCIE3A);
+	//TCCR3A = (1<<WGM32); //set timer to CTC mode (clear timer on correct value)
+	//TCCR3B = (1<<CS30);//(1<<CS31);//|(1<<CS30); //64 prescaller.  //no prescaler
+	//OCR3AH = 0x06; //totaling 1600
+	//OCR3AL = 0x40; //250*64 = 1,600 ->1Ms worth of clock cycles. 
+	//TIMSK3 = (1<<OCIE3A); //output compare interrupt enable timer 3 compare Register A
 	
 }
 
@@ -108,29 +105,32 @@ void setInPutMix(uint8_t outputMask)
 void playTrack(Pattern *currentPattern, Globals *currentGlobals, uint8_t trigInput) //most of these params are just getting passed through.
 { //4 cases:
 	
-	uint16_t sustainTime = (currentPattern->trackSustainTimeLSB[trigInput])|((currentPattern->trackSustainTimeMSB[trigInput])<<8);
-	uint16_t totalAttackTime = currentPattern->trackAttackTimeLSB[trigInput]|((currentPattern->trackAttackTimeMSB[trigInput])<<8);
+
 	//uint16_t totalReleaseTime = currentPattern->trackReleaseTimeLSB[trigInput]|((currentPattern->trackReleaseTimeMSB[trigInput])<<8);
 	//we need to handle attackTimes less than 20ms. 
 	
 	switch(currentPattern->envelopeType[trigInput])
 	{
-		case 0: //A-R
+		case 0:; //A-R
 		trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
 		currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
 			
 		setTrackFade(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
 		currentPattern->trackMainVolumeLSB[trigInput], currentPattern->trackMainVolumeMSB[trigInput],
 		currentPattern->trackAttackTimeLSB[trigInput], currentPattern->trackAttackTimeMSB[trigInput], 0);
+		
 		currentGlobals->releaseTracker|=(1<<trigInput); //set tracking 
-		currentGlobals->sustainCounterArray[trigInput] = (currentGlobals->releaseCounter)+sustainTime+totalAttackTime;
+		uint16_t sustainTime = (currentPattern->trackSustainTimeLSB[trigInput])|((currentPattern->trackSustainTimeMSB[trigInput])<<8);
+		uint16_t totalAttackTime = (currentPattern->trackAttackTimeLSB[trigInput])|((currentPattern->trackAttackTimeMSB[trigInput])<<8);
+		currentGlobals->sustainCounterArray[trigInput] = (currentGlobals->releaseCounter)+((sustainTime+totalAttackTime)*10);
 		break;
 		
-		case 1: //R 
+		case 1:; //R 
 		trackControl(currentPattern->trackSampleLSB[trigInput], currentPattern->trackSampleMSB[trigInput],
 		currentPattern->trackOutputRoute[trigInput], currentPattern->trackPlayMode[trigInput]);
 		currentGlobals->releaseTracker|=(1<<trigInput);
-		currentGlobals->sustainCounterArray[trigInput] = currentGlobals->releaseCounter+sustainTime;
+		uint16_t sustainTimeR = (currentPattern->trackSustainTimeLSB[trigInput])|((currentPattern->trackSustainTimeMSB[trigInput])<<8);
+		currentGlobals->sustainCounterArray[trigInput] = currentGlobals->releaseCounter+(sustainTimeR*10); //sustain counter is in millis, and release Counter is now 1 order of magnitude smaller than millis. 
 		break;
 		
 		case 2: //A 
@@ -186,13 +186,14 @@ void releaseUpdate(Pattern *currentPattern, Globals *currentGlobals)
 		if(releaseTrackerParse&1) //if the first bit in the counter is a 1, we check for release times. 
 		//we could role this into one if statement, but I'm not sure that would be more efficient. Here we're using the release tracker as sort of an initial buffer. 
 		{
-			if((currentGlobals->sustainCounterArray[i])>=(currentGlobals->releaseCounter))
+			if((currentGlobals->sustainCounterArray[i])<=(currentGlobals->releaseCounter))
 			{
 				//we need to do the release state here.
-				setTrackFade(currentPattern->trackSampleLSB[i],currentPattern->trackSampleMSB[i],255,186,currentPattern->trackReleaseTimeLSB[i],currentPattern->trackReleaseTimeMSB[i],1);
-				(currentGlobals->releaseTracker)&=(~(1<<i)); //set the current bit in release tracker to 0.		
+				setTrackFade(currentPattern->trackSampleLSB[i],currentPattern->trackSampleMSB[i],186,255,currentPattern->trackReleaseTimeLSB[i],currentPattern->trackReleaseTimeMSB[i],1);
+				currentGlobals->releaseTracker = currentGlobals->releaseTracker&(~(1<<i)); //turn off that track, so release stage does not play again. 
 			}
 		}
+		releaseTrackerParse = releaseTrackerParse>>1;
 	}
 	
 }

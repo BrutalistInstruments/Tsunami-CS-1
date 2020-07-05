@@ -19,12 +19,12 @@
 //Pattern may not need to be volatile, but I'd like to keep it around. 
 volatile Pattern currentPattern;
 volatile Globals currentGlobals;
-
+volatile uint32_t globalTimer = 0;
 
 int main(){
 	uint8_t factoryReset=0; // set this to 1 if you would like to fill the eeprom with Factory data, and erase all user data.
 	Screen screenBank;
-	
+	char testArray[21] = "CurrentTime:         ";
 	
 	initScreen();
 	initButtons();
@@ -75,14 +75,14 @@ int main(){
 		
 	}
 	
-	
+	initTimer();
 	initGlobals(&currentGlobals, factoryReset);
 	initLEDs();
 	initADC();
 	serialInit0();
 	initMidi();
-	initEnvelopes();
-	initSequencer();
+	//initEnvelopes();
+	//initSequencer();
 	
 	
 	eepromLoadPattern(&currentPattern,currentGlobals.currentPatternNumber);
@@ -97,10 +97,12 @@ int main(){
 	initMenu(&screenBank, currentPattern, currentGlobals); //fills screenBank with menu strings
 
 	//this ISR is used for Button De-Bouncing. Maybe we could put it somewhere else. 
-	TCCR2B = 1<<CS22;//using 64 from pre-scaler
-	TIMSK2 = 1<<TOIE2;
+	//TCCR2B = 1<<CS22;//using 256 from pre-scaler
+	//TIMSK2 = 1<<TOIE2; //interupt on counter overflow. since we're interupting on value 256 of with a 256 pre-scaler, we're calling this function every 65,536
+	//clock cycles. at 16MHz, that equates to every 0.004096, seconds, or every 4 milliseconds. We ~~~should be able to do the same thing from our global counter.
 
-
+	cli(); //this may not be needed, but also may be effecting things since we're setting interrupt registers after sei has already happened. 
+	sei();
 	
 
 
@@ -109,21 +111,35 @@ int main(){
 while(1) {
 	
 	
+	updateTimers(&currentGlobals, globalTimer); //we update our global timers here. 
+	
 	listenTrigButtons(&currentPattern, &currentGlobals);
 	listenGPButtons(currentPattern, &currentGlobals);
 	updateLEDs(currentPattern, currentGlobals);
 	listenEncoders(&currentPattern, &currentGlobals);
 	listenKnobs(&currentPattern, &currentGlobals);
-	updateSequencer(currentPattern, currentGlobals);
+	updateSequencer(currentPattern, &currentGlobals);
 	updateScreen(&screenBank, &currentPattern, &currentGlobals);
 	midiRead(currentPattern, currentGlobals);
 	releaseUpdate(&currentPattern, &currentGlobals);
-
+	//numPrinter(testArray, 11,5,currentGlobals.releaseCounter);
+	//numPrinter(testArray, 11,5,(globalTimer/10)); //the only thing that should be effecting this timer, is the ISRs from the encoders. 
+	//outputS(testArray,0);
 	}
 }
 
-ISR(TIMER3_COMPA_vect)
+ISR(TIMER2_COMPA_vect)
 {
-	currentGlobals.releaseCounter++; //this will increase every millisecond.
-	//should run for about 1000 hours before overflow, so not something we really have to worry about.
+	globalTimer++; //this counts in one order of magnitude smaller than millis : 0.0001 seconds. 
+	//we don't want to do anything else here.
+	if(globalTimer%40==0) //every 40 ticks, we want to call Debounce
+	{
+		debounce();
+	}
 }
+
+//ISR(TIMER3_COMPA_vect)
+//{
+//	currentGlobals.releaseCounter++; //this will increase every millisecond.
+	//should run for about 1000 hours before overflow, so not something we really have to worry about.
+//}

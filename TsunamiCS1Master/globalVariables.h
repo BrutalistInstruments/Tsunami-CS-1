@@ -121,11 +121,15 @@ typedef struct Globals
 	uint32_t releaseCounter;
 	uint16_t releaseTracker; //this is a bitwise tracker to keep track of which tracks still need to be releases.
 	uint32_t sustainCounterArray[16]; //this will be where we store values for release times to check against the release counter.
+	uint16_t clockCounter;
+	uint32_t lastGlobalTimer;
 	
 }Globals;
 
 void initArrays(unsigned char myArray[9][21], int stringNumber, char* myString);
 void initBank(Pattern *currentInitPattern);
 void initGlobals(Globals *currentGlobals, uint8_t factoryReset);
+void initTimer();
+void updateTimers();
 
 #endif /* GLOBALVARIABLES_H_ */
