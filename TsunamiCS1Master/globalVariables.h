@@ -131,5 +131,6 @@ void initBank(Pattern *currentInitPattern);
 void initGlobals(Globals *currentGlobals, uint8_t factoryReset);
 void initTimer();
 void updateTimers();
+void factoryResetCheck(uint8_t *factoryReset, Pattern *currentPattern, Globals *currentGlobals);
 
 #endif /* GLOBALVARIABLES_H_ */

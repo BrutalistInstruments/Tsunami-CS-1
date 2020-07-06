@@ -8,6 +8,12 @@
 #include <avr/io.h>
 #include "globalVariables.h"
 #include <string.h>
+#include <avr/delay.h>
+#include "OLEDLib.h"
+#include "EncoderLib.h"
+#include "twiLib.h"
+#define F_CPU 16000000UL
+
 
 //takes an array less than 20 and fills it with blank characters
 void initArrays(unsigned char myArray[9][21], int stringNumber, char* myString)
@@ -106,5 +112,51 @@ void updateTimers(Globals *currentGlobals, uint32_t currentTime)
 		currentGlobals->releaseCounter = (currentGlobals->releaseCounter)+change;
 		currentGlobals->lastGlobalTimer = currentTime;
 	}
+	
+}
+void factoryResetCheck(uint8_t *factoryReset, Pattern *currentPattern, Globals *currentGlobals)
+{
+	if(((~PINA)&0x01)&&((~PINL)&0x01))
+	{//if both buttons are pressed on startup, wait 4 seconds
+		outputS("FactoryReset?       ",0);
+		_delay_ms(4000);
+
+		if(((~PINA)&0x01)&&((~PINL)&0x01))
+		{
+			
+			uint8_t choice = 2;
+			uint8_t select = 0;
+			char resetArray[21] = "yes?        no?     ";
+			while(choice==2){
+				outputS(resetArray,1);
+				select = listenEnoderReset();
+				if(select==0)
+				{
+					resetArray[4] = 8;
+					resetArray[15] = ' ';
+				}
+				if(select==1)
+				{
+					resetArray[4] = ' ';
+					resetArray[15] = 8;
+				}
+				if((~PINB)&(1<<5))
+				{
+					choice = select; //break out of while loop, and reset, or not.
+				}
+			}
+			
+			if(select==0) //yes was selected.
+			{
+				outputS("Progress:           ",2);
+				(*factoryReset)=1;
+				initGlobals(currentGlobals, *factoryReset);
+				factoryResetEeprom(*currentPattern);
+				globalWrite(currentGlobals);
+			}
+		}
+		
+	}
+	
 	
 }

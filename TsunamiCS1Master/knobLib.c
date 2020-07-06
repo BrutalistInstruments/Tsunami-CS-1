@@ -214,7 +214,7 @@ void interperetKnob(uint8_t select, Pattern *currentKnobPattern, Globals *curren
 				}
 				if(totalReleaseTime<20)
 				{
-					totalReleaseTime = 20;
+					totalReleaseTime = 220;
 				}
 				currentKnobPattern->trackReleaseTimeMSB[positionSelectTracks] = ((totalReleaseTime)>>8);
 				currentKnobPattern->trackReleaseTimeLSB[positionSelectTracks] = (totalReleaseTime);	

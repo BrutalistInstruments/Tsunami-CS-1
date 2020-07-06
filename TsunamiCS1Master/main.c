@@ -33,47 +33,7 @@ int main(){
 	twi_init();
 	sei();
 	//factory Reset, we should turn this into a global function. 
-	if(((~PINA)&0x01)&&((~PINL)&0x01))
-	{//if both buttons are pressed on startup, wait 4 seconds
-		outputS("FactoryReset?       ",0);
-		_delay_ms(4000);
-
-		if(((~PINA)&0x01)&&((~PINL)&0x01))
-		{ 
-			
-			uint8_t choice = 2;
-			uint8_t select = 0;
-			char resetArray[21] = "yes?        no?     ";
-			while(choice==2){
-				outputS(resetArray,1);
-				select = listenEnoderReset();
-				if(select==0)
-				{
-					resetArray[4] = 8;
-					resetArray[15] = ' ';
-				}
-				if(select==1)
-				{
-					resetArray[4] = ' ';
-					resetArray[15] = 8;
-				}				
-				if((~PINB)&(1<<5))
-				{
-					choice = select; //break out of while loop, and reset, or not. 
-				}
-			}
-			
-			if(select==0) //yes was selected. 
-			{
-				outputS("Progress:           ",2);
-				factoryReset=1;
-				initGlobals(&currentGlobals, factoryReset);
-				factoryResetEeprom(currentPattern);
-				globalWrite(&currentGlobals);
-			}
-		}
-		
-	}
+	factoryResetCheck(&factoryReset,&currentPattern, &currentGlobals);
 	
 	initTimer();
 	initGlobals(&currentGlobals, factoryReset);
@@ -137,9 +97,3 @@ ISR(TIMER2_COMPA_vect)
 		debounce();
 	}
 }
-
-//ISR(TIMER3_COMPA_vect)
-//{
-//	currentGlobals.releaseCounter++; //this will increase every millisecond.
-	//should run for about 1000 hours before overflow, so not something we really have to worry about.
-//}
