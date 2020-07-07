@@ -70,6 +70,8 @@ void initGlobals(Globals *currentGlobals, uint8_t factoryReset)
 		currentGlobals->releaseCounter = 0;
 		currentGlobals->lastGlobalTimer = 0;
 		currentGlobals->clockCounter = 0;
+		currentGlobals->currentTrigSequencer = 0;
+		currentGlobals->currentTrigMidi = 0;
 		if(factoryReset==1)
 		{
 			currentGlobals->midiChannel=0;

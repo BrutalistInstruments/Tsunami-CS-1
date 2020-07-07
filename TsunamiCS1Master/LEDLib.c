@@ -67,10 +67,12 @@ void parseLEDs(uint16_t LEDInput, uint8_t gpButtonInput) //this should not be a 
 void updateLEDs(Pattern ledCurrentPattern, Globals currentGlobals)
 {
 	uint8_t shiftedState = currentGlobals.menuState >> 4; //this will get rid of EncoderB
+	uint16_t totalLights = currentGlobals.currentTrigButtons|currentGlobals.currentTrigMidi|currentGlobals.currentTrigSequencer; //we want lights from all sources. 
+	//no input from midi yet, but we will have that eventually. 
 	switch(shiftedState)
 	{
 		case 0:
-		parseLEDs(currentGlobals.currentTrigButtons, currentGlobals.currentGPButtons);
+		parseLEDs(totalLights, currentGlobals.currentGPButtons);
 		break;
 
 		case 1:
@@ -78,11 +80,11 @@ void updateLEDs(Pattern ledCurrentPattern, Globals currentGlobals)
 		break;
 
 		case 2:
-		parseLEDs(currentGlobals.currentTrigButtons, currentGlobals.currentGPButtons);
+		parseLEDs(totalLights, currentGlobals.currentGPButtons);
 		break;
 
 		case 3:
-		parseLEDs(currentGlobals.currentTrigButtons, currentGlobals.currentGPButtons);
+		parseLEDs(totalLights, currentGlobals.currentGPButtons);
 		break;
 	}
 

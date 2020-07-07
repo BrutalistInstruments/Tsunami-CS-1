@@ -101,6 +101,8 @@ typedef struct Globals
 {
 	uint16_t currentTrigButtons; //current state of Trig buttons.
 	uint8_t currentGPButtons; //current state of GP buttons
+	uint16_t currentTrigSequencer;
+	uint16_t currentTrigMidi;
 	uint8_t currentPatternNumber; //current pattern, between 1 and 256
 	uint8_t currentStep; // current step in the sequencer
 	uint8_t currentTrack; //current track being edited
@@ -123,6 +125,7 @@ typedef struct Globals
 	uint32_t sustainCounterArray[16]; //this will be where we store values for release times to check against the release counter.
 	uint16_t clockCounter;
 	uint32_t lastGlobalTimer;
+	
 	
 }Globals;
 

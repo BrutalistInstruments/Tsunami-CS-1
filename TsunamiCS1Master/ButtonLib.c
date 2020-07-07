@@ -19,10 +19,10 @@ uint8_t buttonsCurrentCycle;
 uint16_t lastFullBits = 0;
 uint8_t currentTrig;
 
-ISR(TIMER2_OVF_vect)
-{
-	debounce();
-}
+//ISR(TIMER2_OVF_vect)
+//{
+//	debounce();
+//}
 
 void initButtons()
 {

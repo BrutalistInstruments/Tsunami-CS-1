@@ -39,6 +39,7 @@ void updateSequencer(Pattern sequencerPattern, Globals *currentGlobals)
 	{
 		//this will be where we play samples
 		currentGlobals->clockCounter = 0;
+		currentGlobals->currentTrigSequencer = 0; //we want to re-set this every time. 
 		uint16_t parseStep = sequencerPattern.trackSequence[currentPlayStep];
 		for (uint8_t sc=0; sc<16; sc++) //sequencer counter
 		{//we're going to loop through all of the possible tracks, and trigger them
@@ -46,6 +47,7 @@ void updateSequencer(Pattern sequencerPattern, Globals *currentGlobals)
 			{
 				//trackControl(sequencerPattern.trackSampleLSB[sc], sequencerPattern.trackSampleMSB[sc], sequencerPattern.trackOutputRoute[sc], sequencerPattern.trackPlayMode[sc]);
 				playTrack(&sequencerPattern, currentGlobals, sc);
+				currentGlobals->currentTrigSequencer |= (1<<sc); //start to fill our lighting buffer. 
 			}
 			parseStep = parseStep>>1; //shift bits down one to check the next slot in the sequence.
 		}
