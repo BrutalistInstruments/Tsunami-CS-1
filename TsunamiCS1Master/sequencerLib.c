@@ -45,7 +45,7 @@ void updateSequencer(Pattern sequencerPattern, Globals *currentGlobals)
 			if((parseStep&1)==1)
 			{
 				//trackControl(sequencerPattern.trackSampleLSB[sc], sequencerPattern.trackSampleMSB[sc], sequencerPattern.trackOutputRoute[sc], sequencerPattern.trackPlayMode[sc]);
-				playTrack(&sequencerPattern, &currentGlobals, sc);
+				playTrack(&sequencerPattern, currentGlobals, sc);
 			}
 			parseStep = parseStep>>1; //shift bits down one to check the next slot in the sequence.
 		}
