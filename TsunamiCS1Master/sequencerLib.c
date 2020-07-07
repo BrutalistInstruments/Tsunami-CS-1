@@ -61,6 +61,7 @@ void updateSequencer(Pattern sequencerPattern, Globals *currentGlobals)
 	{ 
 		currentPlayStep=0;
 		currentGlobals->clockCounter = 0;
+		currentGlobals->currentTrigSequencer=0;
 	}
 	
 }
