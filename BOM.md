@@ -24,3 +24,14 @@ Screws are hex driven, so any standard allen wrench set should suit you well.
 This project requires 18 standoffs. 
 The other packages of 100 screws and nuts should get you though the rest of enclosure, and only run around $4. 
 
+
+# Notes
+-Currently, it looks like digikey and mouser are both out of the required audio jacks. 
+It looks like this is a suitable drop in replacement: https://www.mouser.com/ProductDetail/Amphenol-Audio/ACJS-MHDRM?qs=t8%2F5FiDdxGZPnxKNuhurhQ%3D%3D
+Though the in-stock numbers do not seem to be very high at the moment. 
+I would guess that Covid has slowed down manufacturing at the plant. 
+Grabbing some different audio connectors and wiring them up by hand should work fine.
+I would recomend holding off on soldering up the IO PCB until the correct parts come back in stock,
+because for some reason, the vast majority of 1/4" connectors have weird proriotary nubs on the bottom,
+and there seems to be no standard for pin placement. 
+Sorry for the inconvince.
