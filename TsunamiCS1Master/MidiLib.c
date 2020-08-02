@@ -75,8 +75,7 @@ void midiRead(Pattern currentPattern, Globals currentGlobals)
         {
           if(midiEventBuffer[midiReadIndex].dataByte[0]==currentGlobals.midiTrackNote[i])
           { //we don't care about velocity, at least not yet.
-            //trackControl(char trackNumberLSB, char trackNumberMSB, char outputNumber, char trackCommand)
-            trackControl(currentPattern.trackSampleLSB[i], currentPattern.trackSampleMSB[i], currentPattern.trackOutputRoute[i], currentPattern.trackPlayMode[i]);
+			playTrack(&currentPattern,&currentGlobals, i); //this might be out of scope? need to test.
           }
         }
     }
