@@ -13,7 +13,7 @@ EncoderLib.d EncoderLib.o: .././EncoderLib.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h \
  .././globalVariables.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h \
- .././OLEDLib.h .././twiLib.h .././knobLib.h
+ .././OLEDLib.h .././twiLib.h .././knobLib.h .././tsunamiLib.h
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -48,3 +48,5 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 .././twiLib.h:
 
 .././knobLib.h:
+
+.././tsunamiLib.h:

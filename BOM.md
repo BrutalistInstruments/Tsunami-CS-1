@@ -17,9 +17,11 @@ Since timing is extremely important to this code, having the correct clock sourc
 We're currently sourcing all of our mounting hardware from McMaster Carr.
 https://www.mcmaster.com/
 Parts numbers are as follows:
-Screws: 92125A128
+Screws (short, for frontpannel mounting): 92125A128
+Screws (longer, for sidepannels): 92125A132
 Bolts: 90592A085
-Standoffs: 98952A106
+Standoffsx18: 98952A106
+Standoffs for OLED Screenx4: 98952A103 
 Screws are hex driven, so any standard allen wrench set should suit you well. 
 This project requires 18 standoffs. 
 The other packages of 100 screws and nuts should get you though the rest of enclosure, and only run around $4. 

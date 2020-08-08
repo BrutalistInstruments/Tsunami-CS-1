@@ -8,22 +8,42 @@
 #include "OLEDLib.h"
 #include "twiLib.h"
 #include "knobLib.h"
+#include "tsunamiLib.h"
 
 #define topEncoderPinA 0
 #define topEncoderPinB 1
 #define bottomEncoderPinA 2
 #define bottomEncoderPinB 3
 
+#define topEncoderRead (PINE&0b00110000)>>4 //we want to read pins 4 and 5., and shift them down 4 spaces. 
+#define bottomEncoderRead (PIND&0b0000110)>>1 //we want to read pins 3 and 2 of Port D, and shift them down one space. 
 
-volatile uint8_t topEncoderValue = 0;
+
+volatile uint8_t topEncoderValue = 0;  
 volatile uint8_t bottomEncoderValue = 0;
 uint8_t topEncoderLastValue = 0;
 uint8_t bottomEncoderLastValue = 0;
+//each of these numbers are going to be 2 bit values. 
 
 volatile uint8_t encoderPortStates = 0;
+volatile uint8_t topEncoderPortState = 0;
+volatile uint8_t bottomEncoderPortState = 0;
+volatile uint8_t bottomEncoderGrayCounter = 0; //once this reaches 4, increment the encoder. 
 
 //if a bit in this number is high when an interrupt is called, 
 //then we know we are turning that direction. If not, then set that bit. 
+
+//we want to check 0 to 15 in binary. 
+//we have general states for each one. 
+//on each interrupt, we can increment the state, or decrement the state. 
+//basically, there are 4 valid states for each direction, and 4 error states, that we reset our counter at, and 4 states where we do nothing. 
+// incremental states go as 00 01 -> 01 11 -> 11 10 -> 10 00, or 1 -> 7 -> 14 -> 8. 
+// decremental states go as 00 10 -> 10 11 -> 11 01 -> 01 00. or 2 -> 11 -> 13 -> 4.
+// any time we hit 0, 5,10,15, we do nothing, and wait for the next number in the sequence (throw away the read)
+// any time we hit 3,6,9, or 12 we also do nothing, since these are bounces. 
+
+//this new code will effectively be the same for every interrupt, but only focusing on this pins of the encoder that the interrupt was made on. 
+//so interrupts 
 	
 void initEncoders()
 {
@@ -44,7 +64,22 @@ void initEncoders()
  
 ISR(INT2_vect)
 {
+	bottomEncoderPortState = ((bottomEncoderPortState<<2) | bottomEncoderRead)&0b00001111;// get the old state of the bottom encoder, and get the new read of the bottom encoder. 
+	if(bottomEncoderPortState==8)
+	{
+		bottomEncoderValue++;
+	}else if(bottomEncoderPortState==4)
+	{
+		bottomEncoderValue--;
+	}
+	//if bottom encoder gray counter is 4, we increment bottom encoder. 
+	//if it's -4, we decrement bottom encoder value. 
+
+//this is kindof crazy, but really, the only transitions we care about for counting are 8, and 4.
+//maybe we check for only those, and then increment if true?	
 	
+	
+	/*
 	if((1<<topEncoderPinB)&encoderPortStates)//this means Pin 2 is coming after pin 3
 	{
 		bottomEncoderValue--;
@@ -54,10 +89,22 @@ ISR(INT2_vect)
 	{
 		encoderPortStates|=(1<<topEncoderPinA); //we want to set bit 0. 
 	}
+	*/
 }
 
 ISR(INT3_vect)
 {
+	
+	bottomEncoderPortState = ((bottomEncoderPortState<<2) | bottomEncoderRead)&0b00001111;// get the old state of the bottom encoder, and get the new read of the bottom encoder.
+	if(bottomEncoderPortState==8)
+	{
+		bottomEncoderValue++;
+	}else if(bottomEncoderPortState==4)
+	{
+		bottomEncoderValue--;
+	}
+	
+	/*
 
 	if((1<<topEncoderPinA)&encoderPortStates)//this means Pin 3 is coming after pin 2
 	{
@@ -68,6 +115,7 @@ ISR(INT3_vect)
 	{
 		encoderPortStates|=(1<<topEncoderPinB); //we want to set bit 1.
 	}
+	*/
 }
 
 ISR(INT4_vect)
@@ -98,6 +146,11 @@ ISR(INT5_vect)
 	}
 }
 
+void listenEncodersNew(Pattern *currentPattern, Globals *currentGlobals)
+{
+	//this will happen every millisecond. 
+	
+}
 
 void listenEncoders(Pattern *currentPattern, Globals *currentGlobals)
 {

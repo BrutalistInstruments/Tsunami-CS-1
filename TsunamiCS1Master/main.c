@@ -72,12 +72,17 @@ while(1) {
 	
 	
 	updateTimers(&currentGlobals, globalTimer); //we update our global timers here. 
+//	if(currentGlobals.timerFlag) //triggers every millisecond / 16000 cycles.
+//	{
+		 //listenEncoders(&currentPattern, &currentGlobals); //we may not need to check this every millisecond. If we can just do these checks on 
+		 //pin changes, it should be fine. and we have the specific pins to check from, so we should be good. 
+//	}
 	
 	listenTrigButtons(&currentPattern, &currentGlobals);
 	listenGPButtons(currentPattern, &currentGlobals);
 	updateLEDs(currentPattern, currentGlobals);
-	listenEncoders(&currentPattern, &currentGlobals);
 	listenKnobs(&currentPattern, &currentGlobals);
+	listenEncoders(&currentPattern, &currentGlobals);
 	updateSequencer(currentPattern, &currentGlobals);
 	updateScreen(&screenBank, &currentPattern, &currentGlobals);
 	midiRead(currentPattern, currentGlobals);

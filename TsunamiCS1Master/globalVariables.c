@@ -108,11 +108,16 @@ void initTimer() //we only need to use 1 timer, and Use ISRs for that.
 void updateTimers(Globals *currentGlobals, uint32_t currentTime)
 {
 	uint8_t change = 0;
-	if(change=currentTime-(currentGlobals->lastGlobalTimer))
+	if(change=currentTime-(currentGlobals->lastGlobalTimer)) //check if there has been a change. 
 	{
 		currentGlobals->clockCounter = (currentGlobals->clockCounter)+change;
 		currentGlobals->releaseCounter = (currentGlobals->releaseCounter)+change;
 		currentGlobals->lastGlobalTimer = currentTime;
+		currentGlobals->timerFlag = 1;
+	}else
+	{
+		currentGlobals->timerFlag = 0; //we may want to change this some other point in the code, like when everything reliant on this flag is complete. 
+		//just so we're not wasting a conditional every time. 
 	}
 	
 }

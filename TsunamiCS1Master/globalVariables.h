@@ -125,7 +125,7 @@ typedef struct Globals
 	uint32_t sustainCounterArray[16]; //this will be where we store values for release times to check against the release counter.
 	uint16_t clockCounter;
 	uint32_t lastGlobalTimer;
-	
+	uint8_t timerFlag; //if 1, then timer has increased. if 0, timer has not increased. 
 	
 }Globals;
 
