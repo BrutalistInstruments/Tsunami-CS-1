@@ -35,5 +35,5 @@ All above hardware features are now implemented, and just need to be tested when
 
 ## Enclosure
 |Feature|
-|Mounting positions for nuts on side pannels|
-|need to start work on aluminum elcosure|
+|Mounting positions for nuts on side panels|
+|need to start work on aluminum enlcosure|

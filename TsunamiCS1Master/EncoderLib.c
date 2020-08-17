@@ -23,8 +23,7 @@ volatile uint8_t topEncoderValue = 0;
 volatile uint8_t bottomEncoderValue = 0;
 uint8_t topEncoderLastValue = 0;
 uint8_t bottomEncoderLastValue = 0;
-//each of these numbers are going to be 2 bit values. 
-
+uint8_t topEncoderPortState = 0;
 volatile uint8_t encoderPortStates = 0;
 	
 void initEncoders()
@@ -40,6 +39,10 @@ void initEncoders()
 	
 	//enable all 4 interrupts through masking
 	EIMSK |=(1<<INT2)|(1<<INT3)|(1<<INT4)|(1<<INT5);
+	
+	//I think for our previous code to work, we need to define these encoder pins to be inputs. 
+	//then read their states. 
+	//just polling every millisecond might be fine though. 
 
 
 }
@@ -105,6 +108,9 @@ ISR(INT5_vect)
 void listenEncodersNew(Pattern *currentPattern, Globals *currentGlobals)
 {
 	//this will happen every millisecond. 
+	topEncoderPortState = ((topEncoderPortState <<2) | topEncoderRead)&0b00001111; //we only want this to be a 4 bit number. 
+	bottom
+	
 	
 }
 

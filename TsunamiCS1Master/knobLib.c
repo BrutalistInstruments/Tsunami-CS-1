@@ -63,11 +63,11 @@ void selectKnob(uint8_t select)
 		uint8_t muxSelect = select%8; //this should produce a number between 1 and 7.
 		//uint8_t tempMuxSelect = muxSelect;
 
-	//we need to set the internal multiplxer
+	//we need to set the internal multiplexer
 		uint8_t internalMuxSelect = select/8;
 		
 		ADMUX = internalMuxSelect|(1 << ADLAR);   
-		startADCConversion();//this should throw away our first read after the mux changover.
+		startADCConversion();//this should throw away our first read after the mux changeover.
 		
 
 		//then the external multiplexer

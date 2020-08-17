@@ -97,7 +97,7 @@ ISR(TIMER2_COMPA_vect)
 {
 	globalTimer++; //this counts in one order of magnitude smaller than millis : 0.0001 seconds. 
 	//we don't want to do anything else here.
-	if(globalTimer%40==0) //every 40 ticks, we want to call Debounce
+	if(globalTimer%40==0) //every 40 ticks, we want to call De bounce
 	{
 		debounce();
 	}

@@ -105,6 +105,7 @@ void initTimer() //we only need to use 1 timer, and Use ISRs for that.
 		TIMSK2 = (1 << OCIE2A); // Enable OCR0A compare interrupt
 		//interrupts should now be good to go.
 }
+
 void updateTimers(Globals *currentGlobals, uint32_t currentTime)
 {
 	uint8_t change = 0;
@@ -113,12 +114,13 @@ void updateTimers(Globals *currentGlobals, uint32_t currentTime)
 		currentGlobals->clockCounter = (currentGlobals->clockCounter)+change;
 		currentGlobals->releaseCounter = (currentGlobals->releaseCounter)+change;
 		currentGlobals->lastGlobalTimer = currentTime;
-		currentGlobals->timerFlag = 1;
-	}else
-	{
-		currentGlobals->timerFlag = 0; //we may want to change this some other point in the code, like when everything reliant on this flag is complete. 
-		//just so we're not wasting a conditional every time. 
+		//currentGlobals->timerFlag = 1;
 	}
+	//else
+	//{
+	//	currentGlobals->timerFlag = 0; //we may want to change this some other point in the code, like when everything reliant on this flag is complete. 
+		//just so we're not wasting a conditional every time. 
+	//}
 	
 }
 void factoryResetCheck(uint8_t *factoryReset, Pattern *currentPattern, Globals *currentGlobals)
