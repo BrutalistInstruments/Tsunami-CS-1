@@ -67,7 +67,7 @@ For buidling purposes, here are the part names and values for this project:
 |3|SN74HC595N|‎SN74HC595N‎|U6, U7, U8|8 bit shift registers|
 
 ## Tsunami IO Board
-|Qty|Device|Package|Parts|Description|
+|Qty|Value|Part Number|Name|Description|
 | ------- |-------| ------- |-------| ------- |
 |2|CONN_10X2|3020-20-0200-00|J14|IDC Connector to Tsunami Audio headers|
 |1|PINHD-1X6|0705530040|JP1|Molex connector for Midi to CS Board|
