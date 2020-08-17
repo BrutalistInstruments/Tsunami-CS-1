@@ -1,7 +1,7 @@
 ## Electronics Components:
 The current BOM is held at this mangaged DigiKey shopping cart.
 If a part becomes obselete, we'll be updating it here. 
-https://www.digikey.com/short/zrz481
+https://www.digikey.com/short/zrz401
 
 In addition to the Digikey cart, You'll also need to source your own Tsunami Wav Trigger, and Arduio mega boards. 
 The wav trigger can be had from here, or any sparkfun distributer:
