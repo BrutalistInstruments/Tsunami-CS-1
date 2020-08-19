@@ -21,7 +21,6 @@ Check out the build progress with pictures and video over at https://www.instagr
 In this repository, you'll find:
 ## Schematics
 We currently have schematics for the Main Control Surface, and the IO Board
-(currently out of date with new board revisions)
 ## TsunamiArduinoCore
 This is where the current stable build lives. Upload this through USB on your Arduino Mega in Platformio. Arudino IDE support coming soon (though not hard to convert for yourself). 
 ## TsunamiCS1Master
