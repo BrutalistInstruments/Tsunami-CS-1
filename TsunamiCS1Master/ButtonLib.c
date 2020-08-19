@@ -32,7 +32,7 @@ void initButtons()
 	PORTL = 0xFF;
 
 	//GPButtons and Encoder buttons
-	PORTB = 0B01111111; //lets see if we can read these without debouncing
+	PORTB = 0b01111111; 
 
 }
 
