@@ -71,10 +71,10 @@ int main(){
 while(1) {
 	
 	
-	updateTimers(&currentGlobals, globalTimer); //we update our global timers here. 
-//	if(currentGlobals.timerFlag) //triggers every millisecond / 16000 cycles.
+	//updateTimers(&currentGlobals, globalTimer); //we update our global timers here. 
+	//if(currentGlobals.timerFlag) //triggers every millisecond / 16000 cycles.
 //	{
-		 //listenEncoders(&currentPattern, &currentGlobals); //we may not need to check this every millisecond. If we can just do these checks on 
+//		 listenEncodersNew(&currentPattern, &currentGlobals); //we may not need to check this every millisecond. If we can just do these checks on 
 		 //pin changes, it should be fine. and we have the specific pins to check from, so we should be good. 
 //	}
 	
@@ -100,5 +100,9 @@ ISR(TIMER2_COMPA_vect)
 	if(globalTimer%40==0) //every 40 ticks, we want to call De bounce
 	{
 		debounce();
+	}
+	if(globalTimer%100==0)
+	{
+		listenEncodersNew(&currentPattern, &currentGlobals);
 	}
 }

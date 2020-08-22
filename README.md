@@ -22,7 +22,7 @@ In this repository, you'll find:
 ## Schematics
 We currently have schematics for the Main Control Surface, and the IO Board
 ## TsunamiArduinoCore
-This is where the current stable build lives. Upload this through USB on your Arduino Mega in Platformio. Arudino IDE support coming soon (though not hard to convert for yourself). 
+Where the .hex file for the current stable version lives.
 ## TsunamiCS1Master
 This is the development section of repository, only to be used with Atmel Studio and the Atmel Ice programmer. If you're interested In development and onboard debugging through J-tag, this is what you want to use. (currently depreciated)
 ## Enclosure
