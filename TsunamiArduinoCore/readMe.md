@@ -6,5 +6,17 @@ Instead, we provide a .hex file of the most stable build, which you can upload t
 You can use this via command line, or use a tool we very much like, AVRDUDESS:
 https://blog.zakkemble.net/avrdudess-a-gui-for-avrdude/
 
-Connect your arduino via USB, and upload the .hex file useing the "arduino" programmer. 
-After that, you should be good to go!
+Steps:
+-Connect your arduino via USB
+-under the MCU dropdown, choose "Atmega2560"
+-select your COM Port on the Port drop down (should be the only one that says "COM")
+-use a baud rate of 115200
+-for Programmer, use "Wiring"
+-under the "Flash" section, locate the .hex file that you downloaded from thr repository by clicking the "..." button.
+- check the "disable flash erase" check box.
+
+Now you can click either "Go" under the flash section, or "Program". The firmware should be flashed to your Board!
+
+
+If you experience some crazy values printng on your screen for knob movement, be sure your power supply is plugged in. This unit can not sucessfully be powered via the USB port. 
+the last step is to do a factory reset to Format the external memory, and you've completed the programming process!
