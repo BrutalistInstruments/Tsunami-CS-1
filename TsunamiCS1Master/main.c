@@ -71,7 +71,7 @@ int main(){
 while(1) {
 	
 	
-	//updateTimers(&currentGlobals, globalTimer); //we update our global timers here. 
+	updateTimers(&currentGlobals, globalTimer); //we update our global timers here. 
 	//if(currentGlobals.timerFlag) //triggers every millisecond / 16000 cycles.
 //	{
 //		 listenEncodersNew(&currentPattern, &currentGlobals); //we may not need to check this every millisecond. If we can just do these checks on 
@@ -103,6 +103,6 @@ ISR(TIMER2_COMPA_vect)
 	}
 	if(globalTimer%100==0)
 	{
-		listenEncodersNew(&currentPattern, &currentGlobals);
+		//listenEncodersNew(&currentPattern, &currentGlobals);
 	}
 }

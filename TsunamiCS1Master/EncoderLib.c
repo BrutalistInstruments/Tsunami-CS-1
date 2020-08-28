@@ -18,10 +18,10 @@
 #define topEncoderRead (PINE&0b00110000)>>4 //we want to read pins 4 and 5., and shift them down 4 spaces. 
 #define bottomEncoderRead (PIND&0b0000110)>>1 //we want to read pins 3 and 2 of Port D, and shift them down one space. 
 
-volatile uint8_t prevNextCodeTop = 0;
-volatile uint8_t storeTop = 0;
-static int8_t rot_enc_table[] = {0,1,1,0,1,0,0,1,1,0,0,1,0,1,1,0};
-
+//volatile uint8_t prevNextCodeTop = 0;
+//volatile uint8_t storeTop = 0;
+//static int8_t rot_enc_table[] = {0,1,1,0,1,0,0,1,1,0,0,1,0,1,1,0};
+ 
 volatile uint8_t topEncoderValue = 0;  
 volatile uint8_t bottomEncoderValue = 0;
 uint8_t topEncoderLastValue = 0;
@@ -43,8 +43,8 @@ void initEncoders()
 	//enable all 4 interrupts through masking
 	EIMSK |=(1<<INT2)|(1<<INT3)|(1<<INT4)|(1<<INT5);
 	
-	DDRE &=0xCF; //we want to set every bit that is on, except for pins 5 and 4.
-	DDRD &=0xF3; //we want to set every bit that is on, except for pins 2 and 3. 
+	//DDRE &=0xCF; //we want to set every bit that is on, except for pins 5 and 4.
+	//DDRD &=0xF3; //we want to set every bit that is on, except for pins 2 and 3. 
 
 }
  
@@ -77,25 +77,7 @@ ISR(INT3_vect)
 
 ISR(INT4_vect)
 {
-	prevNextCodeTop <<2;
-	prevNextCodeTop |= topEncoderRead;
-	prevNextCodeTop &= 0x0F;
 	
-	if(rot_enc_table[prevNextCodeTop])
-	{
-		storeTop << 4;
-		storeTop |= prevNextCodeTop;
-		if ((storeTop&0xff)==0x2b)
-		{
-			topEncoderValue++;
-		}
-		if ((storeTop&0xff)==0x17)
-		{
-			topEncoderValue--;
-		}
-		
-	}
-	/*
 	if((1<<bottomEncoderPinB)&encoderPortStates)//this means Pin 4 is coming after pin 5
 	{
 		topEncoderValue++;
@@ -105,30 +87,11 @@ ISR(INT4_vect)
 	{
 		encoderPortStates|=(1<<bottomEncoderPinA); //we want to set bit 2.
 	}
-	*/
 }
 
 ISR(INT5_vect)
 {
-	prevNextCodeTop <<2;
-	prevNextCodeTop |= topEncoderRead;
-	prevNextCodeTop &= 0x0F;
-	
-	if(rot_enc_table[prevNextCodeTop])
-	{
-		storeTop << 4;
-		storeTop |= prevNextCodeTop;
-		if ((storeTop&0xff)==0x2b)
-		{
-			topEncoderValue++;
-		}
-		if ((storeTop&0xff)==0x17)
-		{
-			topEncoderValue--;
-		}
-		
-	}
-	/*
+
 	if((1<<bottomEncoderPinA)&encoderPortStates)//this means Pin 3 is coming after pin 2
 	{
 		topEncoderValue--;
@@ -138,9 +101,8 @@ ISR(INT5_vect)
 	{
 		encoderPortStates|=(1<<bottomEncoderPinB); //we want to set bit 3.
 	}
-	*/
 }
-
+/*
 void listenEncodersNew(Pattern *currentPattern, Globals *currentGlobals)
 {
 	//this will happen every millisecond. 
@@ -165,7 +127,7 @@ void listenEncodersNew(Pattern *currentPattern, Globals *currentGlobals)
 		}
 	
 }
-
+*/
 void listenEncoders(Pattern *currentPattern, Globals *currentGlobals)
 {
 	if(topEncoderValue!=topEncoderLastValue)

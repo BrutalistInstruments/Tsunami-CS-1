@@ -8,6 +8,7 @@ What's here:
   - Know bugs / issues
   - Un-implemented features
   - Hardware and enclosure to-dos. (In version 1.0, you'll see nothing here)
+
 ## Bugs
 #### Firmware
 | Known Bug| Proposed Solution |
@@ -35,5 +36,4 @@ All above hardware features are now implemented, and just need to be tested when
 
 ## Enclosure
 |Feature|
-|Mounting positions for nuts on side panels|
 |need to start work on aluminum enlcosure|
