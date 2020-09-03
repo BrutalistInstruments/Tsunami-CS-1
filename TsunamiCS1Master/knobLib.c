@@ -46,7 +46,7 @@ void initADC()
 	DDRF |= 0B00000111; //init pins F2, 1, and 0 as select pins on the external mux.
 	
 	ADMUX = (1 << ADLAR);//we're using the AREF pin to reduce analog noise, and only grabbing 8 bits from the ADC
-	ADCSRA = (1 <<  ADEN) | (0 <<ADPS2) | (1 << ADPS1) | (1 << ADPS0);
+	ADCSRA = (1 <<  ADEN) | (1 <<ADPS2) | (0 << ADPS1) | (0 << ADPS0); //prescaler of 8 CPU cycles. 
 	ADCSRB = (1 << MUX5);
 	DIDR0 = 0xff; // we should set this register to all 1s, so there is no digital input triggering.
 	DIDR2 = 0xff;

@@ -2551,8 +2551,8 @@ void initADC()
 	ADMUX = (1 << ADLAR);//we're using the AREF pin to reduce analog noise, and only grabbing 8 bits from the ADC
      cec:	80 e2       	ldi	r24, 0x20	; 32
      cee:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__TEXT_REGION_LENGTH__+0x70007c>
-	ADCSRA = (1 <<  ADEN) | (0 <<ADPS2) | (1 << ADPS1) | (1 << ADPS0);
-     cf2:	83 e8       	ldi	r24, 0x83	; 131
+	ADCSRA = (1 <<  ADEN) | (1 <<ADPS2) | (0 << ADPS1) | (0 << ADPS0); //prescaler of 8 CPU cycles. 
+     cf2:	84 e8       	ldi	r24, 0x84	; 132
      cf4:	80 93 7a 00 	sts	0x007A, r24	; 0x80007a <__TEXT_REGION_LENGTH__+0x70007a>
 	ADCSRB = (1 << MUX5);
      cf8:	88 e0       	ldi	r24, 0x08	; 8
