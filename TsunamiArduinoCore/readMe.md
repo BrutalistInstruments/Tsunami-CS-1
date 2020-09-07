@@ -7,13 +7,13 @@ You can use this via command line, or use a tool we very much like, AVRDUDESS:
 https://blog.zakkemble.net/avrdudess-a-gui-for-avrdude/
 
 Steps:
--Connect your arduino via USB
--under the MCU dropdown, choose "Atmega2560"
--select your COM Port on the Port drop down (should be the only one that says "COM")
--use a baud rate of 115200
--for Programmer, use "Wiring"
--under the "Flash" section, locate the .hex file that you downloaded from thr repository by clicking the "..." button.
-- check the "disable flash erase" check box.
+- Connect your arduino via USB
+- under the MCU dropdown, choose "Atmega2560"
+- select your COM Port on the Port drop down (should be the only one that says "COM")
+- use a baud rate of 115200
+- for Programmer, use "Wiring"
+- under the "Flash" section, locate the .hex file that you downloaded from thr repository by clicking the "..." button.
+- check the "disable flash erase" check box, and the "Disable Verify" box.
 
 Now you can click either "Go" under the flash section, or "Program". The firmware should be flashed to your Board!
 
