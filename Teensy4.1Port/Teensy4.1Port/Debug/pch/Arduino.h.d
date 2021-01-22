@@ -1,7 +1,5 @@
-C:\Users\OurBl\AppData\Local\Temp\VMBuilds\Teensy4.1Port\teensy41\Debug\VM_DBG\VM_DBG.cpp.o: \
- c:\program\ files\ (x86)\microsoft\ visual\ studio\2019\community\common7\ide\extensions\0jpe4kch.yzv\Micro\ Platforms\default\debuggers\VM_DBG\VM_DBG.cpp \
- c:\program\ files\ (x86)\microsoft\ visual\ studio\2019\community\common7\ide\extensions\0jpe4kch.yzv\Micro\ Platforms\default\debuggers\VM_DBG\VM_DBG.h \
- C:\Users\OurBl\AppData\Local\Temp\VMBuilds\Teensy4.1Port\teensy41\Debug/pch/Arduino.h \
+C:\Users\OurBl\AppData\Local\Temp\VMBuilds\Teensy4.1Port\teensy41\Debug\pch\Arduino.h.gch: \
+ C:\Users\OurBl\AppData\Local\Temp\VMBuilds\Teensy4.1Port\teensy41\Debug\pch\Arduino.h \
  C:\Files\arduino-1.8.13\hardware\teensy\avr\cores\teensy4/WProgram.h \
  C:\Files\arduino-1.8.13\hardware\teensy\avr\cores\teensy4/avr/pgmspace.h \
  C:\Files\arduino-1.8.13\hardware\teensy\avr\cores\teensy4/avr/interrupt.h \

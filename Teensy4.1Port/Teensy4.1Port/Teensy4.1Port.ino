@@ -15,12 +15,12 @@ IntervalTimer OLEDIntervalTimer; //we may be able to save these in our global st
 
 void setup() {
 	initBank(&currentPattern); //set bank to factory defaults
-	initGlobals(&currentGlobals,0); //set globals to factory defaults. both of these will change once the eeprom is implemented. 
+	initGlobals(&currentGlobals, 0); //set globals to factory defaults. both of these will change once the eeprom is implemented. 
 	///for current testing, these will stay in here. 
 
 }
 
 // the loop function runs over and over again until power down or reset
 void loop() {
-  
+
 }

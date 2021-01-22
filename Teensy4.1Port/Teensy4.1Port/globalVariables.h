@@ -4,9 +4,9 @@
 #define _GLOBALVARIABLES_h
 
 #if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
+#include "arduino.h"
 #else
-	#include "WProgram.h"
+#include "WProgram.h"
 #endif
 
 	//this menu system lets us have 8 menu items per menu, and up to 8 menus. This should be more than enough room for future expansion.
@@ -64,26 +64,26 @@
 
 typedef struct Pattern
 {
-    uint8_t outputLevelMSB[8]; //8 bytes
-    uint8_t outputLevelLSB[8]; //8 bytes
-    uint8_t outputPitch[8]; // 8 bytes
-    uint8_t trackOutputRoute[16]; // 16 bytes
-    uint8_t trackMainVolumeMSB[16]; //16 bytes
-    uint8_t trackMainVolumeLSB[16]; //16 bytes 
-    uint8_t trackAttackTimeMSB[16]; //16 bytes 
-    uint8_t trackAttackTimeLSB[16]; //16 bytes
-    uint8_t trackReleaseTimeMSB[16]; //16 bytes  
-    uint8_t trackReleaseTimeLSB[16]; //16 bytes
-    uint8_t trackPlayMode[16]; //16 bytes //right now, only play solo (0)and Poly (1)are supported. loop mode (4) is in the works. 
-    uint8_t trackSampleMSB[16]; //16 bytes
-    uint8_t trackSampleLSB[16]; //16 bytes
-    uint8_t voiceLockFlag[16]; //16 bytes
-    uint16_t patternBPM; //2 bytes
-    uint8_t numSteps; //1 byte
-    uint8_t trackSustainTimeMSB[16]; //16 bytes 
-    uint8_t trackSustainTimeLSB[16]; //16 bytes
-    uint8_t envelopeType[16]; //16 bytes //currently we only have 4, but eventually I'd like to have release stages triggered by "off" messages, especially for looped samples. 
-    uint16_t trackSequence[64]; //128 bytes - this will be a separate page
+	uint8_t outputLevelMSB[8]; //8 bytes
+	uint8_t outputLevelLSB[8]; //8 bytes
+	uint8_t outputPitch[8]; // 8 bytes
+	uint8_t trackOutputRoute[16]; // 16 bytes
+	uint8_t trackMainVolumeMSB[16]; //16 bytes
+	uint8_t trackMainVolumeLSB[16]; //16 bytes 
+	uint8_t trackAttackTimeMSB[16]; //16 bytes 
+	uint8_t trackAttackTimeLSB[16]; //16 bytes
+	uint8_t trackReleaseTimeMSB[16]; //16 bytes  
+	uint8_t trackReleaseTimeLSB[16]; //16 bytes
+	uint8_t trackPlayMode[16]; //16 bytes //right now, only play solo (0)and Poly (1)are supported. loop mode (4) is in the works. 
+	uint8_t trackSampleMSB[16]; //16 bytes
+	uint8_t trackSampleLSB[16]; //16 bytes
+	uint8_t voiceLockFlag[16]; //16 bytes
+	uint16_t patternBPM; //2 bytes
+	uint8_t numSteps; //1 byte
+	uint8_t trackSustainTimeMSB[16]; //16 bytes 
+	uint8_t trackSustainTimeLSB[16]; //16 bytes
+	uint8_t envelopeType[16]; //16 bytes //currently we only have 4, but eventually I'd like to have release stages triggered by "off" messages, especially for looped samples. 
+	uint16_t trackSequence[64]; //128 bytes - this will be a separate page
 
 } Pattern; //total bytes - 128 for the sequence, 251 bytes for all other data
 //so 3 pages in total, 1 for sequencer data, 2 for all other data (248 bytes, room for expansion)
@@ -91,11 +91,11 @@ typedef struct Pattern
 typedef struct Screen
 {
 
-    unsigned char screen0[9][21]; //since each screen can hold 3 bit menu states, there are 9 values that each menu can have. 
-    unsigned char screen1[9][21]; //not every array needs to be initialized, but it is important for our initArray method that they be uniform. 
-    unsigned char screen2[9][21];
-    unsigned char screen3[9][21];
-    unsigned char knobScreen[9][21];
+	unsigned char screen0[9][21]; //since each screen can hold 3 bit menu states, there are 9 values that each menu can have. 
+	unsigned char screen1[9][21]; //not every array needs to be initialized, but it is important for our initArray method that they be uniform. 
+	unsigned char screen2[9][21];
+	unsigned char screen3[9][21];
+	unsigned char knobScreen[9][21];
 
 
 } Screen;
