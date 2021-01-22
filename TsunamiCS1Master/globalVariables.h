@@ -13,8 +13,7 @@
 
 	//defines for menu states.
 	
-	//this menu system lets us have 8 menu items per menu, and up to 8 menus. More than this,
-	//and I think we have a feature creep problem. 
+	//this menu system lets us have 8 menu items per menu, and up to 8 menus. This should be more than enough room for future expansion.
 	//Bits - 7 encoderA Flag, 6-4 EncoderAState, 3: EncoderBFlag, 2-0: encoderBState
 	//Encoder B State: 0 = no arrow;
 	//Encoder B State: 1 = arrow on screen, init state, very top
@@ -58,6 +57,22 @@
 	#define encoderChange 0
 	#define triggerChange 1
 	#define knobChange	2
+
+//All "pin" defs need to have the word "Pin" at the end of their name.
+
+#define OLEDData0Pin 9
+#define OLEDData1Pin 10
+#define OLEDData2Pin 11
+#define OLEDData3Pin 12
+#define OLEDData4Pin 27
+#define OLEDData5Pin 30
+#define OLEDData6Pin 31
+#define OLEDData7Pin 32
+#define OLEDEnablePin 6
+#define OLEDDataCommandPin 26
+
+//we'll fill this as we fill our libraries.
+
 
 typedef struct Pattern
 {

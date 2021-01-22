@@ -3,6 +3,7 @@
  *
  * Created: 7/31/2019 4:31:55 PM
  *  Author: Hal
+ * New comment to test git
  */
 
 #include "globalVariables.h"
