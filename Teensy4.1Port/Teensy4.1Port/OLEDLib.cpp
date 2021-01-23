@@ -48,6 +48,7 @@ void data(uint8_t d, Globals *OLEDGlobals)
 	OLEDGlobals->OLEDBuffer[OLEDGlobals->oledWriteIndex] = toBuffer;
 	OLEDGlobals->oledWriteIndex = OLEDGlobals->oledWriteIndex + 1; //incriment write index. 
 }
+
 void initPins() 
 {
 	for (int i = 0; i < 9; i++)
@@ -107,7 +108,7 @@ void initScreen(volatile Globals* OLEDGlobals)
 	command(0x80, OLEDGlobals);        // Set DDRAM address 0x00 in address counter (cursor home) (default value)
 	command(0x0C, OLEDGlobals);        // Display ON/OFF control: display ON, cursor off, blink off
 	//_delay_ms(250);           // Waits 250 ms for stabilization purpose after display on
-	delay(250)
+	delay(250);
 
 }
 

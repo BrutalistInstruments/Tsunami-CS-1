@@ -93,6 +93,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Teensy4.1Port;$(ProjectDir)..\..\..\..\..\arduino-1.8.13\libraries\TeensyTimerTool-master\src;$(ProjectDir)..\..\..\..\..\arduino-1.8.13\hardware\teensy\avr\cores\teensy4;$(ProjectDir)..\..\..\..\..\arduino-1.8.13\hardware\teensy\avr\cores\teensy4\avr;$(ProjectDir)..\..\..\..\..\arduino-1.8.13\hardware\teensy\avr\cores\teensy4\debug;$(ProjectDir)..\..\..\..\..\arduino-1.8.13\hardware\teensy\avr\cores\teensy4\util;$(ProjectDir)..\..\..\..\..\arduino-1.8.13\hardware\tools\arm\arm-none-eabi\include;$(ProjectDir)..\..\..\..\..\arduino-1.8.13\hardware\tools\arm\lib\gcc\arm-none-eabi\5.4.1\include;$(ProjectDir)..\..\..\..\..\arduino-1.8.13\hardware\tools\arm\arm-none-eabi\include\c++\5.4.1;$(ProjectDir)..\..\..\..\..\arduino-1.8.13\hardware\tools\arm\arm-none-eabi\include\c++\5.4.1\tr1;$(ProjectDir)..\..\..\..\..\arduino-1.8.13\hardware\tools\arm\arm-none-eabi\include\c++\5.4.1\bits;$(ProjectDir)..\..\..\..\..\arduino-1.8.13\hardware\tools\arm\arm-none-eabi\include\c++\5.4.1\arm-none-eabi;$(ProjectDir)..\..\..\..\..\arduino-1.8.13\hardware\teensy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ProjectDir)__vm\.Teensy4.1Port.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PreprocessorDefinitions>__HARDWARE_imxrt1062__;__HARDWARE_IMXRT1062__;__IMXRT1062__;TEENSYDUINO=153;ARDUINO=108013;ARDUINO_TEENSY41;F_CPU=600000000;USB_SERIAL;LAYOUT_US_ENGLISH;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
