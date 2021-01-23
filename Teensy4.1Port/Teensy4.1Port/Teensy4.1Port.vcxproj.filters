@@ -24,9 +24,15 @@
     <ClInclude Include="globalVariables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OLEDLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="globalVariables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OLEDLib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

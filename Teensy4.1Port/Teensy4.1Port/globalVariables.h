@@ -56,7 +56,16 @@
 
 //Defines for all pins on Teensy Microcontroller
 
-
+#define OLEDEnable 6
+#define OLEDDataCommand 26
+#define OLEDData0 9
+#define OLEDData1 10
+#define OLEDData2 11
+#define OLEDData3 12
+#define OLEDData4 27
+#define OLEDData5 30
+#define OLEDData6 31
+#define OLEDData7 32
 
 
 
@@ -129,6 +138,12 @@ typedef struct Globals
 	uint16_t clockCounter;
 	uint32_t lastGlobalTimer;
 	uint8_t timerFlag; //if 1, then timer has increased. if 0, timer has not increased. 
+
+
+	//New Globals for Teensy port.
+	uint16_t OLEDBuffer[256];
+	uint8_t oledReadIndex;
+	uint8_t oledWriteIndex;
 
 }Globals;
 

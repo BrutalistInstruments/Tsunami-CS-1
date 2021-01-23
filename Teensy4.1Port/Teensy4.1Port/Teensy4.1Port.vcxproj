@@ -113,10 +113,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globalVariables.h" />
+    <ClInclude Include="OLEDLib.h" />
     <ClInclude Include="__vm\.Teensy4.1Port.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="globalVariables.cpp" />
+    <ClCompile Include="OLEDLib.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -42,6 +42,9 @@ void initGlobals(volatile Globals* currentGlobals, uint8_t factoryReset)
 	currentGlobals->clockCounter = 0;
 	currentGlobals->currentTrigSequencer = 0;
 	currentGlobals->currentTrigMidi = 0;
+	currentGlobals->oledReadIndex = 0;
+	currentGlobals->oledWriteIndex = 0;
+
 	if (factoryReset == 1)
 	{
 		currentGlobals->midiChannel = 0;
