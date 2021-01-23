@@ -12,6 +12,8 @@ volatile Pattern currentPattern;
 volatile Globals currentGlobals;
 volatile Screen screenBank;
 IntervalTimer OLEDIntervalTimer; //we may be able to save these in our global struct.
+//void (*enableCyclePointer)(int);
+//enableCyclePointer = &enableCycle;
 
 //OLEDIntervalTimer.update(5);
 
@@ -19,10 +21,11 @@ IntervalTimer OLEDIntervalTimer; //we may be able to save these in our global st
 void setup() {
 	initBank(&currentPattern); //set bank to factory defaults
 	initGlobals(&currentGlobals, 0); //set globals to factory defaults. both of these will change once the eeprom is implemented. 
-	initPins();
-	//begin intervalTimer here
-	initScreen(&currentGlobals);
 	///for current testing, these will stay in here. 
+	initPins();
+	//OLEDIntervalTimer.begin((enableCycle(&currentGlobals)), 6); //Well, I guess you can't pass in variables with a function pointer. Not 1--% sure how to continue with this.
+	initScreen(&currentGlobals);
+	
 
 }
 
