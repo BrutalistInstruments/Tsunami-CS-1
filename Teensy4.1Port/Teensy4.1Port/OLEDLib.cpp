@@ -30,7 +30,7 @@ void enableCycle(volatile Globals *OLEDGlobals) //called on by interval timer.
 
 }
 
-void command(uint8_t c, Globals *OLEDGlobals)
+void command(uint8_t c, volatile Globals *OLEDGlobals)
 {
 	uint16_t toBuffer; //this number will be inserted into the buffer, at current buffer index. 
 	toBuffer = c; // since D/C pin is 0, we don't need to shift anything in. bit #8 is just a 0.
@@ -40,7 +40,7 @@ void command(uint8_t c, Globals *OLEDGlobals)
 
 }
 
-void data(uint8_t d, Globals *OLEDGlobals)
+void data(uint8_t d, volatile Globals *OLEDGlobals)
 {
 	uint16_t toBuffer; //this number will be inserted into the buffer, at current buffer index. 
 	toBuffer = d;
@@ -124,6 +124,19 @@ void outputS(char* lineIn, int row,volatile Globals *OLEDGlobals)
 		data(lineIn[c],OLEDGlobals);
 	}
 }
+//overloaded method with volatile keyword. 
+void outputS(volatile char* lineIn, int row, volatile Globals* OLEDGlobals)
+{
+	uint8_t r = row;
+	uint8_t c = 0;
+
+	command(new_line[r], OLEDGlobals);
+	//20, because our display is 20x4.
+	for (c = 0; c < 20; c++)
+	{
+		data(lineIn[c], OLEDGlobals);
+	}
+}
 
 void numPrinter(char* charArray, uint8_t startingPos, uint8_t numCharacters, uint16_t inputNumber)
 {
@@ -192,8 +205,76 @@ void numPrinter(char* charArray, uint8_t startingPos, uint8_t numCharacters, uin
 
 
 }
+//overloaded function with volatile keyword. 
+void numPrinter(volatile char* charArray, uint8_t startingPos, uint8_t numCharacters, uint16_t inputNumber)
+{
+	//this needs to go in the OLED Library.
+	uint8_t onesPlace = 0;
+	uint8_t tensPlace = 0;
+	uint8_t hunderedsPlace = 0;
+	uint8_t thousandsPlace = 0;
+	uint8_t tenThousandsPlace = 0;
 
-void midiNotePrinter(char* charArray, uint8_t startingPosition, uint8_t noteNumber)
+	switch (numCharacters)
+	{
+	case 0:
+		break;
+
+	case 1:
+		onesPlace = (inputNumber % 10) + 48; //this should be a value between 1 and 10.
+		charArray[startingPos] = onesPlace;
+		break;
+
+	case 2:
+		onesPlace = (inputNumber % 10) + 48; //this should be a value between 1 and 10.
+		tensPlace = (inputNumber / 10) + 48;
+		charArray[(startingPos + 1)] = onesPlace;
+		charArray[startingPos] = tensPlace;
+		break;
+
+	case 3:
+		onesPlace = (inputNumber % 10) + 48; //this should be a value between 1 and 10.
+		tensPlace = ((inputNumber % 100) / 10) + 48;
+		hunderedsPlace = (inputNumber / 100) + 48;
+		charArray[(startingPos + 2)] = onesPlace;
+		charArray[(startingPos + 1)] = tensPlace;
+		charArray[startingPos] = hunderedsPlace;
+		break;
+
+	case 4:
+		onesPlace = (inputNumber % 10) + 48; //this should be a value between 1 and 10.
+		tensPlace = ((inputNumber % 100) / 10) + 48;
+		hunderedsPlace = ((inputNumber % 1000) / 100) + 48;
+		thousandsPlace = (inputNumber / 1000) + 48;
+		charArray[(startingPos + 3)] = onesPlace;
+		charArray[(startingPos + 2)] = tensPlace;
+		charArray[(startingPos + 1)] = hunderedsPlace;
+		charArray[startingPos] = thousandsPlace;
+		break;
+
+	case 5:
+		onesPlace = (inputNumber % 10) + 48; //this should be a value between 1 and 10.
+		tensPlace = ((inputNumber % 100) / 10) + 48;
+		hunderedsPlace = ((inputNumber % 1000) / 100) + 48;
+		thousandsPlace = ((inputNumber % 10000) / 1000) + 48;
+		tenThousandsPlace = (inputNumber / 10000) + 48;
+		charArray[(startingPos + 4)] = onesPlace;
+		charArray[(startingPos + 3)] = tensPlace;
+		charArray[(startingPos + 2)] = hunderedsPlace;
+		charArray[(startingPos + 1)] = thousandsPlace;
+		charArray[startingPos] = tenThousandsPlace;
+		break;
+
+		//if your number is higher than 16 bit, sorry, no can do.
+	default:
+		break;
+
+	}
+
+
+}
+
+void midiNotePrinter(volatile char* charArray, uint8_t startingPosition, uint8_t noteNumber)
 {
 	//will take up 3 character spaces. 
 	char printLetter = 0;

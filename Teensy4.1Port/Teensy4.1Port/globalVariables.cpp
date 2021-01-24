@@ -67,3 +67,20 @@ void initGlobals(volatile Globals* currentGlobals, uint8_t factoryReset)
 	}
 }
 
+void initArrays(volatile char myArray[9][21], int stringNumber, char* myString)
+{
+	uint8_t lengthOfString = strlen(myString);
+	uint8_t charLeft = 20 - lengthOfString;
+	uint8_t currentIndex = 0;
+	for (currentIndex; currentIndex < lengthOfString; currentIndex++)
+	{
+		myArray[stringNumber][currentIndex] = myString[currentIndex];
+	}
+
+	for (charLeft; charLeft > 0; charLeft--)
+	{
+		myArray[stringNumber][currentIndex] = ' ';
+		currentIndex++;
+	}
+}
+

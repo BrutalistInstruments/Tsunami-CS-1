@@ -16,8 +16,10 @@ void data(uint8_t d, volatile Globals* OLEDGlobals);
 void initPins();
 void initScreen(volatile Globals *OLEDGlobals);
 void outputS(char* lineIn, int row, volatile Globals* OLEDGlobals);
+void outputS(volatile char* lineIn, int row, volatile Globals* OLEDGlobals);
 void numPrinter(char* charArray, uint8_t startingPos, uint8_t numCharacters, uint16_t inputNumber);
-void midiNotePrinter(char* charArray, uint8_t startingPosition, uint8_t noteNumber);
+void numPrinter(volatile char* charArray, uint8_t startingPos, uint8_t numCharacters, uint16_t inputNumber);
+void midiNotePrinter(volatile char* charArray, uint8_t startingPosition, uint8_t noteNumber);
 
 #endif
 

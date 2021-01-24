@@ -71,7 +71,7 @@
 
 
 
-typedef struct Pattern
+struct Pattern
 {
 	uint8_t outputLevelMSB[8]; //8 bytes
 	uint8_t outputLevelLSB[8]; //8 bytes
@@ -94,22 +94,22 @@ typedef struct Pattern
 	uint8_t envelopeType[16]; //16 bytes //currently we only have 4, but eventually I'd like to have release stages triggered by "off" messages, especially for looped samples. 
 	uint16_t trackSequence[64]; //128 bytes - this will be a separate page
 
-} Pattern; //total bytes - 128 for the sequence, 251 bytes for all other data
+}; //total bytes - 128 for the sequence, 251 bytes for all other data
 //so 3 pages in total, 1 for sequencer data, 2 for all other data (248 bytes, room for expansion)
 
-typedef struct Screen
+struct Screen
 {
 
-	unsigned char screen0[9][21]; //since each screen can hold 3 bit menu states, there are 9 values that each menu can have. 
-	unsigned char screen1[9][21]; //not every array needs to be initialized, but it is important for our initArray method that they be uniform. 
-	unsigned char screen2[9][21];
-	unsigned char screen3[9][21];
-	unsigned char knobScreen[9][21];
+	char screen0[9][21]; //since each screen can hold 3 bit menu states, there are 9 values that each menu can have. 
+	char screen1[9][21]; //not every array needs to be initialized, but it is important for our initArray method that they be uniform. 
+	char screen2[9][21];
+	char screen3[9][21];
+	char knobScreen[9][21];
 
 
-} Screen;
+};
 
-typedef struct Globals
+struct Globals
 {
 	uint16_t currentTrigButtons; //current state of Trig buttons.
 	uint8_t currentGPButtons; //current state of GP buttons
@@ -145,10 +145,11 @@ typedef struct Globals
 	uint8_t oledReadIndex;
 	uint8_t oledWriteIndex;
 
-}Globals;
+};
 
 void initBank(volatile Pattern* currentInitPattern);
 void initGlobals(volatile Globals* currentGlobals, uint8_t factoryReset);
+void initArrays(volatile char myArray[9][21], int stringNumber, char* myString);
 
 #endif
 

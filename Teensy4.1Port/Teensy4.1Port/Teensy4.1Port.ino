@@ -5,6 +5,7 @@
 */
 
 // the setup function runs once when you press reset or power the board
+#include "menuLib.h"
 #include "OLEDLib.h"
 #include "globalVariables.h"
 #include <teensyTimerTool.h>
@@ -22,7 +23,7 @@ void setup() {
 	initPins();
 	OLEDTimer.beginPeriodic([] {enableCycle(&currentGlobals); }, 6);
 	initScreen(&currentGlobals);
-	
+	initMenu(&screenBank, &currentPattern, &currentGlobals);
 
 }
 
