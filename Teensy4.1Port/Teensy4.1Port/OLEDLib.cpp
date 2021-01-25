@@ -10,41 +10,35 @@ uint8_t OLEDPinArray[9] = {OLEDData0,OLEDData1,OLEDData2,OLEDData3,OLEDData4,OLE
 
 void enableCycle(volatile Globals *OLEDGlobals) //called on by interval timer.
 {
-	if (OLEDGlobals->OLEDBuffer[OLEDGlobals->oledReadIndex]) //if this is a non-0 value, continue with interupt. 
-	{
-		//we need to bring the enable pin high, then wait one micro second, then low. 
 		//this interupt will be happenign every 5 to 10 microseconds. We'll keep the delay in for now, and if it negativley impacts performance, we can get rid of it. 
-		uint16_t toParse = OLEDGlobals->OLEDBuffer[OLEDGlobals->oledReadIndex]; //create a pare variable, so we don't destroy the variable in the buffer. Might be unnessisary. 
-		for (int i= 0; i<9;i++ ) 
+	//if(OLEDGlobals->OLEDBuffer[OLEDGlobals->oledReadIndex]!=0){ //Not sure why this line doesn't work, but it seems to make this interupt fail. 
+	for (int i= 0; i<9;i++ ) 
 		{
-			digitalWriteFast(OLEDPinArray[i],(toParse&1)); //mask toParse with 1, so we just get the first bit. 
-			toParse = toParse >> 1; //shift toParse down one, so we can get the next bit to write.
+			digitalWriteFast(OLEDPinArray[i],(OLEDGlobals->OLEDBuffer[OLEDGlobals->oledReadIndex] &1)); //mask toParse with 1, so we just get the first bit. 
+			OLEDGlobals->OLEDBuffer[OLEDGlobals->oledReadIndex] = OLEDGlobals->OLEDBuffer[OLEDGlobals->oledReadIndex] >> 1; //shift toParse down one, so we can get the next bit to write.
 		}
-		OLEDGlobals->OLEDBuffer[OLEDGlobals->oledReadIndex] = 0; //reset buffer to 0, now that we have shifted out the data.
-		OLEDGlobals->oledReadIndex = OLEDGlobals->oledReadIndex + 1; //increment read Index
+		OLEDGlobals->OLEDBuffer[OLEDGlobals->oledReadIndex] = 0; //reset buffer to 0, now that we have shifted out the data. This might be un-necessary? 
+		OLEDGlobals->oledReadIndex++; //increment read Index
 
 		digitalWriteFast(OLEDEnable, HIGH);
 		delayMicroseconds(1);
 		digitalWriteFast(OLEDEnable, LOW); //This pulse sends our data to the screen
-	}
+	//}
 
 }
 
 void command(uint8_t c, volatile Globals *OLEDGlobals)
 {
-	uint16_t toBuffer; //this number will be inserted into the buffer, at current buffer index. 
-	toBuffer = c; // since D/C pin is 0, we don't need to shift anything in. bit #8 is just a 0.
-	OLEDGlobals->OLEDBuffer[OLEDGlobals->oledWriteIndex] = toBuffer;
+// since D/C pin is 0, we don't need to shift anything in. bit #8 is just a 0.
+	OLEDGlobals->OLEDBuffer[OLEDGlobals->oledWriteIndex] = c;
 	OLEDGlobals->oledWriteIndex = OLEDGlobals->oledWriteIndex + 1; //incriment write index. 
 	//no need to worry about overflows, we overflow to the next part of the buffer.
-
 }
 
 void data(uint8_t d, volatile Globals *OLEDGlobals)
 {
 	uint16_t toBuffer; //this number will be inserted into the buffer, at current buffer index. 
-	toBuffer = d;
-	toBuffer = toBuffer | (1 << 8); //this will be our "HIGH" message to the D/C pin
+	toBuffer = d | (1 << 8); //this will be our "HIGH" message to the D/C pin
 	OLEDGlobals->OLEDBuffer[OLEDGlobals->oledWriteIndex] = toBuffer;
 	OLEDGlobals->oledWriteIndex = OLEDGlobals->oledWriteIndex + 1; //incriment write index. 
 }
@@ -74,7 +68,7 @@ void initScreen(volatile Globals* OLEDGlobals)
 
 	command((0x22 | rows),OLEDGlobals); // Function set: extended command set (RE=1), lines #
 	command(0x71, OLEDGlobals);        // Function selection A:
-	data(0x5C, OLEDGlobals);           //  enable internal Vdd regulator at 5V I/O mode (def. value) (0x00 for disable, 2.8V I/O)
+	data(0x00, OLEDGlobals);           //  enable internal Vdd regulator at 5V I/O mode (def. value) (0x00 for disable, 2.8V I/O)
 	command((0x20 | rows), OLEDGlobals); // Function set: fundamental command set (RE=0) (exit from extended command set), lines #
 	command(0x08, OLEDGlobals);        // Display ON/OFF control: display off, cursor off, blink off (default values)
 	command((0x22 | rows), OLEDGlobals); // Function set: extended command set (RE=1), lines #

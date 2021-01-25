@@ -130,7 +130,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties config.Debug.customdebug_teensy41_debugger_type="universal" />
+      <UserProperties arduino.upload.port="usb:70001/3/0/2" config.Debug.customdebug_teensy41_debugger_type="universal" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
