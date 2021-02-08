@@ -5,10 +5,12 @@
 */
 
 // the setup function runs once when you press reset or power the board
+#include "encoderLib.h"
 #include "menuLib.h"
 #include "OLEDLib.h"
 #include "globalVariables.h"
 #include <teensyTimerTool.h>
+#include <Encoder.h>
 //initialize our global structs. 
 volatile Pattern currentPattern;
 volatile Globals currentGlobals;
@@ -25,7 +27,9 @@ void setup() {
 	initScreen(&currentGlobals);
 	//outputS("Working Screen     ", 1, &currentGlobals);
 	initMenu(&screenBank, &currentPattern, &currentGlobals);
-
+	Encoder topEncoder(2,3);
+	Encoder bottomEncoder(4,5);
+	//we can probably put this in a library. 
 }
 
 // the loop function runs over and over again until power down or reset

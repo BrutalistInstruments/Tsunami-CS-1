@@ -30,6 +30,9 @@
     <ClInclude Include="menuLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="encoderLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="globalVariables.cpp">
@@ -39,6 +42,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="menuLib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="encoderLib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
