@@ -145,6 +145,7 @@ struct Globals
 	uint8_t oledReadIndex;
 	uint8_t oledWriteIndex;
 
+
 };
 
 void initBank(volatile Pattern* currentInitPattern);

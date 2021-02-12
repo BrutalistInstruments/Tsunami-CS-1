@@ -16,6 +16,13 @@ volatile Pattern currentPattern;
 volatile Globals currentGlobals;
 volatile Screen screenBank;
 TeensyTimerTool::Timer OLEDTimer;
+TeensyTimerTool::Timer EncoderTimer;
+
+char encoderTest[20] = "TopEncoderValue:   ";
+int encoderRead1 = 0;
+int encoderRead2 = 0;
+int prevEncoderRead1 = 0;
+int prevEncoderRead2 = 0;
 
 
 void setup() {
@@ -27,14 +34,13 @@ void setup() {
 	initScreen(&currentGlobals);
 	//outputS("Working Screen     ", 1, &currentGlobals);
 	initMenu(&screenBank, &currentPattern, &currentGlobals);
-	Encoder topEncoder(2,3);
-	Encoder bottomEncoder(4,5);
-	//we can probably put this in a library. 
+	initEncoders();
+	EncoderTimer.beginPeriodic([] {listenEncoders(&currentGlobals); }, 1000);
+	Serial.begin(9600);
 }
 
 // the loop function runs over and over again until power down or reset
 void loop() {
-	
-
+	updateScreen(&screenBank, &currentPattern, &currentGlobals);
 
 }

@@ -8,7 +8,10 @@
 #else
 	#include "WProgram.h"
 #endif
+#include "globalVariables.h"
 
+void initEncoders();
+void listenEncoders(volatile Globals* encoderGlobals);
 
 #endif
 
