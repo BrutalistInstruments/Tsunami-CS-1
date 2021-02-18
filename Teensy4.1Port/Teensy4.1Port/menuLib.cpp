@@ -37,10 +37,11 @@ void initMenu(volatile Screen* initTheScreen, volatile Pattern* currentPattern, 
 	initArrays(initTheScreen->screen2, 5, "SustainTime:      S");
 
 	//screen3
+	initArrays(initTheScreen->screen3, 0, "Global Settings");
 	initArrays(initTheScreen->screen3, 1, "Midi Channel:");
 	initArrays(initTheScreen->screen3, 2, "Midi trig   :");
 	initArrays(initTheScreen->screen3, 3, " ");
-	initArrays(initTheScreen->screen3, 0, "Global Settings");
+	
 
 	//init all of the knob arrays:
 	initArrays(initTheScreen->knobScreen, 0, "OutVolume x : xxxdb");//string 0 is outVolume
@@ -80,6 +81,9 @@ void updateScreen(volatile Screen* menuScreen, volatile Pattern* currentPattern,
 	{
 		currentGlobals->valueChangeFlag = currentGlobals->valueChangeFlag & (0xFF & (0 << encoderChange));//set encoder bit low, and carry our whatever encoder change has occurred. 
 		//we need to debug this to make sure it's doing what we think it's doing.
+		uint16_t totalSustainTime = currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack] | ((currentPattern->trackSustainTimeMSB[currentGlobals->currentTrack]) << 8);
+		uint16_t trackSample = (currentPattern->trackSampleMSB[currentGlobals->currentTrack] << 8) | (currentPattern->trackSampleLSB[currentGlobals->currentTrack]);
+
 		switch (currentGlobals->menuState)
 		{
 		case PreformanceModeInit: //initial state
@@ -157,13 +161,12 @@ void updateScreen(volatile Screen* menuScreen, volatile Pattern* currentPattern,
 			outputS(menuScreen->screen2[2], 2, currentGlobals);
 			outputS(menuScreen->screen2[3], 3, currentGlobals);
 			break;
-
-		case TrackMenuArrow1Select:;
-			uint16_t trackSample = (currentPattern->trackSampleMSB[currentGlobals->currentTrack] << 8) | (currentPattern->trackSampleLSB[currentGlobals->currentTrack]);
+			
+		case TrackMenuArrow1Select:
 			numPrinter(menuScreen->screen2[1], 10, 4, (trackSample));
 			outputS(menuScreen->screen2[1], 1, currentGlobals);
 			break;
-
+			
 		case TrackMenuArrow2:
 			menuScreen->screen2[1][19] = ' ';
 			menuScreen->screen2[2][19] = 8;
@@ -267,15 +270,15 @@ void updateScreen(volatile Screen* menuScreen, volatile Pattern* currentPattern,
 			outputS(menuScreen->screen2[4], 2, currentGlobals);
 			outputS(menuScreen->screen2[5], 3, currentGlobals);
 			break;
-
-		case TrackMenuArrow5Select:;
-			uint16_t totalSustainTime = currentPattern->trackSustainTimeLSB[currentGlobals->currentTrack] | ((currentPattern->trackSustainTimeMSB[currentGlobals->currentTrack]) << 8);
+			
+		case TrackMenuArrow5Select: 
 			numPrinter(menuScreen->screen2[5], 13, 5, totalSustainTime);
 			menuScreen->screen2[5][12] = menuScreen->screen2[5][13];
 			menuScreen->screen2[5][13] = menuScreen->screen2[5][14];
 			menuScreen->screen2[5][14] = '.';
 			outputS(menuScreen->screen2[5], 3, currentGlobals);
 			break;
+			
 
 		case GlobalMenuInit:
 			outputS(menuScreen->screen3[0], 0, currentGlobals);
