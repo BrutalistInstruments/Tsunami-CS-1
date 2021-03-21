@@ -33,6 +33,9 @@
     <ClInclude Include="encoderLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ButtonLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="globalVariables.cpp">
@@ -45,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="encoderLib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonLib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

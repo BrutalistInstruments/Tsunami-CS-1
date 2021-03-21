@@ -5,6 +5,7 @@
 */
 
 // the setup function runs once when you press reset or power the board
+#include "ButtonLib.h"
 #include "encoderLib.h"
 #include "menuLib.h"
 #include "OLEDLib.h"
@@ -17,6 +18,7 @@ volatile Globals currentGlobals;
 volatile Screen screenBank;
 TeensyTimerTool::Timer OLEDTimer;
 TeensyTimerTool::Timer EncoderTimer;
+TeensyTimerTool::Timer ButtonTimer;
 
 char encoderTest[20] = "TopEncoderValue:   ";
 int encoderRead1 = 0;
@@ -36,6 +38,7 @@ void setup() {
 	initMenu(&screenBank, &currentPattern, &currentGlobals);
 	initEncoders();
 	EncoderTimer.beginPeriodic([] {listenEncoders(&currentGlobals); }, 1000);
+	ButtonTimer.beginPeriodic([] {listenButton(&currentGlobals); }, 100); //might want to make this go slower, check for response times on the buttons
 	Serial.begin(9600);
 }
 

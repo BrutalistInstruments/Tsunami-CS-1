@@ -115,6 +115,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ButtonLib.h" />
     <ClInclude Include="encoderLib.h" />
     <ClInclude Include="globalVariables.h" />
     <ClInclude Include="menuLib.h" />
@@ -122,6 +123,7 @@
     <ClInclude Include="__vm\.Teensy4.1Port.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ButtonLib.cpp" />
     <ClCompile Include="encoderLib.cpp" />
     <ClCompile Include="globalVariables.cpp" />
     <ClCompile Include="menuLib.cpp" />
